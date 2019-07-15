@@ -1,22 +1,18 @@
 package com.matching.domain;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Setter
-@Getter
-@ToString
 @Data
 @Table
-public class Project {
+public class Project implements Serializable {
 
     @Id
     @Column
@@ -27,9 +23,11 @@ public class Project {
     private String title;
 
     @Column(nullable = false)
+    @Length(max = 400000)
     private String content;
 
     @Column(nullable = false)
+    @Length(max = 30)
     private String status;
 
     @Column(nullable = false)
@@ -45,9 +43,16 @@ public class Project {
     private LocalDateTime modifiedDate;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Comment> comments = new ArrayList<>();
+    private List<Comment> comments;
 
-    @OneToMany(mappedBy = "project", fetch = FetchType.EAGER)
-    private List<UserProject> user_projects = new ArrayList<>();
-
+    public Project(String title, String content, String status, String location, LocalDateTime createdDate, LocalDateTime deadline, LocalDateTime modifiedDate, List<Comment> comments) {
+        this.title = title;
+        this.content = content;
+        this.status = status;
+        this.location = location;
+        this.createdDate = createdDate;
+        this.deadline = deadline;
+        this.modifiedDate = modifiedDate;
+        this.comments = comments;
+    }
 }

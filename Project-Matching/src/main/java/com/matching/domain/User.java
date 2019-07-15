@@ -1,26 +1,23 @@
 package com.matching.domain;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * @author dongh9508
  * @since  2019-07-15
  */
 @Entity
-@Setter
-@Getter
-@ToString
 @Data
 @Table
-public class User {
+public class User implements Serializable {
 
     @Id
     @Column
@@ -28,20 +25,28 @@ public class User {
     private Long idx;
 
     @Column(nullable = false)
+    @Length(max = 30)
     private String email;
 
     @Column(nullable = false)
+    @Length(max = 30)
     private String password;
 
     @Column(nullable = false)
+    @Length(max = 30)
     private String nickname;
 
     @Column
     private LocalDateTime createdDate;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Comment> comments = new ArrayList<>();
+    private List<Comment> comments;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<UserProject> user_projects = new ArrayList<>();
+    public User(String email, String password, String nickname, LocalDateTime createdDate, List<Comment> comments) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.createdDate = createdDate;
+        this.comments = comments;
+    }
 }
