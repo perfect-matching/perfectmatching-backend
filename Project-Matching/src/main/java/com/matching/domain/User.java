@@ -34,19 +34,27 @@ public class User implements Serializable {
 
     @Column(nullable = false)
     @Length(max = 30)
-    private String nickname;
+    private String nick;
 
     @Column
     private LocalDateTime createdDate;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> comments;
 
-    public User(String email, String password, String nickname, LocalDateTime createdDate, List<Comment> comments) {
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserProject> userProjects;
+
+    @OneToMany(mappedBy = "leader", fetch = FetchType.LAZY)
+    private List<Project> projects;
+
+    public User(@Length(max = 30) String email, @Length(max = 30) String password, @Length(max = 30) String nick, LocalDateTime createdDate, List<Comment> comments, List<UserProject> userProjects, List<Project> projects) {
         this.email = email;
         this.password = password;
-        this.nickname = nickname;
+        this.nick = nick;
         this.createdDate = createdDate;
         this.comments = comments;
+        this.userProjects = userProjects;
+        this.projects = projects;
     }
 }

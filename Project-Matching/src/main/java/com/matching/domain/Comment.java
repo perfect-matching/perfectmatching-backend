@@ -31,19 +31,13 @@ public class Comment implements Serializable {
     @Column
     private LocalDateTime modifiedDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @NotBlank
-    private User user;
+    private User writer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @NotBlank
     private Project project;
 
-    public Comment(String content, LocalDateTime createdDate, LocalDateTime modifiedDate, @NotBlank User user, @NotBlank Project project) {
-        this.content = content;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
-        this.user = user;
-        this.project = project;
-    }
+
 }
