@@ -19,5 +19,5 @@ Project - Side Project Member Matching Platform(예명)
 * Entity 모델링 명세 [확인](https://docs.google.com/spreadsheets/d/1kbpWNSX8oapVMX6U6IQtt3sRyn1DrJNmXETlUz-EkQg/edit#gid=0)
 
 
-* Entity Relation Diagram [확인]()
+* Entity Relation Diagram [확인](https://drive.google.com/file/d/1tmBT3GAL3OIpRocH-hIGdo70-vzptTSo/view)
 
