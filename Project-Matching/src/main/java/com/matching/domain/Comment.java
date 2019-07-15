@@ -39,5 +39,11 @@ public class Comment implements Serializable {
     @NotBlank
     private Project project;
 
-
+    public Comment(String content, LocalDateTime createdDate, LocalDateTime modifiedDate, @NotBlank User writer, @NotBlank Project project) {
+        this.content = content;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
+        this.writer = writer;
+        this.project = project;
+    }
 }
