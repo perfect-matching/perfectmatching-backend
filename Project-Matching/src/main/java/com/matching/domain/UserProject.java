@@ -1,6 +1,6 @@
 package com.matching.domain;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
@@ -17,7 +17,6 @@ import java.io.Serializable;
 @Data
 @Table
 @NoArgsConstructor
-@AllArgsConstructor
 public class UserProject implements Serializable {
     @EmbeddedId
     private UserProjectKey id;
@@ -42,4 +41,12 @@ public class UserProject implements Serializable {
     @Column
     private String position;
 
+    @Builder
+    public UserProject(UserProjectKey id, User user, Project project, @NotNull @Length(max = 10) String status, @NotNull @Length(max = 10) String position) {
+        this.id = id;
+        this.user = user;
+        this.project = project;
+        this.status = status;
+        this.position = position;
+    }
 }

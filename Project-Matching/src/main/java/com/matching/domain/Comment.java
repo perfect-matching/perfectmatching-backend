@@ -3,21 +3,14 @@ package com.matching.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-
-/**
- * @author dongh9508
- * @since  2019-07-15
- */
 @Entity
 @Data
 @Table
 @NoArgsConstructor
-@AllArgsConstructor
 public class Comment implements Serializable {
 
     @Id
@@ -44,6 +37,12 @@ public class Comment implements Serializable {
     @Column
     private LocalDateTime modifiedDate;
 
-
-
+    @Builder
+    public Comment(@NotNull User writer, @NotNull Project project, @NotNull String content, @NotNull LocalDateTime createdDate, LocalDateTime modifiedDate) {
+        this.writer = writer;
+        this.project = project;
+        this.content = content;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
+    }
 }

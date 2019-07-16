@@ -1,14 +1,16 @@
 package com.matching.domain;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -19,7 +21,6 @@ import java.util.List;
 @Data
 @Table
 @NoArgsConstructor
-@AllArgsConstructor
 public class User implements Serializable {
 
     @Id
@@ -28,13 +29,13 @@ public class User implements Serializable {
     private Long idx;
 
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Comment> comments;
+    private Set<Comment> comments = new HashSet<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<UserProject> userProjects;
+    private Set<UserProject> userProjects = new HashSet<>();
 
     @OneToMany(mappedBy = "leader", fetch = FetchType.LAZY)
-    private List<Project> projects;
+    private Set<Project> projects = new HashSet<>();
 
     @NotNull
     @Length(max = 30)
@@ -54,5 +55,13 @@ public class User implements Serializable {
     @NotNull
     @Column
     private LocalDateTime createdDate;
+
+    @Builder
+    public User( @NotNull @Length(max = 30) String email, @NotNull @Length(max = 30) String password, @NotNull @Length(max = 30) String nick, @NotNull LocalDateTime createdDate) {
+        this.email = email;
+        this.password = password;
+        this.nick = nick;
+        this.createdDate = createdDate;
+    }
 
 }
