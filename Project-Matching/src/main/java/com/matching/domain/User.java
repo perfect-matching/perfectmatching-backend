@@ -4,9 +4,10 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,27 +18,14 @@ import java.util.List;
 @Entity
 @Data
 @Table
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements Serializable {
 
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
-
-    @Column(nullable = false)
-    @Length(max = 30)
-    private String email;
-
-    @Column(nullable = false)
-    @Length(max = 30)
-    private String password;
-
-    @Column(nullable = false)
-    @Length(max = 30)
-    private String nick;
-
-    @Column
-    private LocalDateTime createdDate;
 
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> comments;
@@ -48,13 +36,23 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "leader", fetch = FetchType.LAZY)
     private List<Project> projects;
 
-    public User(@Length(max = 30) String email, @Length(max = 30) String password, @Length(max = 30) String nick, LocalDateTime createdDate, List<Comment> comments, List<UserProject> userProjects, List<Project> projects) {
-        this.email = email;
-        this.password = password;
-        this.nick = nick;
-        this.createdDate = createdDate;
-        this.comments = comments;
-        this.userProjects = userProjects;
-        this.projects = projects;
-    }
+    @NotNull
+    @Length(max = 30)
+    @Column
+    private String email;
+
+    @NotNull
+    @Length(max = 30)
+    @Column
+    private String password;
+
+    @NotNull
+    @Length(max = 30)
+    @Column
+    private String nick;
+
+    @NotNull
+    @Column
+    private LocalDateTime createdDate;
+
 }

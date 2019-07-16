@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -15,6 +16,8 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @Table
+@NoArgsConstructor
+@AllArgsConstructor
 public class Comment implements Serializable {
 
     @Id
@@ -22,28 +25,25 @@ public class Comment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
 
-    @Column(nullable = false)
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User writer;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Project project;
+
+    @NotNull
+    @Column
     private String content;
 
+    @NotNull
     @Column
     private LocalDateTime createdDate;
 
     @Column
     private LocalDateTime modifiedDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @NotBlank
-    private User writer;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @NotBlank
-    private Project project;
 
-    public Comment(String content, LocalDateTime createdDate, LocalDateTime modifiedDate, @NotBlank User writer, @NotBlank Project project) {
-        this.content = content;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
-        this.writer = writer;
-        this.project = project;
-    }
 }
