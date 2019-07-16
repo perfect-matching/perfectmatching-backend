@@ -1,9 +1,13 @@
 package com.matching.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +19,8 @@ import java.util.List;
 @Entity
 @Data
 @Table
+@NoArgsConstructor
+@AllArgsConstructor
 public class Project implements Serializable {
 
     @Id
@@ -22,24 +28,30 @@ public class Project implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
 
+    @NotNull
     @ManyToOne
     private User leader;
 
-    @Column(nullable = false)
+    @NotNull
+    @Column
     private String title;
 
-    @Column(nullable = false)
+    @NotNull
     @Length(max = 400000)
+    @Column
     private String content;
 
-    @Column(nullable = false)
-    @Length(max = 30)
+    @NotNull
+    @Length(max = 10)
+    @Column
     private String status;
 
-    @Column(nullable = false)
+    @NotNull
+    @Column
     private String location;
 
     @Column
+    @NotNull
     private LocalDateTime createdDate;
 
     @Column
@@ -54,16 +66,4 @@ public class Project implements Serializable {
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<UserProject> userProjects;
 
-    public Project(User leader, String title, @Length(max = 400000) String content, @Length(max = 30) String status, String location, LocalDateTime createdDate, LocalDateTime deadline, LocalDateTime modifiedDate, List<Comment> comments, List<UserProject> userProjects) {
-        this.leader = leader;
-        this.title = title;
-        this.content = content;
-        this.status = status;
-        this.location = location;
-        this.createdDate = createdDate;
-        this.deadline = deadline;
-        this.modifiedDate = modifiedDate;
-        this.comments = comments;
-        this.userProjects = userProjects;
-    }
 }

@@ -1,9 +1,12 @@
 package com.matching.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -13,12 +16,11 @@ import java.io.Serializable;
 @Entity
 @Data
 @Table
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserProject implements Serializable {
-
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idx;
+    @EmbeddedId
+    private UserProjectKey id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("user_idx")
@@ -30,17 +32,14 @@ public class UserProject implements Serializable {
     @JoinColumn(name = "project_idx")
     private Project project;
 
-    @Column(nullable = false)
-    private boolean status;
-
-    @Column(nullable = false)
+    @NotNull
     @Length(max = 10)
+    @Column
+    private String status;
+
+    @NotNull
+    @Length(max = 10)
+    @Column
     private String position;
 
-    public UserProject(User user, Project project, boolean status, @Length(max = 10) String position) {
-        this.user = user;
-        this.project = project;
-        this.status = status;
-        this.position = position;
-    }
 }
