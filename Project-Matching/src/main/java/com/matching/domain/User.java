@@ -1,26 +1,23 @@
 package com.matching.domain;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-
-/**
- * @author dongh9508
- * @since  2019-07-16
- */
 @Entity
 @Data
 @Table
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"projects", "userProjects", "comments"})
 public class User implements Serializable {
 
     @Id
@@ -45,6 +42,7 @@ public class User implements Serializable {
     @NotNull
     @Length(max = 30)
     @Column
+    @JsonIgnore
     private String password;
 
     @NotNull
@@ -62,6 +60,21 @@ public class User implements Serializable {
         this.password = password;
         this.nick = nick;
         this.createdDate = createdDate;
+    }
+
+    public void addComment(Comment comment) {
+        comment.setWriter(this);
+        this.comments.add(comment);
+    }
+
+    public void addUserProject(UserProject userProject) {
+        userProject.setUser(this);
+        this.userProjects.add(userProject);
+    }
+
+    public void addProject(Project project) {
+        project.setLeader(this);
+        this.projects.add(project);
     }
 
 }

@@ -2,6 +2,7 @@ package com.matching.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
@@ -12,14 +13,11 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * @author dongh9508
- * @since  2019-07-16
- */
 @Entity
 @Data
 @Table
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"userProjects", "comments"})
 public class Project implements Serializable {
 
     @Id
@@ -88,6 +86,16 @@ public class Project implements Serializable {
         this.startDate = startDate;
         this.endDate = endDate;
         this.modifiedDate = modifiedDate;
+    }
+
+    public void addComment(Comment comment) {
+        comment.setProject(this);
+        this.comments.add(comment);
+    }
+
+    public void addUserProject(UserProject userProject) {
+        userProject.setProject(this);
+        this.userProjects.add(userProject);
     }
 
 }
