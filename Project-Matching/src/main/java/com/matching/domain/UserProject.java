@@ -9,15 +9,12 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-/**
- * @author dongh9508
- * @since  2019-07-15
- */
 @Entity
 @Data
 @Table
 @NoArgsConstructor
 public class UserProject implements Serializable {
+
     @EmbeddedId
     private UserProjectKey id;
 
@@ -50,3 +47,4 @@ public class UserProject implements Serializable {
         this.position = position;
     }
 }
+
