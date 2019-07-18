@@ -21,3 +21,17 @@ Project - Side Project Member Matching Platform(예명)
 
 * Entity Relation Diagram [확인](https://drive.google.com/file/d/1tmBT3GAL3OIpRocH-hIGdo70-vzptTSo/view)
 
+### API URL
+<details><summary>세부정보</summary>
+
+* 서버 URL
+        
+    * `dongh9508.hopto.org:8083`
+
+
+|URL| HTTP | 기능 |
+|:---:|:---:|:---:| 
+| /api/projects | GET | DB에 있는 전체 Project를 가져옴. |
+
+
+</details>
