@@ -33,11 +33,17 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web'){
         exclude module: "jackson-databind"
     }
-    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+    compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310')
+    compile('org.springframework.boot:spring-boot-starter-hateoas')
+    compile('org.springframework.boot:spring-boot-starter-data-rest') {
+        exclude module: "jackson-databind"
+    }
+    compile('org.springframework.boot:spring-boot-starter-security')
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testCompile('org.springframework.security:spring-security-test')
     
 }
