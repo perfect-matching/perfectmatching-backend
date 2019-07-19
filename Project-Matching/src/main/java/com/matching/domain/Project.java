@@ -26,7 +26,7 @@ public class Project implements Serializable {
     private Long idx;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User leader;
 
     @NotNull

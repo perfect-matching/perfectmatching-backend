@@ -107,6 +107,8 @@ public class AppRunner implements ApplicationRunner {
 
         Comment comment2 = Comment.builder().content("테스트 댓글2").createdDate(LocalDateTime.now()).build();
 
+        Comment comment3 = Comment.builder().content("테스트 댓글3").createdDate(LocalDateTime.now()).build();
+
         user2.addComment(comment1);
         project1.addComment(comment1);
         commentRepository.save(comment1);
@@ -115,33 +117,9 @@ public class AppRunner implements ApplicationRunner {
         project2.addComment(comment2);
         commentRepository.save(comment2);
 
-        for(UserProject userProject : user1.getUserProjects()) {
-            System.out.println( "User idx : " + userProject.getUser().getIdx() + ", Project Leader idx : "
-                    + userProject.getProject().getLeader().getIdx() + ", Project idx : " + userProject.getProject().getIdx()
-                    + ", 프로젝트 참여 여부 : " + userProject.getStatus());
-        }
-
-        System.out.println();
-
-        for(UserProject userProject : project1.getUserProjects()) {
-            System.out.println( "Project idx : " + userProject.getProject().getIdx() + ", Project Leader idx : "
-                    + userProject.getProject().getLeader().getIdx() + ", User idx : " + userProject.getUser().getIdx()
-                    + ", 프로젝트 참여 여부 : " + userProject.getStatus());
-        }
-
-        System.out.println();
-
-        for(Comment comment : user2.getComments()) {
-            System.out.println( "댓글 내용 : " + comment.getContent() + ", 작성자 Idx : " + comment.getWriter().getIdx() +
-                    ", 프로젝트 Idx : " +  comment.getProject().getIdx());
-        }
-
-        System.out.println();
-
-        for(Comment comment : project1.getComments()) {
-            System.out.println( "댓글 내용 : " + comment.getContent() + ", 작성자 Idx : " + comment.getWriter().getIdx() +
-                    ", 프로젝트 Idx : " +  comment.getProject().getIdx());
-        }
+        user1.addComment(comment3);
+        project1.addComment(comment3);
+        commentRepository.save(comment3);
 
     }
 }
