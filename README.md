@@ -31,7 +31,7 @@ Project - Side Project Member Matching Platform(예명)
 
 |URL| HTTP | 기능 |
 |:---:|:---:|:---:| 
-| /api/projects | GET | DB에 있는 전체 Project를 가져옴. |
-
+| `/api/projects` | GET | DB에 있는 전체 Project를 가져옴. |
+| `/api/projects/{idx}` | GET | Project의 idx에 따라 개별로 가져옴. |
 
 </details>

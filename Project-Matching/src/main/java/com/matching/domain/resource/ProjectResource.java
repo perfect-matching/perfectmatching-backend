@@ -11,13 +11,13 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @Getter
 public class ProjectResource extends ResourceSupport {
 
-    private final Project project;
-
-    public ProjectResource(final Project project) {
-        this.project = project;
-        final long id = project.getIdx();
-
-        add(linkTo(methodOn(ProjectController.class).getLeader(project.getLeader().getIdx())).withRel("leader"));
-        add(linkTo(methodOn(ProjectController.class).get(id)).withSelfRel());
-    }
+//    private final Project project;
+//
+//    public ProjectResource(final Project project) {
+//        this.project = project;
+//        final long id = project.getIdx();
+//
+//        add(linkTo(methodOn(ProjectController.class).getLeader(project.getLeader().getIdx())).withRel("leader"));
+//        add(linkTo(methodOn(ProjectController.class).get(id)).withSelfRel());
+//    }
 }

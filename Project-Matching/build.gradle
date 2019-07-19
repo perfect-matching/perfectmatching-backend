@@ -28,22 +28,29 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-    compile('org.springframework.boot:spring-boot-starter-web'){
-        exclude module: "jackson-databind"
-    }
-    compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310')
-    compile('org.springframework.boot:spring-boot-starter-hateoas')
-    compile('org.springframework.boot:spring-boot-starter-data-rest') {
-        exclude module: "jackson-databind"
-    }
-    compile('org.springframework.boot:spring-boot-starter-security')
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'mysql:mysql-connector-java'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testCompile('org.springframework.security:spring-security-test')
     
+    /* for rest api & web */
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    
+    /* for spring security */
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    /* unused */
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    
+    /* lombok */
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    /* for database */
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'mysql:mysql-connector-java'
+
+    /* for test & dev */
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
 }
+
