@@ -29,9 +29,13 @@ Project - Side Project Member Matching Platform(예명)
     * `dongh9508.hopto.org:8083`
 
 
-|URL| HTTP | 기능 |
+|URI(자원)| HTTP(행위) | 기능(표현) |
 |:---:|:---:|:---:| 
-| `/api/projects` | GET | DB에 있는 전체 Project를 가져옴. |
-| `/api/projects/{idx}` | GET | Project의 idx에 따라 개별로 가져옴. |
+| `/api/projects` | GET | DB에 있는 전체 Project를 가져오기 위한 api |
+| `/api/projects/{idx}` | GET | Project의 idx에 따라 개별로 가져오기 위한 api |
+| `/api/projects` | POST | Project를 생성하기 위한 요청 api |
+| `/api/projects/{idx}` | PUT | Project의 idx에 따라 Proect의 상세 내용 수정을 위한 api |
+| `/api/projects/{idx}` | DELETE | Project의 idx에 따라 Proect 삭제를 위한 api |
+
 
 </details>
