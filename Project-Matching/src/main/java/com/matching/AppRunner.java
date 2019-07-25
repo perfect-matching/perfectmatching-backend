@@ -8,9 +8,13 @@ import com.matching.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.stream.IntStream;
+import java.util.*;
 
 @Component
 public class AppRunner implements ApplicationRunner {
@@ -27,99 +31,68 @@ public class AppRunner implements ApplicationRunner {
     @Autowired
     private CommentRepository commentRepository;
 
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        User user1 = User.builder().createdDate(LocalDateTime.now()).email("test1@test.com").
-                password("123456").nick("별명1").build();
+        IntStream.rangeClosed(1, 40).forEach(index -> userRepository.save(User.builder().email("test" + index + "@email.com")
+                                            .nick("testUser_" + index).password("testPassword").createdDate(LocalDateTime.now()).build()));
 
-        User user2 = User.builder().createdDate(LocalDateTime.now()).email("test2@test.com").
-                password("123456").nick("별명2").build();
+        IntStream.rangeClosed(1, 200).forEach(this::createProjectTestData);
 
-        User user3 = User.builder().createdDate(LocalDateTime.now()).email("test3@test.com").
-                password("123456").nick("별명3").build();
+        IntStream.rangeClosed(1, 300).forEach(index -> createUserProjectTestData());
 
-        userRepository.save(user1);
-        userRepository.save(user2);
-        userRepository.save(user3);
+        IntStream.rangeClosed(1, 100).forEach(this::createCommentTestData);
+    }
 
-        Project project1 = Project.builder().content("내용1").title("제목1").endDate(LocalDateTime.now()).
-                startDate(LocalDateTime.now()).deadline(LocalDateTime.now()).location("부산").
-                createdDate(LocalDateTime.now()).status("모집").build();
+    private void createProjectTestData(int index) {
+        Random random = new Random();
+        String[] location = {"부산", "서울", "창원", "인천", "대구", "제주도", "춘천", "강릉", "울산", "포항"};
+        String[] position = {"개발자", "기획자", "디자이너", "마케터", "기타"};
+        User user = userRepository.findByIdx(random.nextInt(15) + 1);
 
-        Project project2 = Project.builder().content("내용2").title("제목2").endDate(LocalDateTime.now()).
-                startDate(LocalDateTime.now()).deadline(LocalDateTime.now()).location("서울").
-                createdDate(LocalDateTime.now()).status("모집").build();
+        Project project = Project.builder().content("내용" + index).title("제목" + index).endDate(LocalDateTime.now()).
+                startDate(LocalDateTime.now()).deadline(LocalDateTime.now()).location(location[random.nextInt(location.length)]).
+                createdDate(LocalDateTime.now()).status("모집").leader(user).build();
 
-        Project project3 = Project.builder().content("내용3").title("제목3").endDate(LocalDateTime.now()).
-                startDate(LocalDateTime.now()).deadline(LocalDateTime.now()).location("대구").
-                createdDate(LocalDateTime.now()).status("모집").build();
+        projectRepository.save(project);
 
+        UserProjectKey key = new UserProjectKey(user.getIdx(), project.getIdx());
+        UserProject userProject = UserProject.builder().id(key).position(position[random.nextInt(position.length)])
+                .status("매칭완료").user(user).project(project).build();
 
-        user1.addProject(project1);
-        projectRepository.save(project1);
+        userProjectRepository.save(userProject);
+    }
 
-        user1.addProject(project2);
-        projectRepository.save(project2);
+    private void createUserProjectTestData() {
+        Random random = new Random();
+        String[] position = {"개발자", "기획자", "디자이너", "마케터", "기타"};
+        String[] status = {"매칭중", "매칭완료"};
 
-        user2.addProject(project3);
-        projectRepository.save(project3);
+        long userIdx = random.nextInt(15)+1;
+        long projectIdx = random.nextInt(100)+1;
 
-        UserProjectKey key1 = new UserProjectKey(user1.getIdx(), project1.getIdx());
-        UserProjectKey key2 = new UserProjectKey(user1.getIdx(), project2.getIdx());
-        UserProjectKey key3 = new UserProjectKey(user2.getIdx(), project2.getIdx());
-        UserProjectKey key4 = new UserProjectKey(user2.getIdx(), project3.getIdx());
-        UserProjectKey key5 = new UserProjectKey(user3.getIdx(), project1.getIdx());
-        UserProjectKey key6 = new UserProjectKey(user3.getIdx(), project3.getIdx());
+        UserProjectKey key = new UserProjectKey(userIdx, projectIdx);
 
-        UserProject userProject1 = UserProject.builder().id(key1).position("개발자").status("참여").build();
-        UserProject userProject2 = UserProject.builder().id(key2).position("개발자").status("참여").build();
-        UserProject userProject3 = UserProject.builder().id(key3).position("디자이너").status("매칭중").build();
-        UserProject userProject4 = UserProject.builder().id(key4).position("디자이너").status("참여").build();
-        UserProject userProject5 = UserProject.builder().id(key5).position("기획자").status("매칭중").build();
-        UserProject userProject6 = UserProject.builder().id(key6).position("기획자").status("매칭중").build();
+        if(!userProjectRepository.findById(key).isPresent()) {
+            User user = userRepository.findByIdx(userIdx);
+            Project project = projectRepository.findByIdx(projectIdx);
 
-        user1.addUserProject(userProject1);
-        project1.addUserProject(userProject1);
-        userProjectRepository.save(userProject1);
+            UserProject userProject = UserProject.builder().id(key).position(position[random.nextInt(position.length)])
+                    .status(status[random.nextInt(status.length)]).user(user).project(project).build();
 
-        user1.addUserProject(userProject2);
-        project2.addUserProject(userProject2);
-        userProjectRepository.save(userProject2);
+            userProjectRepository.save(userProject);
+        }
+    }
 
-        user2.addUserProject(userProject3);
-        project2.addUserProject(userProject3);
-        userProjectRepository.save(userProject3);
+    private void createCommentTestData(int index) {
+        Random random = new Random();
 
-        user2.addUserProject(userProject4);
-        project3.addUserProject(userProject4);
-        userProjectRepository.save(userProject4);
+        User user = userRepository.findByIdx((long) (random.nextInt(15)+1));
+        Project project = projectRepository.findByIdx((long) (random.nextInt(100)+1));
+        Comment comment = Comment.builder().content("테스트 댓글 " + index).createdDate(LocalDateTime.now())
+                .writer(user).project(project).build();
 
-        user3.addUserProject(userProject5);
-        project1.addUserProject(userProject5);
-        userProjectRepository.save(userProject5);
-
-        user3.addUserProject(userProject6);
-        project3.addUserProject(userProject6);
-        userProjectRepository.save(userProject6);
-
-        Comment comment1 = Comment.builder().content("테스트 댓글1").createdDate(LocalDateTime.now()).build();
-
-        Comment comment2 = Comment.builder().content("테스트 댓글2").createdDate(LocalDateTime.now()).build();
-
-        Comment comment3 = Comment.builder().content("테스트 댓글3").createdDate(LocalDateTime.now()).build();
-
-        user2.addComment(comment1);
-        project1.addComment(comment1);
-        commentRepository.save(comment1);
-
-        user3.addComment(comment2);
-        project2.addComment(comment2);
-        commentRepository.save(comment2);
-
-        user1.addComment(comment3);
-        project1.addComment(comment3);
-        commentRepository.save(comment3);
-
+        commentRepository.save(comment);
     }
 }
