@@ -8,7 +8,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,13 +26,16 @@ public class User implements Serializable {
     private Long idx;
 
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
     private Set<Comment> comments = new HashSet<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonBackReference
     private Set<UserProject> userProjects = new HashSet<>();
 
     @OneToMany(mappedBy = "leader", fetch = FetchType.LAZY)
-    private Set<Project> projects = new HashSet<>();
+    @JsonBackReference
+    private List<Project> projects = new ArrayList<>();
 
     @NotNull
     @Length(max = 30)
@@ -53,7 +58,7 @@ public class User implements Serializable {
     private LocalDateTime createdDate;
 
     @Builder
-    public User( @NotNull @Length(max = 30) String email, @NotNull @Length(max = 30) String password, @NotNull @Length(max = 30) String nick, @NotNull LocalDateTime createdDate) {
+    public User(@NotNull @Length(max = 30) String email, @NotNull @Length(max = 30) String password, @NotNull @Length(max = 30) String nick, @NotNull LocalDateTime createdDate) {
         this.email = email;
         this.password = password;
         this.nick = nick;
