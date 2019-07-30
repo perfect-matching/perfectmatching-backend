@@ -35,23 +35,27 @@ public class AppRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
+        StringBuilder stringBuilder = new StringBuilder();
+        IntStream.rangeClosed(1, 600).forEach(stringBuilder::append);
+
         IntStream.rangeClosed(1, 40).forEach(index -> userRepository.save(User.builder().email("test" + index + "@email.com")
                                             .nick("testUser_" + index).password("testPassword").createdDate(LocalDateTime.now()).build()));
 
-        IntStream.rangeClosed(1, 200).forEach(this::createProjectTestData);
+        IntStream.rangeClosed(1, 200).forEach(index -> createProjectTestData(index ,stringBuilder.toString()));
 
         IntStream.rangeClosed(1, 300).forEach(index -> createUserProjectTestData());
 
         IntStream.rangeClosed(1, 100).forEach(this::createCommentTestData);
     }
 
-    private void createProjectTestData(int index) {
+    private void createProjectTestData(int index, String content) {
         Random random = new Random();
         String[] location = {"부산", "서울", "창원", "인천", "대구", "제주도", "춘천", "강릉", "울산", "포항"};
         String[] position = {"개발자", "기획자", "디자이너", "마케터", "기타"};
+        String title = "이러 이러한 Side Project 의 함께할 사람들을 찾고 있습니다. ";
         User user = userRepository.findByIdx(random.nextInt(15) + 1);
 
-        Project project = Project.builder().content("내용" + index).title("제목" + index).endDate(LocalDateTime.now()).
+        Project project = Project.builder().content("내용들 : " + content).title(title + index).endDate(LocalDateTime.now()).
                 startDate(LocalDateTime.now()).deadline(LocalDateTime.now()).location(location[random.nextInt(location.length)]).
                 createdDate(LocalDateTime.now()).status("모집").leader(user).build();
 

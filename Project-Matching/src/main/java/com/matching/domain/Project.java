@@ -1,5 +1,6 @@
 package com.matching.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -66,9 +67,11 @@ public class Project implements Serializable {
     private LocalDateTime modifiedDate;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
     private Set<Comment> comments = new HashSet<>();
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    @JsonBackReference
     private Set<UserProject> userProjects = new HashSet<>();
 
     @Builder
