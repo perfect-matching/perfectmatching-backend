@@ -11,7 +11,7 @@ Project - Side Project Member Matching Platform(예명)
 | OS |Windows 10, Ubuntu 18.04|
 |IDE |IntelliJ IDEA Ultimate |
 |JDK |JDK 1.8|
-|DataBase |MySQL 8.0.3|
+|DataBase |MySQL Server 5.7|
 |Build Tool |Gradle 5.2.1|
 
 ### Modeling
@@ -31,7 +31,10 @@ Project - Side Project Member Matching Platform(예명)
 
 |URI(자원)| HTTP(행위) | 기능(표현) |
 |:---:|:---:|:---:| 
-| `/api/projects` | GET | DB에 있는 전체 Project를 가져오기 위한 api |
+| `/api/projects` | GET | DB에 있는 Project를 가져오기 위한 api |
+| `/api/projects?offset={num}` | GET | offset에 따른 Project들을 보여주기 위한 api |
+| `/api/projects?location={name}` | GET | location에 따른 Project들을 보여주기 위한 api |
+| `/api/projects?location={name}&offset={num}` | GET | location과 offset에 따른 Project들을 보여주기 위한 api |
 | `/api/projects/{idx}` | GET | Project의 idx에 따라 개별로 가져오기 위한 api |
 | `/api/projects` | POST | Project를 생성하기 위한 요청 api |
 | `/api/projects/{idx}` | PUT | Project의 idx에 따라 Proect의 상세 내용 수정을 위한 api |

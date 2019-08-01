@@ -33,7 +33,7 @@ public class AppRunner implements ApplicationRunner {
 
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
 
         StringBuilder stringBuilder = new StringBuilder();
         IntStream.rangeClosed(1, 600).forEach(stringBuilder::append);
