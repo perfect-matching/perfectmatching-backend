@@ -26,7 +26,7 @@ Project - Side Project Member Matching Platform(예명)
 
 * 서버 URL
         
-    * `dongh9508.hopto.org:8083`
+    * `https://donghun-dev.kro.kr:8083`
 
 
 |URI(자원)| HTTP(행위) | 기능(표현) |
