@@ -53,7 +53,7 @@ public class AppRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) {
 
         IntStream.rangeClosed(1, 40).forEach(index -> userRepository.save(User.builder().email("test" + index + "@email.com")
-                .nick("testUser_" + index).password("testPassword").createdDate(LocalDateTime.now()).build()));
+                .nick("testUser_" + index).password("testPassword").createdDate(LocalDateTime.now()).description("저는 이러한 사람입니다.").build()));
 
         IntStream.rangeClosed(1, 200).forEach(index -> createProjectTestData(index));
 
@@ -70,8 +70,10 @@ public class AppRunner implements ApplicationRunner {
         User user = userRepository.findByIdx(random.nextInt(15) + 1);
 
         Project project = Project.builder().content(TEST_CONTENT).title(title + index).endDate(LocalDateTime.now()).
-                startDate(LocalDateTime.now()).deadline(LocalDateTime.now()).location(location[random.nextInt(location.length)]).
-                createdDate(LocalDateTime.now()).status("모집").leader(user).build();
+                summary("이러한 프로젝트에 참여할 인원을 모집합니다.").startDate(LocalDateTime.now()).deadline(LocalDateTime.now()).
+                location(location[random.nextInt(location.length)]).createdDate(LocalDateTime.now()).status("모집").leader(user).
+                developerRecruits(random.nextInt(6)).designerRecruits(random.nextInt(6)).plannerRecruits(random.nextInt(6)).
+                marketerRecruits(random.nextInt(6)).etcRecruits(random.nextInt(6)).build();
 
         projectRepository.save(project);
 

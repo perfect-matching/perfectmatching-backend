@@ -32,13 +32,17 @@ public class UserProject implements Serializable {
     @Column
     private String position;
 
+    @Column
+    private String simpleProfile;
+
     @Builder
-    public UserProject(UserProjectKey id, User user, Project project, String status, String position) {
+    public UserProject(UserProjectKey id, User user, Project project, String status, String position, String simpleProfile) {
         this.id = id;
         this.user = user;
         this.project = project;
         this.status = status;
         this.position = position;
+        this.simpleProfile = simpleProfile;
     }
 }
 
