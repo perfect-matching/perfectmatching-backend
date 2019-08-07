@@ -52,15 +52,21 @@ public class User implements Serializable {
     @Column
     private LocalDateTime createdDate;
 
+    @Column
+    private String profileImg;
+
+    @Column
+    private String description;
+
     @Builder
-    public User(String email, String password, String nick, LocalDateTime createdDate) {
+    public User(String email, String password, String nick, LocalDateTime createdDate, String profileImg, String description) {
         this.email = email;
         this.password = password;
         this.nick = nick;
         this.createdDate = createdDate;
+        this.profileImg = profileImg;
+        this.description = description;
     }
-
-
 
     public void addComment(Comment comment) {
         comment.setWriter(this);
