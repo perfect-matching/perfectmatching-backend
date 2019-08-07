@@ -53,7 +53,6 @@ public class ProjectController {
 
         PageMetadata pageMetadata = new PageMetadata(pageable.getPageSize(), collection.getNumber(), collection.getTotalElements());
         PagedResources<?> resources = new PagedResources<>(page.getContent(), pageMetadata);
-
         resources.add(new Link(projectService.getCurrentUriGetString(), "self"));
         resources.add(new Link(uriString, "next"));
 

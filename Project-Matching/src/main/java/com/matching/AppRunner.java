@@ -51,7 +51,6 @@ public class AppRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-
         IntStream.rangeClosed(1, 40).forEach(index -> userRepository.save(User.builder().email("test" + index + "@email.com")
                 .nick("testUser_" + index).password("testPassword").createdDate(LocalDateTime.now()).description("저는 이러한 사람입니다.").build()));
 
