@@ -13,6 +13,15 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
+# log
+
+console.xml
+logback-spring.xml
+file.xml
+AccessLogConfig.java
+HttpsConfig.jaava
+logback-access.xml
+
 # Generated files
 .idea/**/contentModel.xml
 
