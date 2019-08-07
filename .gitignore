@@ -200,5 +200,5 @@ modules.xml
 #SpringBoot
 
 *.yml
-*.properties
-
+application.properties
+Project-Matching/.gradle/
