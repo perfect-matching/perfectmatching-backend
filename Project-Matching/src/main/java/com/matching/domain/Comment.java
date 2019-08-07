@@ -34,7 +34,7 @@ public class Comment implements Serializable {
     private LocalDateTime modifiedDate;
 
     @Builder
-    public Comment(User writer, @NotNull Project project, @NotNull String content, @NotNull LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public Comment(User writer, Project project, String content, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.writer = writer;
         this.project = project;
         this.content = content;
