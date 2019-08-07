@@ -30,8 +30,11 @@ public class Project implements Serializable {
     @Column
     private String title;
 
-    @Column
+    @Column(length = 4000)
     private String content;
+
+    @Column
+    private String summary;
 
     @Column
     private String status;
@@ -78,12 +81,11 @@ public class Project implements Serializable {
     private Set<UserProject> userProjects = new HashSet<>();
 
     @Builder
-    public Project(User leader, String title, String content, String status, String location, LocalDateTime createdDate,
-                   LocalDateTime deadline, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime modifiedDate,
-                   Integer developerRecruits, Integer designerRecruits, Integer plannerRecruits, Integer marketerRecruits, Integer etcRecruits) {
+    public Project(User leader, String title, String content, String summary, String status, String location, LocalDateTime createdDate, LocalDateTime deadline, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime modifiedDate, Integer developerRecruits, Integer designerRecruits, Integer plannerRecruits, Integer marketerRecruits, Integer etcRecruits) {
         this.leader = leader;
         this.title = title;
         this.content = content;
+        this.summary = summary;
         this.status = status;
         this.location = location;
         this.createdDate = createdDate;
@@ -97,6 +99,7 @@ public class Project implements Serializable {
         this.marketerRecruits = marketerRecruits;
         this.etcRecruits = etcRecruits;
     }
+
 
     public void addComment(Comment comment) {
         comment.setProject(this);
