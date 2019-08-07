@@ -17,19 +17,23 @@ public class ProjectsDTO {
     private String title;
 
     @NotBlank
-    private String content;
+    private String summary;
 
     @NotBlank
     private String location;
 
     @NotBlank
     private Integer developerRecruits;
+
     @NotBlank
     private Integer designerRecruits;
+
     @NotBlank
     private Integer plannerRecruits;
+
     @NotBlank
     private Integer marketerRecruits;
+
     @NotBlank
     private Integer etcRecruits;
 
@@ -46,7 +50,7 @@ public class ProjectsDTO {
     public ProjectsDTO(Project project) {
         this.leader = project.getLeader().getNick();
         this.title = project.getTitle();
-        this.content = project.getContent();
+        this.summary = project.getSummary();
         this.deadLine = project.getDeadline();
         this.createdDate = project.getCreatedDate();
         this.status = project.getStatus();
