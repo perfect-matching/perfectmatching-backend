@@ -1,10 +1,15 @@
 package com.matching.service;
 
+import com.matching.controller.CommentController;
+import com.matching.controller.ProfileController;
 import com.matching.controller.ProjectController;
 import com.matching.domain.Comment;
 import com.matching.domain.Project;
 import com.matching.domain.UserProject;
+import com.matching.domain.dto.CommentDTO;
+import com.matching.domain.dto.ProjectDTO;
 import com.matching.domain.dto.ProjectsDTO;
+import com.matching.repository.CommentRepository;
 import com.matching.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,13 +33,17 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private CommentRepository commentRepository;
+
     public Page<Project> findAllProject(Pageable pageable, String location) {
+        if(projectRepository.findAllByOrderByIdxDesc(pageable) == null ||
+                projectRepository.findByLocationOrderByIdxDesc(location, pageable) == null) {
+            return null;
+        }
         return location == null ? projectRepository.findAllByOrderByIdxDesc(pageable) : projectRepository.findByLocationOrderByIdxDesc(location, pageable);
     }
 
-//    public Page<Project> findByPositionAndLocation(Pageable pageable) {
-//
-//    }
 
     public List<Resource> getProjectsDTOList(HttpServletResponse response, Page<Project> page) {
         List<Resource> list = new ArrayList<>();
@@ -43,6 +52,7 @@ public class ProjectService {
             ProjectsDTO projectsDTO = new ProjectsDTO(project);
             Resource<?> resource = new Resource<>(projectsDTO);
             resource.add(linkTo(methodOn(ProjectController.class).getProjectJsonView(project.getIdx(), response)).withSelfRel());
+            resource.add(linkTo(methodOn(ProfileController.class).getProfile(project.getLeader().getIdx(), response)).withRel("Leader Profile"));
             list.add(resource);
         }
 
@@ -50,53 +60,9 @@ public class ProjectService {
     }
 
     public Resource<?> getProject(Long idx) {
-
         Project project = projectRepository.findByIdx(idx);
-
-        Map<String, Object> map = new HashMap<>();
-
-        map.put("idx", project.getIdx());
-        map.put("title", project.getTitle());
-        map.put("leader", project.getLeader().getNick());
-        map.put("status", project.getStatus());
-        map.put("content", project.getContent());
-        map.put("location", project.getLocation());
-        map.put("createdDate", project.getCreatedDate());
-        map.put("deadline", project.getDeadline());
-        map.put("startDate", project.getStartDate());
-        map.put("endDate", project.getEndDate());
-        map.put("modifiedDate", project.getModifiedDate());
-        map.put("developerRecruits", project.getDeveloperRecruits());
-        map.put("designerRecruits", project.getDesignerRecruits());
-        map.put("plannerRecruits", project.getPlannerRecruits());
-        map.put("MarketerRecruits", project.getMarketerRecruits());
-        map.put("etcRecruits", project.getEtcRecruits());
-
-        List<Map<String, Object>> userList = new ArrayList<>();
-        List<Map<String, Object>> commentList = new ArrayList<>();
-
-        for(Comment comment : project.getComments()) {
-            Map<String, Object> commentMap = new HashMap<>();
-            commentMap.put("작성자", comment.getWriter().getNick());
-            commentMap.put("내용", comment.getContent());
-            commentMap.put("작성 날짜", comment.getCreatedDate());
-            commentList.add(commentMap);
-        }
-
-        map.put("comments", commentList);
-
-        for(UserProject userProject : project.getUserProjects()) {
-            if(userProject.getStatus().equals("매칭완료")) {
-                Map<String, Object> userMap = new HashMap<>();
-                userMap.put("유저네임", userProject.getUser().getNick());
-                userMap.put("포지션", userProject.getPosition());
-                userList.add(userMap);
-            }
-        }
-
-        map.put("Project Member", userList);
-
-        return new Resource<>(map);
+        ProjectDTO projectDTO = new ProjectDTO(project);
+        return new Resource<>(projectDTO);
     }
 
     public String getCurrentUriGetString() throws UnsupportedEncodingException {
@@ -114,5 +80,22 @@ public class ProjectService {
             uriString += "?offset="+ (collection.getNumber() + 1);
 
         return uriString;
+    }
+
+    public boolean findProjectComments(Long idx) {
+        if(projectRepository.findByIdx(idx) == null)
+            return true;
+        return commentRepository.findByProject(projectRepository.findByIdx(idx)) == null;
+    }
+
+    public Resources<?> getProjectComments(Long idx, HttpServletResponse response) {
+        List<Resource> list = new ArrayList<>();
+        for(Comment comment : commentRepository.findByProject(projectRepository.findByIdx(idx))) {
+            CommentDTO commentDTO = new CommentDTO(comment);
+            Resource<?> resource = new Resource<>(commentDTO);
+            resource.add(linkTo(methodOn(CommentController.class).getComment(comment.getIdx(), response)).withSelfRel());
+            list.add(resource);
+        }
+        return new Resources<>(list);
     }
 }

@@ -32,13 +32,15 @@ Project - Side Project Member Matching Platform(예명)
 |URI(자원)| HTTP(행위) | 기능(표현) |
 |:---:|:---:|:---:| 
 | `/api/projects` | GET | DB에 있는 Project를 가져오기 위한 api |
-| `/api/projects?offset={num}` | GET | offset에 따른 Project들을 보여주기 위한 api |
-| `/api/projects?location={name}` | GET | location에 따른 Project들을 보여주기 위한 api |
-| `/api/projects?location={name}&offset={num}` | GET | location과 offset에 따른 Project들을 보여주기 위한 api |
-| `/api/projects/{idx}` | GET | Project의 idx에 따라 개별로 가져오기 위한 api |
-| `/api/projects` | POST | Project를 생성하기 위한 요청 api |
-| `/api/projects/{idx}` | PUT | Project의 idx에 따라 Proect의 상세 내용 수정을 위한 api |
-| `/api/projects/{idx}` | DELETE | Project의 idx에 따라 Proect 삭제를 위한 api |
-
+| `/api/projects?offset={num}` | GET | offset에 따른 Project들을 가져오기 위한 api |
+| `/api/projects?location={name}` | GET | location에 따른 Project들을 가져오기 위한 api |
+| `/api/projects?location={name}&offset={num}` | GET | location과 offset에 따른 Project들을 가져오기 위한 api |
+| `/api/project/{idx}` | GET | Project의 idx에 따라 개별로 가져오기 위한 api |
+| `/api/project` | POST | Project를 생성하기 위한 요청 api |
+| `/api/project/{idx}` | PUT | Project의 idx에 따라 Proect의 상세 내용 수정을 위한 api |
+| `/api/project/{idx}` | DELETE | Project의 idx에 따라 Proect 삭제를 위한 api |
+| `/api/project/{idx}/comments` | GET | Project에 따른 Comment들을 가져오기 위한 api |
+| `/api/profile/{idx}` | GET | idx에 따른 User의 프로필 정보를 가져오기 위한 api |
+| `/api/comment/{idx}` | GET | idx에 따른 Comment를 가져오기 위한 api |
 
 </details>
