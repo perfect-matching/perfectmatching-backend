@@ -35,7 +35,6 @@ public class ProjectController {
     public ResponseEntity<?> getProjectsJsonView(@PageableDefault(size = 4) Pageable pageable, HttpServletResponse response,
                                                     @RequestParam(required = false) String location) throws UnsupportedEncodingException {
 
-        System.out.println("aasdadasdsadasdasdasd");
         response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
         response.setHeader("Location", "/api/projects");
 
