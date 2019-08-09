@@ -14,6 +14,9 @@ public class ProjectsDTO {
     private String leader;
 
     @NotBlank
+    private String image;
+
+    @NotBlank
     private String title;
 
     @NotBlank
@@ -23,19 +26,19 @@ public class ProjectsDTO {
     private String location;
 
     @NotBlank
-    private Integer developerRecruits;
+    private Boolean developerRecruits;
 
     @NotBlank
-    private Integer designerRecruits;
+    private Boolean designerRecruits;
 
     @NotBlank
-    private Integer plannerRecruits;
+    private Boolean plannerRecruits;
 
     @NotBlank
-    private Integer marketerRecruits;
+    private Boolean marketerRecruits;
 
     @NotBlank
-    private Integer etcRecruits;
+    private Boolean etcRecruits;
 
     @NotBlank
     private LocalDateTime deadLine;
@@ -49,17 +52,18 @@ public class ProjectsDTO {
 
     public ProjectsDTO(Project project) {
         this.leader = project.getLeader().getNick();
+        this.image = project.getLeader().getProfileImg();
         this.title = project.getTitle();
         this.summary = project.getSummary();
         this.deadLine = project.getDeadline();
         this.createdDate = project.getCreatedDate();
         this.status = project.getStatus();
         this.location = project.getLocation();
-        this.developerRecruits = project.getDeveloperRecruits();
-        this.designerRecruits = project.getDesignerRecruits();
-        this.plannerRecruits = project.getPlannerRecruits();
-        this.marketerRecruits = project.getMarketerRecruits();
-        this.etcRecruits = project.getEtcRecruits();
+        this.developerRecruits = project.getDeveloperRecruits() > 0;
+        this.designerRecruits = project.getDesignerRecruits() > 0;
+        this.plannerRecruits = project.getPlannerRecruits() > 0;
+        this.marketerRecruits = project.getMarketerRecruits() > 0;
+        this.etcRecruits = project.getEtcRecruits() > 0;
     }
 
 }

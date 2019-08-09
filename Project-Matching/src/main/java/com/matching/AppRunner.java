@@ -58,7 +58,7 @@ public class AppRunner implements ApplicationRunner {
 
         IntStream.rangeClosed(1, 300).forEach(index -> createUserProjectTestData());
 
-        IntStream.rangeClosed(1, 100).forEach(this::createCommentTestData);
+        IntStream.rangeClosed(1, 400).forEach(this::createCommentTestData);
     }
 
     private void createProjectTestData(int index) {
@@ -66,7 +66,7 @@ public class AppRunner implements ApplicationRunner {
         String[] location = {"부산", "서울", "창원", "인천", "대구", "제주도", "춘천", "강릉", "울산", "포항"};
         String[] position = {"개발자", "기획자", "디자이너", "마케터", "기타"};
         String title = "이러 이러한 Side Project 의 함께할 사람들을 찾고 있습니다. ";
-        User user = userRepository.findByIdx(random.nextInt(15) + 1);
+        User user = userRepository.findByIdx(random.nextInt(40) + 1);
 
         Project project = Project.builder().content(TEST_CONTENT).title(title + index).endDate(LocalDateTime.now()).
                 summary("이러한 프로젝트에 참여할 인원을 모집합니다.").startDate(LocalDateTime.now()).deadline(LocalDateTime.now()).
@@ -88,8 +88,8 @@ public class AppRunner implements ApplicationRunner {
         String[] position = {"개발자", "기획자", "디자이너", "마케터", "기타"};
         String[] status = {"매칭중", "매칭완료"};
 
-        long userIdx = random.nextInt(15)+1;
-        long projectIdx = random.nextInt(100)+1;
+        long userIdx = random.nextInt(40)+1;
+        long projectIdx = random.nextInt(200)+1;
 
         UserProjectKey key = new UserProjectKey(userIdx, projectIdx);
 
@@ -107,8 +107,8 @@ public class AppRunner implements ApplicationRunner {
     private void createCommentTestData(int index) {
         Random random = new Random();
 
-        User user = userRepository.findByIdx((long) (random.nextInt(15)+1));
-        Project project = projectRepository.findByIdx((long) (random.nextInt(100)+1));
+        User user = userRepository.findByIdx((long) (random.nextInt(40)+1));
+        Project project = projectRepository.findByIdx((long) (random.nextInt(200)+1));
         Comment comment = Comment.builder().content("테스트 댓글 " + index).createdDate(LocalDateTime.now())
                 .writer(user).project(project).build();
 
