@@ -1,7 +1,10 @@
 package com.matching.domain;
 
+import com.matching.domain.enums.PositionType;
+import com.matching.domain.enums.UserProjectStatus;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -11,6 +14,7 @@ import java.io.Serializable;
 @Data
 @Table
 @NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class UserProject implements Serializable {
 
     @EmbeddedId
@@ -27,16 +31,18 @@ public class UserProject implements Serializable {
     private Project project;
 
     @Column
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private UserProjectStatus status;
 
     @Column
-    private String position;
+    @Enumerated(EnumType.STRING)
+    private PositionType position;
 
     @Column
     private String simpleProfile;
 
     @Builder
-    public UserProject(UserProjectKey id, User user, Project project, String status, String position, String simpleProfile) {
+    public UserProject(UserProjectKey id, User user, Project project, UserProjectStatus status, PositionType position, String simpleProfile) {
         this.id = id;
         this.user = user;
         this.project = project;

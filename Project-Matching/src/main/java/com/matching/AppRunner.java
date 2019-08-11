@@ -1,6 +1,10 @@
 package com.matching;
 
 import com.matching.domain.*;
+import com.matching.domain.enums.LocationType;
+import com.matching.domain.enums.PositionType;
+import com.matching.domain.enums.ProjectStatus;
+import com.matching.domain.enums.UserProjectStatus;
 import com.matching.repository.CommentRepository;
 import com.matching.repository.ProjectRepository;
 import com.matching.repository.UserProjectRepository;
@@ -63,30 +67,26 @@ public class AppRunner implements ApplicationRunner {
 
     private void createProjectTestData(int index) {
         Random random = new Random();
-        String[] location = {"부산", "서울", "창원", "인천", "대구", "제주도", "춘천", "강릉", "울산", "포항"};
-        String[] position = {"개발자", "기획자", "디자이너", "마케터", "기타"};
         String title = "이러 이러한 Side Project 의 함께할 사람들을 찾고 있습니다. ";
         User user = userRepository.findByIdx(random.nextInt(40) + 1);
 
         Project project = Project.builder().content(TEST_CONTENT).title(title + index).endDate(LocalDateTime.now()).
                 summary("이러한 프로젝트에 참여할 인원을 모집합니다.").startDate(LocalDateTime.now()).deadline(LocalDateTime.now()).
-                location(location[random.nextInt(location.length)]).createdDate(LocalDateTime.now()).status("모집").leader(user).
+                location(LocationType.getRandomLocationType()).createdDate(LocalDateTime.now()).status(ProjectStatus.getRandomProjectStatus()).leader(user).
                 developerRecruits(random.nextInt(6)).designerRecruits(random.nextInt(6)).plannerRecruits(random.nextInt(6)).
                 marketerRecruits(random.nextInt(6)).etcRecruits(random.nextInt(6)).build();
 
         projectRepository.save(project);
 
         UserProjectKey key = new UserProjectKey(user.getIdx(), project.getIdx());
-        UserProject userProject = UserProject.builder().id(key).position(position[random.nextInt(position.length)])
-                .status("매칭완료").user(user).project(project).build();
+        UserProject userProject = UserProject.builder().id(key).position(PositionType.getRandomPositionType())
+                .status(UserProjectStatus.getRandomUserProjectStatus()).user(user).project(project).build();
 
         userProjectRepository.save(userProject);
     }
 
     private void createUserProjectTestData() {
         Random random = new Random();
-        String[] position = {"개발자", "기획자", "디자이너", "마케터", "기타"};
-        String[] status = {"매칭중", "매칭완료"};
 
         long userIdx = random.nextInt(40)+1;
         long projectIdx = random.nextInt(200)+1;
@@ -97,8 +97,8 @@ public class AppRunner implements ApplicationRunner {
             User user = userRepository.findByIdx(userIdx);
             Project project = projectRepository.findByIdx(projectIdx);
 
-            UserProject userProject = UserProject.builder().id(key).position(position[random.nextInt(position.length)])
-                    .status(status[random.nextInt(status.length)]).user(user).project(project).build();
+            UserProject userProject = UserProject.builder().id(key).position(PositionType.getRandomPositionType())
+                    .status(UserProjectStatus.getRandomUserProjectStatus()).user(user).project(project).build();
 
             userProjectRepository.save(userProject);
         }

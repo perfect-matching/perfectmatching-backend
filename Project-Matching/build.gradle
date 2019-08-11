@@ -28,11 +28,15 @@ repositories {
 }
 
 dependencies {
+    /* for file upload */
+    implementation 'org.apache.commons:commons-lang3:3.4'
+    implementation 'commons-io:commons-io:2.5'
     
     /* for rest api & web */
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     
     /* for spring security */
     implementation 'org.springframework.boot:spring-boot-starter-security'

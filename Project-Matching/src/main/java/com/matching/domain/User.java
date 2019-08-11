@@ -19,7 +19,7 @@ import java.util.Set;
 @Data
 @Table
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"projects", "userProjects", "comments"})
+@EqualsAndHashCode(of = "idx")
 public class User implements Serializable {
 
     @Id

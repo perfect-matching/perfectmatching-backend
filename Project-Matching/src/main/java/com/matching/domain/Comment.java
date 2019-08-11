@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @Table
 @NoArgsConstructor
+@EqualsAndHashCode(of = "idx")
 public class Comment implements Serializable {
 
     @Id

@@ -19,11 +19,15 @@ public class ProfileDTO {
     private String summary;
 
     @NotBlank
+    private String email;
+
+    @NotBlank
     private List<ProfileProjectDTO> profileProjectDTOS = new ArrayList<>();
 
     public ProfileDTO(User user) {
         this.nickname = user.getNick();
         this.summary = user.getDescription();
+        this.email = user.getEmail();
 
         for(UserProject userProject : user.getUserProjects()) {
             profileProjectDTOS.add(new ProfileProjectDTO(userProject));

@@ -9,8 +9,11 @@ import com.matching.domain.UserProject;
 import com.matching.domain.dto.CommentDTO;
 import com.matching.domain.dto.ProjectDTO;
 import com.matching.domain.dto.ProjectsDTO;
+import com.matching.domain.enums.LocationType;
+import com.matching.domain.enums.PositionType;
 import com.matching.repository.CommentRepository;
 import com.matching.repository.ProjectRepository;
+import com.matching.repository.UserProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,12 +39,47 @@ public class ProjectService {
     @Autowired
     private CommentRepository commentRepository;
 
-    public Page<Project> findAllProject(Pageable pageable, String location) {
-        if(projectRepository.findAllByOrderByIdxDesc(pageable) == null ||
-                projectRepository.findByLocationOrderByIdxDesc(location, pageable) == null) {
-            return null;
-        }
-        return location == null ? projectRepository.findAllByOrderByIdxDesc(pageable) : projectRepository.findByLocationOrderByIdxDesc(location, pageable);
+    @Autowired
+    private UserProjectRepository userProjectRepo;
+
+    public Page<Project> findPosition(String position, Pageable pageable) {
+        if(position.equals("DEVELOPER"))
+            return projectRepository.findByDeveloperRecruitsIsGreaterThanOrderByIdxDesc(0, pageable);
+        else if(position.equals("DESIGNER"))
+            return projectRepository.findByDesignerRecruitsIsGreaterThanOrderByIdxDesc(0, pageable);
+        else if(position.equals("MARKETER"))
+            return projectRepository.findByMarketerRecruitsIsGreaterThanOrderByIdxDesc(0, pageable);
+        else if(position.equals("PLANNER"))
+            return projectRepository.findByPlannerRecruitsIsGreaterThanOrderByIdxDesc(0, pageable);
+        else if(position.equals("ETC"))
+            return projectRepository.findByEtcRecruitsIsGreaterThanOrderByIdxDesc(0, pageable);
+        return null;
+    }
+
+    public Page<Project> findPositionAndLocation(String position, LocationType location, Pageable pageable) {
+        if(position.equals("Developer"))
+            return projectRepository.findByLocationAndDeveloperRecruitsIsGreaterThanOrderByIdxDesc(location, 0, pageable);
+        else if(position.equals("DESIGNER"))
+            return projectRepository.findByLocationAndDesignerRecruitsIsGreaterThanOrderByIdxDesc(location, 0, pageable);
+        else if(position.equals("MARKETER"))
+            return projectRepository.findByLocationAndMarketerRecruitsIsGreaterThanOrderByIdxDesc(location, 0, pageable);
+        else if(position.equals("PLANNER"))
+            return projectRepository.findByLocationAndPlannerRecruitsIsGreaterThanOrderByIdxDesc(location, 0, pageable);
+        else if(position.equals("ETC"))
+            return projectRepository.findByLocationAndEtcRecruitsIsGreaterThanOrderByIdxDesc(location, 0, pageable);
+        return null;
+    }
+
+    public Page<Project> findAllProject(Pageable pageable, LocationType location, String position) {
+
+        if(position == null && location == null)
+            return projectRepository.findAllByOrderByIdxDesc(pageable);
+        else if(position == null && location != null)
+            return projectRepository.findByLocationOrderByIdxDesc(location, pageable);
+        else if(position != null && location == null)
+            return findPosition(position, pageable);
+        else
+            return findPositionAndLocation(position, location, pageable);
     }
 
 
@@ -61,23 +99,24 @@ public class ProjectService {
 
     public Resource<?> getProject(Long idx) {
         Project project = projectRepository.findByIdx(idx);
-        ProjectDTO projectDTO = new ProjectDTO(project);
+        ProjectDTO projectDTO = new ProjectDTO(project, userProjectRepo);
         return new Resource<>(projectDTO);
     }
 
-    public String getCurrentUriGetString() throws UnsupportedEncodingException {
-        return URLDecoder.decode(ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString(), "UTF-8");
+    public String getCurrentUriGetString() {
+        return ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     }
 
-    public String nextUriEncoding(String uriString, Page<Project> collection, String location) {
-        if(uriString.contains("?offset=" + collection.getNumber()))
-            uriString = uriString.replace("?offset=" + collection.getNumber(), "?offset="+ (collection.getNumber() + 1));
-        else if(uriString.contains("&offset=" + collection.getNumber()))
-            uriString = uriString.replace("&offset=" + collection.getNumber(), "&offset="+ (collection.getNumber() + 1));
-        else if(!uriString.contains("&offset=" + collection.getNumber()) && location != null)
-            uriString += "&offset="+ (collection.getNumber() + 1);
+    public String nextUriEncoding(String uriString, Page<Project> collection, LocationType location, String position) {
+        int pageNumber = collection.getNumber();
+        if(uriString.contains("?offset=" + pageNumber))
+            uriString = uriString.replace("?offset=" + pageNumber, "?offset="+ (pageNumber + 1));
+        else if(uriString.contains("&offset=" + pageNumber))
+            uriString = uriString.replace("&offset=" + pageNumber, "&offset="+ (pageNumber + 1));
+        else if(!uriString.contains("&offset=" + pageNumber) && (location != null || position != null) )
+            uriString += "&offset="+ (pageNumber + 1);
         else
-            uriString += "?offset="+ (collection.getNumber() + 1);
+            uriString += "?offset="+ (pageNumber + 1);
 
         return uriString;
     }

@@ -26,9 +26,9 @@ public class ProfileProjectDTO {
 
     public ProfileProjectDTO(UserProject userProject) {
         this.title = userProject.getProject().getTitle();
-        this.status = userProject.getProject().getStatus();
+        this.status = userProject.getProject().getStatus().getStatus();
         this.createdDate = userProject.getProject().getCreatedDate();
-        this.position = userProject.getPosition();
+        this.position = userProject.getPosition().getPosition();
         this.summary = userProject.getProject().getSummary();
     }
 }

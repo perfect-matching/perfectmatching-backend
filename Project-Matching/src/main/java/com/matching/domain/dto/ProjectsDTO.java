@@ -14,7 +14,7 @@ public class ProjectsDTO {
     private String leader;
 
     @NotBlank
-    private String image;
+    private String leaderImage;
 
     @NotBlank
     private String title;
@@ -52,13 +52,13 @@ public class ProjectsDTO {
 
     public ProjectsDTO(Project project) {
         this.leader = project.getLeader().getNick();
-        this.image = project.getLeader().getProfileImg();
+        this.leaderImage = project.getLeader().getProfileImg();
         this.title = project.getTitle();
         this.summary = project.getSummary();
         this.deadLine = project.getDeadline();
         this.createdDate = project.getCreatedDate();
-        this.status = project.getStatus();
-        this.location = project.getLocation();
+        this.status = project.getStatus().getStatus();
+        this.location = project.getLocation().getLocation();
         this.developerRecruits = project.getDeveloperRecruits() > 0;
         this.designerRecruits = project.getDesignerRecruits() > 0;
         this.plannerRecruits = project.getPlannerRecruits() > 0;
