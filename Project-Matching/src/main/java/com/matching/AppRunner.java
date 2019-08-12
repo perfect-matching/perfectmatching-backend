@@ -80,7 +80,7 @@ public class AppRunner implements ApplicationRunner {
 
         UserProjectKey key = new UserProjectKey(user.getIdx(), project.getIdx());
         UserProject userProject = UserProject.builder().id(key).position(PositionType.getRandomPositionType())
-                .status(UserProjectStatus.getRandomUserProjectStatus()).user(user).project(project).build();
+                .status(UserProjectStatus.MATCHING).user(user).project(project).build();
 
         userProjectRepository.save(userProject);
     }
