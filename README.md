@@ -108,12 +108,12 @@ Project - Side Project Member Matching Platform
 
     |URI(자원)| HTTP(행위) | 기능(표현) |
     |:---:|:---:|:---:| 
-    | `/api/project` | POST | Project를 생성하기 위한 요청 api |
+    | `/api/project/{idx}` | PUT | Project의 idx에 따라 Project를 수정하기 위한 api |
 
 * DELETE
     
     |URI(자원)| HTTP(행위) | 기능(표현) |
     |:---:|:---:|:---:| 
-    | `/api/project/{idx}` | DELETE | Project의 idx에 따라 Proect 삭제를 위한 api |
+    | `/api/project/{idx}` | DELETE | Project의 idx에 따라 Projet를 삭제하기 위한 api |
 
 </details>

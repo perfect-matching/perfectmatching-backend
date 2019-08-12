@@ -1,16 +1,7 @@
 package com.matching.controller;
 
 import com.matching.domain.Project;
-import com.matching.domain.User;
-import com.matching.domain.UserProject;
-import com.matching.domain.UserProjectKey;
 import com.matching.domain.enums.LocationType;
-import com.matching.domain.enums.PositionType;
-import com.matching.domain.enums.ProjectStatus;
-import com.matching.domain.enums.UserProjectStatus;
-import com.matching.repository.ProjectRepository;
-import com.matching.repository.UserProjectRepository;
-import com.matching.repository.UserRepository;
 import com.matching.service.ProfileService;
 import com.matching.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
-import java.io.UnsupportedEncodingException;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -46,15 +34,6 @@ public class ProjectController {
 
     @Autowired
     private ProfileService profileService;
-
-    @Autowired
-    private ProjectRepository projectRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserProjectRepository userProjectRepository;
 
     @GetMapping(value = "/projects",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProjectsJsonView(@PageableDefault(size = 4) Pageable pageable, HttpServletResponse response,
