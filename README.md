@@ -1,7 +1,7 @@
-Project - Side Project Member Matching Platform(예명)
+Project - Side Project Member Matching Platform
 ===
 
-* 사이드 프로젝트를 함께할 팀원을 구할 수 있는 플랫폼
+> 사용자가 원하는대로 사이드 프로젝트를 함께할 팀원들을 모집할 수 있고 또는 사용자가 원하는 사이드 프로젝트에 참여하기 위해서 프로젝트를 찾을 수 있는 매칭 플랫폼 프로젝트. 
 
 ## 개발환경
 
@@ -21,26 +21,99 @@ Project - Side Project Member Matching Platform(예명)
 
 * Entity Relation Diagram [확인](https://drive.google.com/file/d/1tmBT3GAL3OIpRocH-hIGdo70-vzptTSo/view)
 
-### API URL
+### 실행 방법
+<details><summary>세부정보</summary>
+
+* 준비사항.
+    
+    * Gradle or IntelliJ IDEA
+
+    * JDK (>= 1.8)
+
+    * Spring Boot (>= 2.x)
+
+* 저장소를 `clone`
+
+    ```bash
+    $ git clone https://github.com/perfect-matching/perfectmatching-backend.git
+    ```
+
+* 프로젝트 내 Project-Matching\src\main\resources 경로에 `application.yml` 생성.
+
+    * 밑의 양식대로 내용을 채운 뒤, `application.yml`에 삽입.
+    <br>
+
+    ```yml
+    spring:
+        datasource:
+            url: jdbc:mysql://localhost/본인_DB
+            username: 본인_DB_User
+            password: 본인_DB_User_Password
+            driver-class-name: com.mysql.jdbc.Driver
+        jpa:
+            hibernate:
+            ddl-auto: create
+
+        data:
+            web:
+                pageable:
+                    page-parameter: offset
+    ```
+
+* IntelliJ IDEA(>= 2018.3)에서 해당 프로젝트를 `Open`
+
+    * 또는 터미널을 열어서 프로젝트 경로에 진입해서 다음 명령어를 실행.
+
+    * Windows 10
+
+        ```bash
+        $ gradlew bootRun
+        ```
+
+    * Ubuntu 18.04
+
+        ```
+        $ ./gradlew bootRun
+        ```
+
+</details>
+
+### REST API URL
 <details><summary>세부정보</summary>
 
 * 서버 URL
         
     * `https://donghun-dev.kro.kr:8083`
 
+* GET
 
-|URI(자원)| HTTP(행위) | 기능(표현) |
-|:---:|:---:|:---:| 
-| `/api/projects` | GET | DB에 있는 Project를 가져오기 위한 api |
-| `/api/projects?offset={num}` | GET | offset에 따른 Project들을 가져오기 위한 api |
-| `/api/projects?location={name}` | GET | location에 따른 Project들을 가져오기 위한 api |
-| `/api/projects?location={name}&offset={num}` | GET | location과 offset에 따른 Project들을 가져오기 위한 api |
-| `/api/project/{idx}` | GET | Project의 idx에 따라 개별로 가져오기 위한 api |
-| `/api/project` | POST | Project를 생성하기 위한 요청 api |
-| `/api/project/{idx}` | PUT | Project의 idx에 따라 Proect의 상세 내용 수정을 위한 api |
-| `/api/project/{idx}` | DELETE | Project의 idx에 따라 Proect 삭제를 위한 api |
-| `/api/project/{idx}/comments` | GET | Project에 따른 Comment들을 가져오기 위한 api |
-| `/api/profile/{idx}` | GET | idx에 따른 User의 프로필 정보를 가져오기 위한 api |
-| `/api/comment/{idx}` | GET | idx에 따른 Comment를 가져오기 위한 api |
+    |URI(자원)| HTTP(행위) | 기능(표현) |
+    |:---:|:---:|:---:| 
+    | `/api/projects` | GET | DB에 있는 Project를 가져오기 위한 api |
+    | `/api/projects?offset={num}` | GET | offset에 따른 Project들을 가져오기 위한 api |
+    | `/api/projects?location={name}` | GET | location에 따른 Project들을 가져오기 위한 api |
+    | `/api/projects?location={name}&offset={num}` | GET | location과 offset에 따른 Project들을 가져오기 위한 api |
+    | `/api/project/{idx}` | GET | Project의 idx에 따라 개별로 가져오기 위한 api |
+    | `/api/project/{idx}/comments` | GET | Project에 따른 Comment들을 가져오기 위한 api |
+    | `/api/profile/{idx}` | GET | idx에 따른 User의 프로필 정보를 가져오기 위한 api |
+    | `/api/comment/{idx}` | GET | idx에 따른 Comment를 가져오기 위한 api |
+
+* POST
+
+    |URI(자원)| HTTP(행위) | 기능(표현) |
+    |:---:|:---:|:---:| 
+    | `/api/project` | POST | Project를 생성하기 위한 요청 api |
+
+* PUT
+
+    |URI(자원)| HTTP(행위) | 기능(표현) |
+    |:---:|:---:|:---:| 
+    | `/api/project/{idx}` | PUT | Project의 idx에 따라 Project를 수정하기 위한 api |
+
+* DELETE
+    
+    |URI(자원)| HTTP(행위) | 기능(표현) |
+    |:---:|:---:|:---:| 
+    | `/api/project/{idx}` | DELETE | Project의 idx에 따라 Projet를 삭제하기 위한 api |
 
 </details>

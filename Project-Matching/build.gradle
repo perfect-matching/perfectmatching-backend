@@ -19,27 +19,31 @@ configurations {
     }
 }
 
+bootRun {
+    main = 'com.matching.MatchingApplication'
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
-
     /* for file upload */
-    compile 'org.apache.commons:commons-lang3:3.4'
-    compile 'commons-io:commons-io:2.5'
-
+    implementation 'org.apache.commons:commons-lang3:3.4'
+    implementation 'commons-io:commons-io:2.5'
+    
     /* for rest api & web */
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    
     /* for spring security */
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
     /* unused */
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-
+    
     /* lombok */
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -52,5 +56,5 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-
 }
+

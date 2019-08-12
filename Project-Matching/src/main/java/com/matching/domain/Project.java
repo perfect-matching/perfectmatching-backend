@@ -1,6 +1,8 @@
 package com.matching.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.matching.domain.enums.LocationType;
+import com.matching.domain.enums.ProjectStatus;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +18,7 @@ import java.util.Set;
 @Data
 @Table
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"userProjects", "comments"})
+@EqualsAndHashCode(of = "idx")
 public class Project implements Serializable {
 
     @Id
@@ -37,10 +39,12 @@ public class Project implements Serializable {
     private String summary;
 
     @Column
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ProjectStatus status;
 
     @Column
-    private String location;
+    @Enumerated(EnumType.STRING)
+    private LocationType location;
 
     @Column
     private LocalDateTime createdDate;
@@ -81,7 +85,7 @@ public class Project implements Serializable {
     private Set<UserProject> userProjects = new HashSet<>();
 
     @Builder
-    public Project(User leader, String title, String content, String summary, String status, String location, LocalDateTime createdDate, LocalDateTime deadline, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime modifiedDate, Integer developerRecruits, Integer designerRecruits, Integer plannerRecruits, Integer marketerRecruits, Integer etcRecruits) {
+    public Project(User leader, String title, String content, String summary, ProjectStatus status, LocationType location, LocalDateTime createdDate, LocalDateTime deadline, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime modifiedDate, Integer developerRecruits, Integer designerRecruits, Integer plannerRecruits, Integer marketerRecruits, Integer etcRecruits) {
         this.leader = leader;
         this.title = title;
         this.content = content;
