@@ -21,7 +21,6 @@ public enum LocationType {
     GYENONGSANGNAMDO("경상남도"),
     JEJUDO("제주도");
 
-
     private String location;
 
     LocationType(String location) {

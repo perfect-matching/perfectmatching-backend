@@ -2,11 +2,13 @@ package com.matching.domain.dto;
 
 import com.matching.domain.Comment;
 import lombok.Data;
+import org.springframework.hateoas.core.Relation;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
+@Relation(collectionRelation = "datas")
 public class CommentDTO {
 
     @NotBlank

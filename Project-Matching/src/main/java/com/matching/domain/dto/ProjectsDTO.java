@@ -3,11 +3,13 @@ package com.matching.domain.dto;
 import com.matching.domain.Project;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.hateoas.core.Relation;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
+@Relation(collectionRelation = "datas")
 public class ProjectsDTO {
 
     @NotBlank
