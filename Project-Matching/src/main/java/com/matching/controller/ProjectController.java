@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -35,10 +34,11 @@ public class ProjectController {
     @Autowired
     private ProfileService profileService;
 
-    @GetMapping(value = "/projects",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProjectsJsonView(@PageableDefault(size = 4) Pageable pageable, HttpServletResponse response,
                                                     @RequestParam(required = false) LocationType location,
                                                     @RequestParam(required = false) String position) {
+
         response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
         response.setHeader("Location", "/api/projects");
 
@@ -54,8 +54,9 @@ public class ProjectController {
 
         PageMetadata pageMetadata = new PageMetadata(pageable.getPageSize(), collection.getNumber(), collection.getTotalElements());
         PagedResources<?> resources = new PagedResources<>(page.getContent(), pageMetadata);
-        resources.add(new Link(projectService.getCurrentUriGetString(), "self"));
-        resources.add(new Link(uriString, "next"));
+
+        resources.add(new Link(projectService.getCurrentUriGetString()).withSelfRel());
+        resources.add(new Link(uriString).withRel("next"));
 
         return ResponseEntity.ok(resources);
     }
@@ -71,7 +72,7 @@ public class ProjectController {
         return ResponseEntity.ok(resource);
     }
 
-    @GetMapping(value = "/projects/{idx}/leader", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/project/{idx}/leader", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProjectLeader(@PathVariable final Long idx, HttpServletResponse response) {
         response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
         response.setHeader("Location", "/api/project/" + idx + "/leader");

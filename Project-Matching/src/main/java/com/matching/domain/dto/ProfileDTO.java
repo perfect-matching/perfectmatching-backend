@@ -1,6 +1,5 @@
 package com.matching.domain.dto;
 
-import com.matching.domain.Project;
 import com.matching.domain.User;
 import com.matching.domain.UserProject;
 import lombok.Data;
@@ -22,7 +21,7 @@ public class ProfileDTO {
     private String email;
 
     @NotBlank
-    private List<ProfileProjectDTO> profileProjectDTOS = new ArrayList<>();
+    private List<ProfileProjectDTO> datas = new ArrayList<>();
 
     public ProfileDTO(User user) {
         this.nickname = user.getNick();
@@ -30,7 +29,7 @@ public class ProfileDTO {
         this.email = user.getEmail();
 
         for(UserProject userProject : user.getUserProjects()) {
-            profileProjectDTOS.add(new ProfileProjectDTO(userProject));
+            datas.add(new ProfileProjectDTO(userProject));
         }
     }
 }

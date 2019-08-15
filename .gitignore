@@ -201,4 +201,4 @@ modules.xml
 
 *.yml
 application.properties
-Project-Matching/.gradle/
+.gradle/

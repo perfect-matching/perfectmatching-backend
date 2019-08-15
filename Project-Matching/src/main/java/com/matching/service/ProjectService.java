@@ -1,5 +1,6 @@
 package com.matching.service;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.matching.controller.CommentController;
 import com.matching.controller.ProfileController;
 import com.matching.controller.ProjectController;
@@ -23,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;
@@ -82,8 +85,8 @@ public class ProjectService {
             return findPositionAndLocation(position, location, pageable);
     }
 
-
     public List<Resource> getProjectsDTOList(HttpServletResponse response, Page<Project> page) {
+
         List<Resource> list = new ArrayList<>();
 
         for(Project project : page) {
