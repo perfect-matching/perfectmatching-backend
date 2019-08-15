@@ -39,20 +39,20 @@ public class User implements Serializable {
     @JsonBackReference
     private List<Project> projects = new ArrayList<>();
 
-    @Column
+    @Column(length = 30, nullable = false)
     private String email;
 
-    @Column
+    @Column(length = 30, nullable = false)
     @JsonIgnore
     private String password;
 
-    @Column
+    @Column(length = 30, nullable = false)
     private String nick;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime createdDate;
 
-    @Column
+    @Column(length = 100)
     private String profileImg;
 
     @Column

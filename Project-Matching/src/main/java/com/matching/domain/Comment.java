@@ -25,10 +25,10 @@ public class Comment implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private Project project;
 
-    @Column
+    @Column(length = 255, nullable = false)
     private String content;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime createdDate;
 
     @Column

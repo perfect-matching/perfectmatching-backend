@@ -29,51 +29,51 @@ public class Project implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private User leader;
 
-    @Column
+    @Column(nullable = false)
     private String title;
 
-    @Column(length = 4000)
+    @Column(length = 4000, nullable = false)
     private String content;
 
-    @Column
+    @Column(length = 100, nullable = false)
     private String summary;
 
-    @Column
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ProjectStatus status;
 
-    @Column
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private LocationType location;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime createdDate;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime deadline;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime startDate;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime endDate;
 
     @Column
     private LocalDateTime modifiedDate;
 
-    @Column
+    @Column(nullable = false)
     private Integer developerRecruits;
 
-    @Column
+    @Column(nullable = false)
     private Integer designerRecruits;
 
-    @Column
+    @Column(nullable = false)
     private Integer plannerRecruits;
 
-    @Column
+    @Column(nullable = false)
     private Integer marketerRecruits;
 
-    @Column
+    @Column(nullable = false)
     private Integer etcRecruits;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
