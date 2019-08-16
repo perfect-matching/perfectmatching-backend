@@ -56,7 +56,7 @@ public class AppRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         IntStream.rangeClosed(1, 40).forEach(index -> userRepository.save(User.builder().email("test" + index + "@email.com")
-                .nick("testUser_" + index).password("testPassword").createdDate(LocalDateTime.now()).description("저는 이러한 사람입니다.").build()));
+                .nick("testUser_" + index).password("testPassword").createdDate(LocalDateTime.now()).profileImg("Profile Image URL").description("저는 이러한 사람입니다.").build()));
 
         IntStream.rangeClosed(1, 200).forEach(index -> createProjectTestData(index));
 
@@ -80,7 +80,7 @@ public class AppRunner implements ApplicationRunner {
 
         UserProjectKey key = new UserProjectKey(user.getIdx(), project.getIdx());
         UserProject userProject = UserProject.builder().id(key).position(PositionType.getRandomPositionType())
-                .status(UserProjectStatus.MATCHING).user(user).project(project).build();
+                .status(UserProjectStatus.MATCHING).simpleProfile("저는 꼭 프로젝트에 참여하고 싶습니다").user(user).project(project).build();
 
         userProjectRepository.save(userProject);
     }
@@ -98,7 +98,7 @@ public class AppRunner implements ApplicationRunner {
             Project project = projectRepository.findByIdx(projectIdx);
 
             UserProject userProject = UserProject.builder().id(key).position(PositionType.getRandomPositionType())
-                    .status(UserProjectStatus.getRandomUserProjectStatus()).user(user).project(project).build();
+                    .status(UserProjectStatus.getRandomUserProjectStatus()).simpleProfile("저는 꼭 프로젝트에 참여하고 싶습니다").user(user).project(project).build();
 
             userProjectRepository.save(userProject);
         }

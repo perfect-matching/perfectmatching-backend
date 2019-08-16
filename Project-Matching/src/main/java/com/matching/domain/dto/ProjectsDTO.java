@@ -13,18 +13,29 @@ import java.time.LocalDateTime;
 public class ProjectsDTO {
 
     @NotBlank
+    private Long projectIdx;
+
+    @NotBlank
+    @Length(max = 30, min = 1)
     private String leader;
 
     @NotBlank
+    private Long leaderIdx;
+
+    @NotBlank
+    @Length(max = 100, min = 1)
     private String leaderImage;
 
     @NotBlank
+    @Length(max = 255, min = 1)
     private String title;
 
     @NotBlank
+    @Length(max = 100, min = 1)
     private String summary;
 
     @NotBlank
+    @Length(max = 255, min = 1)
     private String location;
 
     @NotBlank
@@ -42,18 +53,19 @@ public class ProjectsDTO {
     @NotBlank
     private Boolean etcRecruits;
 
-    @NotBlank
     private LocalDateTime deadLine;
 
     @NotBlank
     private LocalDateTime createdDate;
 
     @NotBlank
-    @Length(max = 10)
+    @Length(max = 10, min = 1)
     private String status;
 
     public ProjectsDTO(Project project) {
+        this.projectIdx = project.getIdx();
         this.leader = project.getLeader().getNick();
+        this.leaderIdx = project.getLeader().getIdx();
         this.leaderImage = project.getLeader().getProfileImg();
         this.title = project.getTitle();
         this.summary = project.getSummary();

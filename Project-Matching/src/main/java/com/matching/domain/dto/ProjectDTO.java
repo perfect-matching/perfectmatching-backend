@@ -5,6 +5,7 @@ import com.matching.domain.enums.PositionType;
 import com.matching.domain.enums.UserProjectStatus;
 import com.matching.repository.UserProjectRepository;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -13,24 +14,34 @@ import java.time.LocalDateTime;
 public class ProjectDTO {
 
     @NotBlank
+    private Long projectIdx;
+
+    @NotBlank
+    @Length(max = 255, min = 1)
     private String title;
 
     @NotBlank
+    private Long leaderIdx;
+
+    @NotBlank
+    @Length(max = 30, min = 1)
     private String leader;
 
     @NotBlank
+    @Length(max = 5000, min = 1)
     private String content;
 
     @NotBlank
+    @Length(max = 10, min = 1)
     private String status;
 
     @NotBlank
+    @Length(max = 255, min = 1)
     private String location;
 
     @NotBlank
     private LocalDateTime createdDate;
 
-    @NotBlank
     private LocalDateTime deadline;
 
     @NotBlank
@@ -39,7 +50,6 @@ public class ProjectDTO {
     @NotBlank
     private LocalDateTime endDate;
 
-    @NotBlank
     private LocalDateTime modifiedDate;
 
     @NotBlank
@@ -73,11 +83,14 @@ public class ProjectDTO {
     private Integer currentEtc;
 
     @NotBlank
+    @Length(max = 100, min = 1)
     private String summary;
 
     public ProjectDTO(Project project, UserProjectRepository userProjectRepo) {
+        this.projectIdx = project.getIdx();
         this.title = project.getTitle();
         this.leader = project.getLeader().getNick();
+        this.leaderIdx = project.getLeader().getIdx();
         this.content = project.getContent();
         this.status = project.getStatus().getStatus();
         this.location = project.getLocation().getLocation();

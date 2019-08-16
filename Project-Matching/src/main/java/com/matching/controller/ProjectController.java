@@ -77,11 +77,13 @@ public class ProjectController {
         response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
         response.setHeader("Location", "/api/project/" + idx + "/leader");
 
-        if(profileService.findUser(idx))
+        Long leaderIdx = projectService.findByProject(idx).getLeader().getIdx();
+
+        if(profileService.findUser(leaderIdx))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        Resource<?> resource = profileService.findUserProfile(idx);
-        resource.add(linkTo(methodOn(ProfileController.class).getProfile(idx, response)).withSelfRel());
+        Resource<?> resource = profileService.findUserProfile(leaderIdx);
+        resource.add(linkTo(methodOn(ProjectController.class).getProjectLeader(idx, response)).withSelfRel());
 
         return ResponseEntity.ok(resource);
     }
