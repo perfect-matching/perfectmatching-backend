@@ -29,51 +29,51 @@ public class Project implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private User leader;
 
-    @Column
+    @Column(nullable = false)
     private String title;
 
-    @Column(length = 4000)
+    @Column(nullable = false, length = 5000)
     private String content;
 
-    @Column
+    @Column(nullable = false, length = 100)
     private String summary;
 
-    @Column
+    @Column(nullable = false, length = 10)
     @Enumerated(EnumType.STRING)
     private ProjectStatus status;
 
-    @Column
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private LocationType location;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime createdDate;
 
     @Column
     private LocalDateTime deadline;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime startDate;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime endDate;
 
     @Column
     private LocalDateTime modifiedDate;
 
-    @Column
+    @Column(nullable = false)
     private Integer developerRecruits;
 
-    @Column
+    @Column(nullable = false)
     private Integer designerRecruits;
 
-    @Column
+    @Column(nullable = false)
     private Integer plannerRecruits;
 
-    @Column
+    @Column(nullable = false)
     private Integer marketerRecruits;
 
-    @Column
+    @Column(nullable = false)
     private Integer etcRecruits;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -103,7 +103,6 @@ public class Project implements Serializable {
         this.marketerRecruits = marketerRecruits;
         this.etcRecruits = etcRecruits;
     }
-
 
     public void addComment(Comment comment) {
         comment.setProject(this);

@@ -30,15 +30,15 @@ public class UserProject implements Serializable {
     @JoinColumn(name = "project_idx")
     private Project project;
 
-    @Column
+    @Column(nullable = false, length = 10)
     @Enumerated(EnumType.STRING)
     private UserProjectStatus status;
 
-    @Column
+    @Column(nullable = false, length = 10)
     @Enumerated(EnumType.STRING)
     private PositionType position;
 
-    @Column
+    @Column(nullable = false, length = 400)
     private String simpleProfile;
 
     @Builder
