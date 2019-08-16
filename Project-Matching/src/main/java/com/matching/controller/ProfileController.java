@@ -3,6 +3,7 @@ package com.matching.controller;
 import com.matching.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +24,29 @@ public class ProfileController {
     @GetMapping(value = "/{idx}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProfile(@PathVariable Long idx, HttpServletResponse response) {
         response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/profile");
+        response.setHeader("Location", "/api/profile/" + idx);
 
         if(profileService.findUser(idx))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         Resource<?> resource = profileService.findUserProfile(idx);
         resource.add(linkTo(methodOn(ProfileController.class).getProfile(idx, response)).withSelfRel());
+        resource.add(linkTo(methodOn(ProfileController.class).getProfileProjects(idx, response)).withRel("Profile Projects"));
 
         return ResponseEntity.ok(resource);
+    }
+
+    @GetMapping(value = "/{idx}/projects", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProfileProjects(@PathVariable Long idx, HttpServletResponse response) {
+        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
+        response.setHeader("Location", "/api/profile/" + idx + "/projects");
+
+        if(profileService.findUser(idx) || profileService.findUserProjects(idx))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Resources<?> resources = profileService.findProfileProjects(idx);
+        resources.add(linkTo(methodOn(ProfileController.class).getProfileProjects(idx, response)).withSelfRel());
+
+        return ResponseEntity.ok(resources);
     }
 }

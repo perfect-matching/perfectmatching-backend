@@ -29,16 +29,10 @@ public class ProfileDTO {
     @Length(max = 30, min = 3)
     private String email;
 
-    private List<ProfileProjectDTO> datas = new ArrayList<>();
-
     public ProfileDTO(User user) {
         this.userIdx = user.getIdx();
         this.nickname = user.getNick();
         this.summary = user.getDescription();
         this.email = user.getEmail();
-
-        for(UserProject userProject : user.getUserProjects()) {
-            datas.add(new ProfileProjectDTO(userProject));
-        }
     }
 }
