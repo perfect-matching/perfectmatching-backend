@@ -85,6 +85,10 @@ public class ProjectService {
             return findPositionAndLocation(position, location, pageable);
     }
 
+    public Project findByProject(Long idx) {
+        return projectRepository.findByIdx(idx);
+    }
+
     public List<Resource> getProjectsDTOList(HttpServletResponse response, Page<Project> page) {
 
         List<Resource> list = new ArrayList<>();
