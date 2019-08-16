@@ -52,7 +52,7 @@ Project - Side Project Member Matching Platform
             driver-class-name: com.mysql.jdbc.Driver
         jpa:
             hibernate:
-            ddl-auto: create
+                ddl-auto: create
 
         data:
             web:
