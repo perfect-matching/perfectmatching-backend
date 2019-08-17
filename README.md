@@ -95,7 +95,9 @@ Project - Side Project Member Matching Platform
     | `/api/projects?location={name}&offset={num}` | GET | location과 offset에 따른 Project들을 가져오기 위한 api |
     | `/api/project/{idx}` | GET | Project의 idx에 따라 개별로 가져오기 위한 api |
     | `/api/project/{idx}/comments` | GET | Project에 따른 Comment들을 가져오기 위한 api |
+    | `/api/project/{idx}/members` | GET | Project에 참여중인 맴버들의 정보를 가져오기 위한 api |
     | `/api/profile/{idx}` | GET | idx에 따른 User의 프로필 정보를 가져오기 위한 api |
+    | `/api/profile/{idx}/projects` | GET | idx에 따른 User의 프로필 정보 중 참여중인 프로젝트 정보를 가져오기 위한 api |
     | `/api/comment/{idx}` | GET | idx에 따른 Comment를 가져오기 위한 api |
 
 * POST

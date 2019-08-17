@@ -31,9 +31,6 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-    @Autowired
-    private ProfileService profileService;
-
     @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProjectsJsonView(@PageableDefault(size = 4) Pageable pageable, HttpServletResponse response,
                                                     @RequestParam(required = false) LocationType location,
@@ -43,6 +40,7 @@ public class ProjectController {
         response.setHeader("Location", "/api/projects");
 
         Page<Project> collection = projectService.findAllProject(pageable, location, position);
+
         if(collection == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
@@ -65,26 +63,17 @@ public class ProjectController {
     public ResponseEntity<?> getProjectJsonView(@PathVariable final Long idx, HttpServletResponse response) {
         response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
         response.setHeader("Location", "/api/project/" + idx);
-        Resource<?> resource = projectService.getProject(idx);
-        resource.add(linkTo(methodOn(ProjectController.class).getProjectJsonView(idx, response)).withSelfRel());
-        resource.add(linkTo(methodOn(ProjectController.class).getProjectLeader(idx, response)).withRel("Leader"));
-        resource.add(linkTo(methodOn(ProjectController.class).getProjectComments(idx, response)).withRel("Comments"));
-        return ResponseEntity.ok(resource);
-    }
 
-    @GetMapping(value = "/project/{idx}/leader", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getProjectLeader(@PathVariable final Long idx, HttpServletResponse response) {
-        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/project/" + idx + "/leader");
-
-        Long leaderIdx = projectService.findByProject(idx).getLeader().getIdx();
-
-        if(profileService.findUser(leaderIdx))
+        if(projectService.projectNullCheck(idx))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        Resource<?> resource = profileService.findUserProfile(leaderIdx);
-        resource.add(linkTo(methodOn(ProjectController.class).getProjectLeader(idx, response)).withSelfRel());
+        Resource<?> resource = projectService.getProject(idx);
+        Long leaderIdx = projectService.findByProject(idx).getLeader().getIdx();
 
+        resource.add(linkTo(methodOn(ProjectController.class).getProjectJsonView(idx, response)).withSelfRel());
+        resource.add(linkTo(methodOn(ProfileController.class).getProfile(leaderIdx, response)).withRel("Leader Profile"));
+        resource.add(linkTo(methodOn(ProjectController.class).getProjectComments(idx, response)).withRel("Comments"));
+        resource.add(linkTo(methodOn(ProjectController.class).getProjectMembers(idx, response)).withRel("Members"));
         return ResponseEntity.ok(resource);
     }
 
@@ -99,6 +88,20 @@ public class ProjectController {
 
         Resources<?> resources = projectService.getProjectComments(idx, response);
         resources.add(linkTo(methodOn(ProjectController.class).getProjectComments(idx, response)).withSelfRel());
+
+        return ResponseEntity.ok(resources);
+    }
+
+    @GetMapping(value = "/project/{idx}/members", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProjectMembers(@PathVariable Long idx, HttpServletResponse response) {
+        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
+        response.setHeader("Location", "/api/project/" + idx + "/members");
+
+        if(projectService.findProjectMembers(idx))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Resources<?> resources = projectService.getProjectMembers(idx, response);
+        resources.add(linkTo(methodOn(ProjectController.class).getProjectMembers(idx, response)).withSelfRel());
 
         return ResponseEntity.ok(resources);
     }

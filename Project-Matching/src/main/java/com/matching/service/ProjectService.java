@@ -8,10 +8,12 @@ import com.matching.domain.Comment;
 import com.matching.domain.Project;
 import com.matching.domain.UserProject;
 import com.matching.domain.dto.CommentDTO;
+import com.matching.domain.dto.MemberDTO;
 import com.matching.domain.dto.ProjectDTO;
 import com.matching.domain.dto.ProjectsDTO;
 import com.matching.domain.enums.LocationType;
 import com.matching.domain.enums.PositionType;
+import com.matching.domain.enums.UserProjectStatus;
 import com.matching.repository.CommentRepository;
 import com.matching.repository.ProjectRepository;
 import com.matching.repository.UserProjectRepository;
@@ -45,7 +47,11 @@ public class ProjectService {
     @Autowired
     private UserProjectRepository userProjectRepo;
 
-    public Page<Project> findPosition(String position, Pageable pageable) {
+    public boolean projectNullCheck(Long idx) {
+        return projectRepository.findByIdx(idx) == null;
+    }
+
+    private Page<Project> findPosition(String position, Pageable pageable) {
         if(position.equals("DEVELOPER"))
             return projectRepository.findByDeveloperRecruitsIsGreaterThanOrderByIdxDesc(0, pageable);
         else if(position.equals("DESIGNER"))
@@ -59,7 +65,7 @@ public class ProjectService {
         return null;
     }
 
-    public Page<Project> findPositionAndLocation(String position, LocationType location, Pageable pageable) {
+    private Page<Project> findPositionAndLocation(String position, LocationType location, Pageable pageable) {
         if(position.equals("Developer"))
             return projectRepository.findByLocationAndDeveloperRecruitsIsGreaterThanOrderByIdxDesc(location, 0, pageable);
         else if(position.equals("DESIGNER"))
@@ -72,6 +78,7 @@ public class ProjectService {
             return projectRepository.findByLocationAndEtcRecruitsIsGreaterThanOrderByIdxDesc(location, 0, pageable);
         return null;
     }
+
 
     public Page<Project> findAllProject(Pageable pageable, LocationType location, String position) {
 
@@ -142,6 +149,26 @@ public class ProjectService {
             resource.add(linkTo(methodOn(CommentController.class).getComment(comment.getIdx(), response)).withSelfRel());
             list.add(resource);
         }
+        return new Resources<>(list);
+    }
+
+    public boolean findProjectMembers(Long idx) {
+        if(projectRepository.findByIdx(idx) == null)
+            return true;
+        return userProjectRepo.findByProjectAndStatus(projectRepository.findByIdx(idx), UserProjectStatus.MATCHING) == null;
+    }
+
+    public Resources<?> getProjectMembers(Long idx, HttpServletResponse response) {
+        List<Resource> list = new ArrayList<>();
+        List<UserProject> userProjectList = userProjectRepo.findByProjectAndStatus(projectRepository.findByIdx(idx), UserProjectStatus.MATCHING);
+
+        for(UserProject userProject : userProjectList) {
+            MemberDTO memberDTO = new MemberDTO(userProject);
+            Resource<?> resource = new Resource<>(memberDTO);
+            resource.add(linkTo(methodOn(ProfileController.class).getProfile(memberDTO.getMemberIdx(), response)).withRel("Profile"));
+            list.add(resource);
+        }
+
         return new Resources<>(list);
     }
 }
