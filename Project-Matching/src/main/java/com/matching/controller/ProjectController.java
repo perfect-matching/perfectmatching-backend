@@ -42,7 +42,7 @@ public class ProjectController {
         Page<Project> collection = projectService.findAllProject(pageable, location, position);
 
         if(collection == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("잘못된 요청입니다." ,HttpStatus.BAD_REQUEST);
 
         List<Resource> list = projectService.getProjectsDTOList(response, collection);
         Page<?> page = new PageImpl<>(list, pageable, list.size());

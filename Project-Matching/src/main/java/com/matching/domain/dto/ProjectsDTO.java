@@ -1,7 +1,10 @@
 package com.matching.domain.dto;
 
 import com.matching.domain.Project;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.hateoas.core.Relation;
 
@@ -9,7 +12,10 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @Relation(collectionRelation = "datas")
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProjectsDTO {
 
     @NotBlank

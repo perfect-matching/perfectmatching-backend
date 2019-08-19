@@ -4,13 +4,19 @@ import com.matching.domain.Project;
 import com.matching.domain.enums.PositionType;
 import com.matching.domain.enums.UserProjectStatus;
 import com.matching.repository.UserProjectRepository;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProjectDTO {
 
     @NotBlank
