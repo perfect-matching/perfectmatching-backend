@@ -1,13 +1,19 @@
 package com.matching.domain.dto;
 
 import com.matching.domain.UserProject;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.hateoas.core.Relation;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
+@Builder
 @Relation(collectionRelation = "datas")
+@NoArgsConstructor
+@AllArgsConstructor
 public class MemberDTO {
 
     @NotBlank
