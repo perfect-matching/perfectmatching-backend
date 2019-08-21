@@ -89,20 +89,20 @@ Project - Side Project Member Matching Platform
 
     |URI(자원)| HTTP(행위) | 기능(표현) |
     |:---:|:---:|:---:| 
-    | `/api/projects` | GET | DB에 있는 Project를 가져오기 위한 api |
-    | `/api/projects?offset={num}` | GET | offset에 따른 Project들을 가져오기 위한 api |
-    | `/api/projects?location={name}` | GET | location에 따른 Project들을 가져오기 위한 api |
-    | `/api/projects?location={name}&offset={num}` | GET | location과 offset에 따른 Project들을 가져오기 위한 api |
+    | `/api/projects` | [GET](https://donghun-dev.kro.kr:8083/api/projects) | DB에 있는 Project를 가져오기 위한 api |
+    | `/api/projects?offset={num}` | [GET](https://donghun-dev.kro.kr:8083/api/projects?offset=1) | offset에 따른 Project들을 가져오기 위한 api |
+    | `/api/projects?location={name}` | [GET](https://donghun-dev.kro.kr:8083/api/projects?location=부산광역시) | location에 따른 Project들을 가져오기 위한 api |
+    | `/api/projects?location={name}&offset={num}` | [GET](https://donghun-dev.kro.kr:8083/api/projects?location=부산광역시&offset=1) | location과 offset에 따른 Project들을 가져오기 위한 api |
     | `/api/projects?position={name}` | GET | position에 따른 Project들을 가져오기 위한 api |
     | `/api/projects?position={name}&offset={num}` | GET | position과 offset에 따른 Project들을 가져오기 위한 api |
     | `/api/projects?position={name}&location={name}` | GET | position과 location에 따른 Project들을 가져오기 위한 api |
     | `/api/projects?location={name}&position&offset={num}` | GET | location과 postion 그리고 offset에 따른 Project들을 가져오기 위한 api |
-    | `/api/project/{idx}` | GET | Project의 idx에 따라 개별로 가져오기 위한 api |
-    | `/api/project/{idx}/comments` | GET | Project에 따른 Comment들을 가져오기 위한 api |
-    | `/api/project/{idx}/members` | GET | Project에 참여중인 맴버들의 정보를 가져오기 위한 api |
-    | `/api/profile/{idx}` | GET | idx에 따른 User의 프로필 정보를 가져오기 위한 api |
-    | `/api/profile/{idx}/projects` | GET | idx에 따른 User의 프로필 정보 중 참여중인 프로젝트 정보를 가져오기 위한 api |
-    | `/api/comment/{idx}` | GET | idx에 따른 Comment를 가져오기 위한 api |
+    | `/api/project/{idx}` | [GET](https://donghun-dev.kro.kr:8083/api/project/1) | Project의 idx에 따라 개별로 가져오기 위한 api |
+    | `/api/project/{idx}/comments` | [GET](https://donghun-dev.kro.kr:8083/api/project/1/comments) | Project에 따른 Comment들을 가져오기 위한 api |
+    | `/api/project/{idx}/members` | [GET](https://donghun-dev.kro.kr:8083/api/project/1/members) | Project에 참여중인 맴버들의 정보를 가져오기 위한 api |
+    | `/api/profile/{idx}` | [GET](https://donghun-dev.kro.kr:8083/api/profile/1) | idx에 따른 User의 프로필 정보를 가져오기 위한 api |
+    | `/api/profile/{idx}/projects` | [GET](https://donghun-dev.kro.kr:8083/api/profile/1/projects) | idx에 따른 User의 프로필 정보 중 참여중인 프로젝트 정보를 가져오기 위한 api |
+    | `/api/comment/{idx}` | [GET](https://donghun-dev.kro.kr:8083/api/comment/1) | idx에 따른 Comment를 가져오기 위한 api |
 
 * POST
 
