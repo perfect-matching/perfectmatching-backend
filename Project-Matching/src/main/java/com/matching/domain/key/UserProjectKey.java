@@ -1,4 +1,4 @@
-package com.matching.domain;
+package com.matching.domain.key;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

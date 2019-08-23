@@ -19,12 +19,14 @@ public class ProjectsDTOTest {
     @Before
     public void createProject() {
         User user = User.builder().nick("Test User").email("Test_User@gmail.com").password("test_password")
-                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now()).build();
+                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now())
+                .investTime(4).socialUrl("https://github.com/testUser").build();
 
         project = Project.builder().leader(user).title("테스트 프로젝트").content("테스트 생성").summary("테스트 프로젝트")
                 .status(ProjectStatus.getRandomProjectStatus()).location(LocationType.getRandomLocationType())
                 .createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now())
-                .designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1).build();
+                .designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
+                .socialUrl("https://github.com/testUser/testProject").build();
     }
 
     @Test

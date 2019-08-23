@@ -2,6 +2,7 @@ package com.matching.domain;
 
 import com.matching.domain.enums.PositionType;
 import com.matching.domain.enums.UserProjectStatus;
+import com.matching.domain.key.UserProjectKey;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,7 +31,7 @@ public class UserProject implements Serializable {
     @JoinColumn(name = "project_idx")
     private Project project;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
     private UserProjectStatus status;
 

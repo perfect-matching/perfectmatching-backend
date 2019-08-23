@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -37,7 +35,7 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "leader", fetch = FetchType.LAZY)
     @JsonBackReference
-    private List<Project> projects = new ArrayList<>();
+    private Set<Project> projects = new HashSet<>();
 
     @Column(nullable = false, length = 30)
     private String email;
@@ -58,14 +56,22 @@ public class User implements Serializable {
     @Column(nullable = false, length = 500)
     private String description;
 
+    @Column(nullable = false)
+    private Integer investTime;
+
+    @Column(length = 100)
+    private String socialUrl;
+
     @Builder
-    public User(String email, String password, String nick, LocalDateTime createdDate, String profileImg, String description) {
+    public User(String email, String password, String nick, LocalDateTime createdDate, String profileImg, String description, Integer investTime, String socialUrl) {
         this.email = email;
         this.password = password;
         this.nick = nick;
         this.createdDate = createdDate;
         this.profileImg = profileImg;
         this.description = description;
+        this.investTime = investTime;
+        this.socialUrl = socialUrl;
     }
 
     public void addComment(Comment comment) {

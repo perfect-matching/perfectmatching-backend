@@ -32,11 +32,24 @@ public class ProfileDTO {
     @Length(max = 30, min = 3)
     private String email;
 
+    @NotBlank
+    @Length(max = 100)
+    private String profileImg;
+
+    @NotBlank
+    private Integer investTime;
+
+    @Length(max = 100)
+    private String socialUrl;
+
     public ProfileDTO(User user) {
         this.userIdx = user.getIdx();
         this.nickname = user.getNick();
         this.summary = user.getDescription();
         this.email = user.getEmail();
+        this.profileImg = user.getProfileImg();
+        this.investTime = user.getInvestTime();
+        this.socialUrl = user.getSocialUrl();
     }
 
 }

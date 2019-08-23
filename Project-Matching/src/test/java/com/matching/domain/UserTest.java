@@ -28,7 +28,8 @@ public class UserTest {
     @Test
     public void userCreateTest() {
         User user = User.builder().nick("Test User").email("Test_User@gmail.com").password("test_password")
-                        .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now()).build();
+                        .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now())
+                        .investTime(4).socialUrl("https://github.com/testUser").build();
         testEntityManager.persist(user);
         assertThat(userRepository.getOne(user.getIdx())).isNotNull().isEqualTo(user);
     }
@@ -36,15 +37,18 @@ public class UserTest {
     @Test
     public void userCreateAndSearchTest() {
         User user1 = User.builder().nick("Test User1").email("Test_User1@gmail.com").password("test_password1")
-                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now()).build();
+                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now())
+                .investTime(4).socialUrl("https://github.com/testUser").build();
         testEntityManager.persist(user1);
 
         User user2 = User.builder().nick("Test User2").email("Test_User2@gmail.com").password("test_password2")
-                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now()).build();
+                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now())
+                .investTime(4).socialUrl("https://github.com/testUser").build();
         testEntityManager.persist(user2);
 
         User user3 = User.builder().nick("Test User3").email("Test_User3@gmail.com").password("test_password3")
-                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now()).build();
+                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now())
+                .investTime(4).socialUrl("https://github.com/testUser").build();
         testEntityManager.persist(user3);
 
         List<User> userList = userRepository.findAll();
@@ -59,11 +63,13 @@ public class UserTest {
     @Test
     public void userCreateAndDeleteTest() {
         User user1 = User.builder().nick("Test User1").email("Test_User1@gmail.com").password("test_password1")
-                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now()).build();
+                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now())
+                .investTime(4).socialUrl("https://github.com/testUser").build();
         testEntityManager.persist(user1);
 
         User user2 = User.builder().nick("Test User2").email("Test_User2@gmail.com").password("test_password2")
-                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now()).build();
+                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now())
+                .investTime(4).socialUrl("https://github.com/testUser").build();
         testEntityManager.persist(user2);
 
         userRepository.deleteAll();

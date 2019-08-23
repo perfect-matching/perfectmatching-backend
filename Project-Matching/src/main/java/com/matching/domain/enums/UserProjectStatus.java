@@ -7,9 +7,9 @@ import java.util.Random;
 @Getter
 public enum UserProjectStatus {
 
-    WAIT("대기중"),
-    MATCHING("매칭완료"),
-    FAIL("매칭실패");
+    WAIT("대기"),
+    MATCHING("승인"),
+    FAIL("거절");
 
     private String status;
 
