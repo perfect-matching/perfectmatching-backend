@@ -5,6 +5,7 @@ import com.matching.domain.enums.LocationType;
 import com.matching.domain.enums.PositionType;
 import com.matching.domain.enums.ProjectStatus;
 import com.matching.domain.enums.UserProjectStatus;
+import com.matching.domain.key.UserProjectKey;
 import com.matching.repository.CommentRepository;
 import com.matching.repository.ProjectRepository;
 import com.matching.repository.UserProjectRepository;
@@ -56,9 +57,10 @@ public class AppRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         IntStream.rangeClosed(1, 40).forEach(index -> userRepository.save(User.builder().email("test" + index + "@email.com")
-                .nick("testUser_" + index).password("testPassword").createdDate(LocalDateTime.now()).profileImg("Profile Image URL").description("저는 이러한 사람입니다.").build()));
+                .nick("testUser_" + index).password("testPassword").createdDate(LocalDateTime.now()).profileImg("Profile Image URL")
+                .description("저는 이러한 사람입니다.").investTime(4).socialUrl("https://github.com/testUser").build()));
 
-        IntStream.rangeClosed(1, 200).forEach(index -> createProjectTestData(index));
+        IntStream.rangeClosed(1, 200).forEach(this::createProjectTestData);
 
         IntStream.rangeClosed(1, 300).forEach(index -> createUserProjectTestData());
 
@@ -74,7 +76,7 @@ public class AppRunner implements ApplicationRunner {
                 summary("이러한 프로젝트에 참여할 인원을 모집합니다.").startDate(LocalDateTime.now()).deadline(LocalDateTime.now()).
                 location(LocationType.getRandomLocationType()).createdDate(LocalDateTime.now()).status(ProjectStatus.getRandomProjectStatus()).leader(user).
                 developerRecruits(random.nextInt(6)).designerRecruits(random.nextInt(6)).plannerRecruits(random.nextInt(6)).
-                marketerRecruits(random.nextInt(6)).etcRecruits(random.nextInt(6)).build();
+                marketerRecruits(random.nextInt(6)).etcRecruits(random.nextInt(6)).socialUrl("https://github.com/testUser/testProject").build();
 
         projectRepository.save(project);
 

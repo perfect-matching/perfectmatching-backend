@@ -15,7 +15,8 @@ public class ProfileDTOTest {
     @Before
     public void createUser() {
         user = User.builder().nick("Test User").email("Test_User@gmail.com").password("test_password")
-                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now()).build();
+                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now())
+                .investTime(4).socialUrl("https://github.com/testUser").build();
     }
 
     @Test
@@ -27,5 +28,7 @@ public class ProfileDTOTest {
         assertThat(profileDTO.getUserIdx()).isEqualTo(user.getIdx());
         assertThat(profileDTO.getNickname()).isEqualTo(user.getNick());
         assertThat(profileDTO.getSummary()).isEqualTo(user.getDescription());
+        assertThat(profileDTO.getInvestTime()).isEqualTo(user.getInvestTime());
+        assertThat(profileDTO.getSocialUrl()).isEqualTo(user.getSocialUrl());
     }
 }

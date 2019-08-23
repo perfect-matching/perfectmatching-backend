@@ -1,5 +1,7 @@
-package com.matching.domain;
+package com.matching.domain.key;
 
+import com.matching.domain.Project;
+import com.matching.domain.User;
 import com.matching.domain.enums.LocationType;
 import com.matching.domain.enums.ProjectStatus;
 import org.junit.Before;

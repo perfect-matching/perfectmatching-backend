@@ -92,6 +92,9 @@ public class ProjectDTO {
     @Length(max = 100, min = 1)
     private String summary;
 
+    @Length(max = 100, min = 1)
+    private String socialUrl;
+
     public ProjectDTO(Project project, UserProjectRepository userProjectRepo) {
         this.projectIdx = project.getIdx();
         this.title = project.getTitle();
@@ -116,6 +119,7 @@ public class ProjectDTO {
         this.currentMarketer = userProjectRepo.countByProjectAndPositionAndStatus(project, PositionType.MARKETER, UserProjectStatus.MATCHING);
         this.currentPlanner = userProjectRepo.countByProjectAndPositionAndStatus(project, PositionType.PLANNER, UserProjectStatus.MATCHING);
         this.currentEtc = userProjectRepo.countByProjectAndPositionAndStatus(project, PositionType.ETC, UserProjectStatus.MATCHING);
+        this.socialUrl = project.getSocialUrl();
 
     }
 }

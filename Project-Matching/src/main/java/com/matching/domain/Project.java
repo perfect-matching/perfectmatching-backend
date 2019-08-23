@@ -32,13 +32,13 @@ public class Project implements Serializable {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false, length = 5000)
+    @Column(length = 5000)
     private String content;
 
     @Column(nullable = false, length = 100)
     private String summary;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
     private ProjectStatus status;
 
@@ -76,6 +76,9 @@ public class Project implements Serializable {
     @Column(nullable = false)
     private Integer etcRecruits;
 
+    @Column(length = 100)
+    private String socialUrl;
+
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonBackReference
     private Set<Comment> comments = new HashSet<>();
@@ -85,7 +88,7 @@ public class Project implements Serializable {
     private Set<UserProject> userProjects = new HashSet<>();
 
     @Builder
-    public Project(User leader, String title, String content, String summary, ProjectStatus status, LocationType location, LocalDateTime createdDate, LocalDateTime deadline, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime modifiedDate, Integer developerRecruits, Integer designerRecruits, Integer plannerRecruits, Integer marketerRecruits, Integer etcRecruits) {
+    public Project(User leader, String title, String content, String summary, ProjectStatus status, LocationType location, LocalDateTime createdDate, LocalDateTime deadline, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime modifiedDate, Integer developerRecruits, Integer designerRecruits, Integer plannerRecruits, Integer marketerRecruits, Integer etcRecruits, String socialUrl) {
         this.leader = leader;
         this.title = title;
         this.content = content;
@@ -102,6 +105,7 @@ public class Project implements Serializable {
         this.plannerRecruits = plannerRecruits;
         this.marketerRecruits = marketerRecruits;
         this.etcRecruits = etcRecruits;
+        this.socialUrl = socialUrl;
     }
 
     public void addComment(Comment comment) {

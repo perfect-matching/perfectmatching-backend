@@ -37,17 +37,20 @@ public class CommentTest {
     @Before
     public void createUserAndProject() {
         user1 = User.builder().nick("Test User1").email("Test_User@gmail.com").password("test_password")
-                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now()).build();
+                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now())
+                .investTime(4).socialUrl("https://github.com/testUser").build();
         testEntityManager.persist(user1);
 
         user2 = User.builder().nick("Test User2").email("Test_User@gmail.com").password("test_password")
-                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now()).build();
+                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now())
+                .investTime(4).socialUrl("https://github.com/testUser").build();
         testEntityManager.persist(user2);
 
         project = Project.builder().leader(user1).title("테스트 프로젝트").content("테스트 생성").summary("테스트 프로젝트")
                 .status(ProjectStatus.getRandomProjectStatus()).location(LocationType.getRandomLocationType())
                 .createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now())
-                .designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1).build();
+                .designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
+                .socialUrl("https://github.com/testUser/testProject").build();
         testEntityManager.persist(project);
     }
 

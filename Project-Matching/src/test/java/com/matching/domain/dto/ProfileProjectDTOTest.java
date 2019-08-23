@@ -3,7 +3,7 @@ package com.matching.domain.dto;
 import com.matching.domain.Project;
 import com.matching.domain.User;
 import com.matching.domain.UserProject;
-import com.matching.domain.UserProjectKey;
+import com.matching.domain.key.UserProjectKey;
 import com.matching.domain.enums.LocationType;
 import com.matching.domain.enums.PositionType;
 import com.matching.domain.enums.ProjectStatus;
@@ -22,7 +22,8 @@ public class ProfileProjectDTOTest {
     @Before
     public void createUserAndProjectAndUserProject() {
         User user = User.builder().nick("Test User").email("Test_User@gmail.com").password("test_password")
-                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now()).build();
+                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now())
+                .investTime(4).socialUrl("https://github.com/testUser").build();
 
         Project project = Project.builder().leader(user).title("테스트 프로젝트").content("테스트 생성").summary("테스트 프로젝트")
                 .status(ProjectStatus.getRandomProjectStatus()).location(LocationType.getRandomLocationType())
