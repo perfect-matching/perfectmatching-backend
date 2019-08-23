@@ -8,7 +8,6 @@ import java.util.Random;
 public enum ProjectStatus {
 
     RECRUIT("모집중"),
-    RECRUITCLOSE("모집완료"),
     PROGRESS("진행중"),
     COMPLETE("완료");
 
@@ -20,6 +19,6 @@ public enum ProjectStatus {
 
     public static ProjectStatus getRandomProjectStatus() {
         Random random = new Random();
-        return values()[random.nextInt(values().length)];
+        return values()[random.nextInt(values().length-1)];
     }
 }

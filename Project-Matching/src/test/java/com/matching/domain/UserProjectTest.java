@@ -50,15 +50,13 @@ public class UserProjectTest {
 
         project = Project.builder().leader(user).title("테스트 프로젝트").content("테스트 생성").summary("테스트 프로젝트")
                 .status(ProjectStatus.getRandomProjectStatus()).location(LocationType.getRandomLocationType())
-                .createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now())
-                .designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
+                .createdDate(LocalDateTime.now()).designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
                 .socialUrl("https://github.com/testUser/testProject").build();
         testEntityManager.persist(project);
 
         project2 = Project.builder().leader(user).title("테스트 프로젝트2").content("테스트 생성").summary("테스트 프로젝트")
                 .status(ProjectStatus.getRandomProjectStatus()).location(LocationType.getRandomLocationType())
-                .createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now())
-                .designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
+                .createdDate(LocalDateTime.now()).designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
                 .socialUrl("https://github.com/testUser/testProject").build();
         testEntityManager.persist(project2);
 

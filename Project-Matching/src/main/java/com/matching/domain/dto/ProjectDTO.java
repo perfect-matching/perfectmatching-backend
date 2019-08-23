@@ -48,14 +48,6 @@ public class ProjectDTO {
     @NotBlank
     private LocalDateTime createdDate;
 
-    private LocalDateTime deadline;
-
-    @NotBlank
-    private LocalDateTime startDate;
-
-    @NotBlank
-    private LocalDateTime endDate;
-
     private LocalDateTime modifiedDate;
 
     @NotBlank
@@ -104,14 +96,11 @@ public class ProjectDTO {
         this.status = project.getStatus().getStatus();
         this.location = project.getLocation().getLocation();
         this.createdDate = project.getCreatedDate();
-        this.deadline = project.getDeadline();
-        this.startDate = project.getStartDate();
         this.developerRecruits = project.getDeveloperRecruits();
         this.marketerRecruits = project.getMarketerRecruits();
         this.plannerRecruits = project.getPlannerRecruits();
         this.designerRecruits = project.getDesignerRecruits();
         this.plannerRecruits = project.getMarketerRecruits();
-        this.endDate = project.getEndDate();
         this.etcRecruits = project.getEtcRecruits();
         this.summary = project.getSummary();
         this.currentDeveloper = userProjectRepo.countByProjectAndPositionAndStatus(project, PositionType.DEVELOPER, UserProjectStatus.MATCHING);

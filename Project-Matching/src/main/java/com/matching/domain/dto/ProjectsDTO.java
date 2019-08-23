@@ -59,8 +59,6 @@ public class ProjectsDTO {
     @NotBlank
     private Boolean etcRecruits;
 
-    private LocalDateTime deadLine;
-
     @NotBlank
     private LocalDateTime createdDate;
 
@@ -75,7 +73,6 @@ public class ProjectsDTO {
         this.leaderImage = project.getLeader().getProfileImg();
         this.title = project.getTitle();
         this.summary = project.getSummary();
-        this.deadLine = project.getDeadline();
         this.createdDate = project.getCreatedDate();
         this.status = project.getStatus().getStatus();
         this.location = project.getLocation().getLocation();

@@ -42,8 +42,7 @@ public class ProjectTest {
     public void projectCreateTest() {
         Project project = Project.builder().leader(user).title("테스트 프로젝트").content("테스트 생성").summary("테스트 프로젝트")
                             .status(ProjectStatus.getRandomProjectStatus()).location(LocationType.getRandomLocationType())
-                            .createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now())
-                            .designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
+                            .createdDate(LocalDateTime.now()).designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
                             .socialUrl("https://github.com/testUser/testProject").build();
         testEntityManager.persist(project);
         assertThat(projectRepository.getOne(project.getIdx())).isNotNull().isEqualTo(project);
@@ -53,15 +52,13 @@ public class ProjectTest {
     public void projectCreateAndSearchTest() {
         Project project1 = Project.builder().leader(user).title("테스트 프로젝트1").content("테스트 생성").summary("테스트 프로젝트")
                 .status(ProjectStatus.getRandomProjectStatus()).location(LocationType.getRandomLocationType())
-                .createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now())
-                .designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
+                .createdDate(LocalDateTime.now()).designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
                 .socialUrl("https://github.com/testUser/testProject").build();
         testEntityManager.persist(project1);
 
         Project project2 = Project.builder().leader(user).title("테스트 프로젝트2").content("테스트 생성").summary("테스트 프로젝트")
                 .status(ProjectStatus.getRandomProjectStatus()).location(LocationType.getRandomLocationType())
-                .createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now())
-                .designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
+                .createdDate(LocalDateTime.now()).designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
                 .socialUrl("https://github.com/testUser/testProject").build();
         testEntityManager.persist(project2);
 
@@ -76,15 +73,13 @@ public class ProjectTest {
     public void projectCreateAndDeleteTest() {
         Project project1 = Project.builder().leader(user).title("테스트 프로젝트1").content("테스트 생성").summary("테스트 프로젝트")
                 .status(ProjectStatus.getRandomProjectStatus()).location(LocationType.getRandomLocationType())
-                .createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now())
-                .designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
+                .createdDate(LocalDateTime.now()).designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
                 .socialUrl("https://github.com/testUser/testProject").build();
         testEntityManager.persist(project1);
 
         Project project2 = Project.builder().leader(user).title("테스트 프로젝트2").content("테스트 생성").summary("테스트 프로젝트")
                 .status(ProjectStatus.getRandomProjectStatus()).location(LocationType.getRandomLocationType())
-                .createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now())
-                .designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
+                .createdDate(LocalDateTime.now()).designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
                 .socialUrl("https://github.com/testUser/testProject").build();
         testEntityManager.persist(project2);
 
