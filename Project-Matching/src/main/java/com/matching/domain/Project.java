@@ -50,15 +50,6 @@ public class Project implements Serializable {
     private LocalDateTime createdDate;
 
     @Column
-    private LocalDateTime deadline;
-
-    @Column(nullable = false)
-    private LocalDateTime startDate;
-
-    @Column(nullable = false)
-    private LocalDateTime endDate;
-
-    @Column
     private LocalDateTime modifiedDate;
 
     @Column(nullable = false)
@@ -87,8 +78,12 @@ public class Project implements Serializable {
     @JsonBackReference
     private Set<UserProject> userProjects = new HashSet<>();
 
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Set<ProjectTag> projectTags = new HashSet<>();
+
     @Builder
-    public Project(User leader, String title, String content, String summary, ProjectStatus status, LocationType location, LocalDateTime createdDate, LocalDateTime deadline, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime modifiedDate, Integer developerRecruits, Integer designerRecruits, Integer plannerRecruits, Integer marketerRecruits, Integer etcRecruits, String socialUrl) {
+    public Project(User leader, String title, String content, String summary, ProjectStatus status, LocationType location, LocalDateTime createdDate, LocalDateTime modifiedDate, Integer developerRecruits, Integer designerRecruits, Integer plannerRecruits, Integer marketerRecruits, Integer etcRecruits, String socialUrl) {
         this.leader = leader;
         this.title = title;
         this.content = content;
@@ -96,9 +91,6 @@ public class Project implements Serializable {
         this.status = status;
         this.location = location;
         this.createdDate = createdDate;
-        this.deadline = deadline;
-        this.startDate = startDate;
-        this.endDate = endDate;
         this.modifiedDate = modifiedDate;
         this.developerRecruits = developerRecruits;
         this.designerRecruits = designerRecruits;
@@ -116,6 +108,11 @@ public class Project implements Serializable {
     public void addUserProject(UserProject userProject) {
         userProject.setProject(this);
         this.userProjects.add(userProject);
+    }
+
+    public void addProjectTag(ProjectTag projectTag) {
+        projectTag.setProject(this);
+        this.projectTags.add(projectTag);
     }
 
 }

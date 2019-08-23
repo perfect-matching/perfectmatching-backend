@@ -5,11 +5,9 @@ import com.matching.domain.enums.LocationType;
 import com.matching.domain.enums.PositionType;
 import com.matching.domain.enums.ProjectStatus;
 import com.matching.domain.enums.UserProjectStatus;
+import com.matching.domain.key.ProjectTagKey;
 import com.matching.domain.key.UserProjectKey;
-import com.matching.repository.CommentRepository;
-import com.matching.repository.ProjectRepository;
-import com.matching.repository.UserProjectRepository;
-import com.matching.repository.UserRepository;
+import com.matching.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -41,8 +39,25 @@ public class AppRunner implements ApplicationRunner {
             "무궁화 삼천리 화려 강산\n" +
             "대한 사람 대한으로 길이 보전하세";
 
+    private final String[] test_skill = {"Android", "iOS", "Windows", "Vue js", "React Js", "System", "C#", "ASP", "JSP", "Java", "RxJava", "Kotlin", "Spring", "Spring Boot", "Oracle", "MySQL", "NoSQL", "MongoDB", "Django", "Python", "RubyOnRails", "Kernel", "OS", "Network", "Algorithm", "Data Structure", "BootStrap", "ML", "AI", "Cloud" };
+
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private DoneProjectRepository doneProjectRepository;
+
+    @Autowired
+    private ProjectTagRepository projectTagRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
+
+    @Autowired
+    private UsedSkillRepository usedSkillRepository;
+
+    @Autowired
+    private UserSkillRepository userSkillRepository;
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -53,14 +68,29 @@ public class AppRunner implements ApplicationRunner {
     @Autowired
     private CommentRepository commentRepository;
 
-
     @Override
     public void run(ApplicationArguments args) {
+        Random random = new Random();
+
         IntStream.rangeClosed(1, 40).forEach(index -> userRepository.save(User.builder().email("test" + index + "@email.com")
                 .nick("testUser_" + index).password("testPassword").createdDate(LocalDateTime.now()).profileImg("Profile Image URL")
                 .description("저는 이러한 사람입니다.").investTime(4).socialUrl("https://github.com/testUser").build()));
 
+        IntStream.rangeClosed(1, 300).forEach(index -> userSkillRepository.save(UserSkill.builder().user(userRepository.findByIdx
+                ((long)random.nextInt(40)+1)).text("테스트 스킬 " + index).build()));
+
+        IntStream.rangeClosed(1, 200).forEach(index -> doneProjectRepository.save(DoneProject.builder().user(userRepository.findByIdx((
+                long)random.nextInt(40)+1)).title("테스트 프로젝트 " + index).summary("테스트 프로젝트 " + index + "입니다.").content("테스트 내용 " + index).
+                createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now()).build()));
+
+        IntStream.rangeClosed(1, 300).forEach(index -> usedSkillRepository.save(UsedSkill.builder().doneProject(doneProjectRepository.findByIdx
+                ((long)random.nextInt(200)+1)).text("테스트 스킬 " + index).build()));
+
         IntStream.rangeClosed(1, 200).forEach(this::createProjectTestData);
+
+        IntStream.rangeClosed(1, 100).forEach(index -> tagRepository.save(Tag.builder().text("테스트 태그 " + index).build()));
+
+        IntStream.rangeClosed(1, 400).forEach(index -> createProjectTagTestData());
 
         IntStream.rangeClosed(1, 300).forEach(index -> createUserProjectTestData());
 
@@ -72,8 +102,8 @@ public class AppRunner implements ApplicationRunner {
         String title = "이러 이러한 Side Project 의 함께할 사람들을 찾고 있습니다. ";
         User user = userRepository.findByIdx(random.nextInt(40) + 1);
 
-        Project project = Project.builder().content(TEST_CONTENT).title(title + index).endDate(LocalDateTime.now()).
-                summary("이러한 프로젝트에 참여할 인원을 모집합니다.").startDate(LocalDateTime.now()).deadline(LocalDateTime.now()).
+        Project project = Project.builder().content(TEST_CONTENT).title(title + index).
+                summary("이러한 프로젝트에 참여할 인원을 모집합니다.").
                 location(LocationType.getRandomLocationType()).createdDate(LocalDateTime.now()).status(ProjectStatus.getRandomProjectStatus()).leader(user).
                 developerRecruits(random.nextInt(6)).designerRecruits(random.nextInt(6)).plannerRecruits(random.nextInt(6)).
                 marketerRecruits(random.nextInt(6)).etcRecruits(random.nextInt(6)).socialUrl("https://github.com/testUser/testProject").build();
@@ -86,6 +116,7 @@ public class AppRunner implements ApplicationRunner {
 
         userProjectRepository.save(userProject);
     }
+
 
     private void createUserProjectTestData() {
         Random random = new Random();
@@ -115,5 +146,23 @@ public class AppRunner implements ApplicationRunner {
                 .writer(user).project(project).build();
 
         commentRepository.save(comment);
+    }
+
+    private void createProjectTagTestData() {
+        Random random = new Random();
+
+        long projectIdx = random.nextInt(200)+1;
+        long tagIdx = random.nextInt(100)+1;
+
+        ProjectTagKey key = new ProjectTagKey(projectIdx, tagIdx);
+
+        if(!projectTagRepository.findById(key).isPresent()) {
+            Project project = projectRepository.findByIdx(projectIdx);
+            Tag tag = tagRepository.findByIdx(tagIdx);
+
+            ProjectTag projectTag = ProjectTag.builder().id(key).project(project).tag(tag).build();
+            projectTagRepository.save(projectTag);
+        }
+
     }
 }

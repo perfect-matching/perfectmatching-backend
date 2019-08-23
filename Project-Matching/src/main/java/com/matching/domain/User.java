@@ -37,6 +37,14 @@ public class User implements Serializable {
     @JsonBackReference
     private Set<Project> projects = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Set<DoneProject> doneProjects = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Set<UserSkill> userSkills = new HashSet<>();
+
     @Column(nullable = false, length = 30)
     private String email;
 
@@ -87,6 +95,16 @@ public class User implements Serializable {
     public void addProject(Project project) {
         project.setLeader(this);
         this.projects.add(project);
+    }
+
+    public void addDoneProject(DoneProject doneProject) {
+        doneProject.setUser(this);
+        this.doneProjects.add(doneProject);
+    }
+
+    public void addUserSkill(UserSkill userSkill) {
+        userSkill.setUser(this);
+        this.userSkills.add(userSkill);
     }
 
 }

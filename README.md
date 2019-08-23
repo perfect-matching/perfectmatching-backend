@@ -91,8 +91,8 @@ Project - Side Project Member Matching Platform
     |:---:|:---:|:---:| 
     | `/api/projects` | [GET](https://donghun-dev.kro.kr:8083/api/projects) | DB에 있는 Project를 가져오기 위한 api |
     | `/api/projects?offset={num}` | [GET](https://donghun-dev.kro.kr:8083/api/projects?offset=1) | offset에 따른 Project들을 가져오기 위한 api |
-    | `/api/projects?location={name}` | [GET](https://donghun-dev.kro.kr:8083/api/projects?location=부산광역시) | location에 따른 Project들을 가져오기 위한 api |
-    | `/api/projects?location={name}&offset={num}` | [GET](https://donghun-dev.kro.kr:8083/api/projects?location=부산광역시&offset=1) | location과 offset에 따른 Project들을 가져오기 위한 api |
+    | `/api/projects?location={name}` | [GET](https://donghun-dev.kro.kr:8083/api/projects?location=BUSAN) | location에 따른 Project들을 가져오기 위한 api |
+    | `/api/projects?location={name}&offset={num}` | [GET](https://donghun-dev.kro.kr:8083/api/projects?location=BUSAN&offset=1) | location과 offset에 따른 Project들을 가져오기 위한 api |
     | `/api/projects?position={name}` | GET | position에 따른 Project들을 가져오기 위한 api |
     | `/api/projects?position={name}&offset={num}` | GET | position과 offset에 따른 Project들을 가져오기 위한 api |
     | `/api/projects?position={name}&location={name}` | GET | position과 location에 따른 Project들을 가져오기 위한 api |
