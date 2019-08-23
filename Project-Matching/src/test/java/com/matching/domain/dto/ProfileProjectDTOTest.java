@@ -28,7 +28,8 @@ public class ProfileProjectDTOTest {
         Project project = Project.builder().leader(user).title("테스트 프로젝트").content("테스트 생성").summary("테스트 프로젝트")
                 .status(ProjectStatus.getRandomProjectStatus()).location(LocationType.getRandomLocationType())
                 .createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now())
-                .designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1).build();
+                .designerRecruits(1).developerRecruits(1).etcRecruits(1).marketerRecruits(1).plannerRecruits(1)
+                .socialUrl("https://github.com/testUser/testProject").build();
 
         UserProjectKey userProjectKey = new UserProjectKey(user.getIdx(), project.getIdx());
 
