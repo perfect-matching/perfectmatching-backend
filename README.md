@@ -104,13 +104,13 @@ Project - Side Project Member Matching Platform
     | `/api/profile/{idx}` | [GET](https://donghun-dev.kro.kr:8083/api/profile/1) | idx에 따른 User의 프로필 정보를 가져오기 위한 api |
     | `/api/profile/{idx}/skills` | [GET](https://donghun-dev.kro.kr:8083/api/profile/1/skills) | idx에 따른 User의 프로필 정보 중 스킬 정보를 가져오기 위한 api |
     | `/api/profile/{idx}/projects` | [GET](https://donghun-dev.kro.kr:8083/api/profile/1/projects) | idx에 따른 User의 진행중인 프로젝트 정보를 가져오기 위한 api |
-    | `/api/profile/{idx}/doneProjects` | [GET](https://donghun-dev.kro.kr:8083/api/profile/1/doneProjects) | idx에 따른 User의 진행했던 프로젝트 정보를 가져오기 위한 api |
+    | `/api/profile/{idx}/doneProjects` | [GET](https://donghun-dev.kro.kr:8083/api/profile/1/doneprojects) | idx에 따른 User의 진행했던 프로젝트 정보를 가져오기 위한 api |
     | `/api/comment/{idx}` | [GET](https://donghun-dev.kro.kr:8083/api/comment/1) | idx에 따른 Comment의 정보를 가져오기 위한 api |
-    | `/api/doneProject/{idx}` | [GET](https://donghun-dev.kro.kr:8083/api/doneProject/1) | idx에 따른 DoneProject를 가져오기 위한 api |
-    | `/api/doneProject/{idx}/usedSkills` | [GET](https://donghun-dev.kro.kr:8083/api/doneProject/1/usedSkills) | DoneProject에 포함된 태그들의 정보를 가져오기 위한 api |
+    | `/api/doneproject/{idx}` | [GET](https://donghun-dev.kro.kr:8083/api/doneproject/1) | idx에 따른 DoneProject를 가져오기 위한 api |
+    | `/api/doneproject/{idx}/usedskills` | [GET](https://donghun-dev.kro.kr:8083/api/doneproject/1/usedskills) | DoneProject에 포함된 태그들의 정보를 가져오기 위한 api |
     | `/api/tag/{idx}` | [GET](https://donghun-dev.kro.kr:8083/api/tag/1/) | idx에 따른 Tag를 가져오기 위한 api |
-    | `/api/userSkill/{idx}` | [GET](https://donghun-dev.kro.kr:8083/api/userSkill/1/) | idx에 따른 UserSkill을 가져오기 위한 api |
-    | `/api/usedSkill/{idx}` | [GET](https://donghun-dev.kro.kr:8083/api/usedSkill/1/) | idx에 따른 UsedSkill을 가져오기 위한 api |
+    | `/api/userskill/{idx}` | [GET](https://donghun-dev.kro.kr:8083/api/userskill/1/) | idx에 따른 UserSkill을 가져오기 위한 api |
+    | `/api/usedskill/{idx}` | [GET](https://donghun-dev.kro.kr:8083/api/usedskill/1/) | idx에 따른 UsedSkill을 가져오기 위한 api |
 
 * POST
 
