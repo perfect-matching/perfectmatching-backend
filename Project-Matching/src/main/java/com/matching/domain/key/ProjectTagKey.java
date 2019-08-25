@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
-import java.util.Objects;
+
 
 @Data
 @Embeddable
@@ -21,20 +21,4 @@ public class ProjectTagKey implements Serializable {
     @Column(name = "tag_idx")
     private Long tagIdx;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if ( o == null || getClass() != o.getClass() ) {
-            return false;
-        }
-        ProjectTagKey projectTagKey = (ProjectTagKey) o;
-        return Objects.equals( projectIdx, projectTagKey.projectIdx ) && Objects.equals( tagIdx, projectTagKey.tagIdx );
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(projectIdx, tagIdx);
-    }
 }

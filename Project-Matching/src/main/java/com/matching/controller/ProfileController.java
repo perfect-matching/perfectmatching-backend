@@ -31,9 +31,24 @@ public class ProfileController {
 
         Resource<?> resource = profileService.findUserProfile(idx);
         resource.add(linkTo(methodOn(ProfileController.class).getProfile(idx, response)).withSelfRel());
-        resource.add(linkTo(methodOn(ProfileController.class).getProfileProjects(idx, response)).withRel("Profile Projects"));
+        resource.add(linkTo(methodOn(ProfileController.class).getProfileSkills(idx, response)).withRel("Profile Skills"));
+        resource.add(linkTo(methodOn(ProfileController.class).getProfileProjects(idx, response)).withRel("Processing Projects"));
+        resource.add(linkTo(methodOn(ProfileController.class).getProfileDoneProjects(idx, response)).withRel("Done Projects"));
 
         return ResponseEntity.ok(resource);
+    }
+
+    @GetMapping(value = "/{idx}/skills", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProfileSkills(@PathVariable Long idx, HttpServletResponse response) {
+        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
+        response.setHeader("Location", "/api/profile/" + idx + "/skills");
+
+        if(profileService.findProfileSkills(idx))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Resources<?> resources = profileService.getProfileSkills(idx, response);
+        resources.add(linkTo(methodOn(ProfileController.class).getProfileSkills(idx, response)).withSelfRel());
+        return ResponseEntity.ok(resources);
     }
 
     @GetMapping(value = "/{idx}/projects", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,12 +56,25 @@ public class ProfileController {
         response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
         response.setHeader("Location", "/api/profile/" + idx + "/projects");
 
-        if(profileService.findUser(idx) || profileService.findUserProjects(idx))
+        if(profileService.findProfileProjects(idx))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        Resources<?> resources = profileService.findProfileProjects(idx);
+        Resources<?> resources = profileService.getProfileProjects(idx);
         resources.add(linkTo(methodOn(ProfileController.class).getProfileProjects(idx, response)).withSelfRel());
 
+        return ResponseEntity.ok(resources);
+    }
+
+    @GetMapping(value = "/{idx}/doneprojects", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProfileDoneProjects(@PathVariable Long idx, HttpServletResponse response) {
+        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
+        response.setHeader("Location", "/api/profile/" + idx + "/doneprojects");
+
+        if(profileService.findProfileDoneProjects(idx))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Resources<?> resources = profileService.getProfileDoneProjects(idx, response);
+        resources.add(linkTo(methodOn(ProfileController.class).getProfileDoneProjects(idx, response)).withSelfRel());
         return ResponseEntity.ok(resources);
     }
 }

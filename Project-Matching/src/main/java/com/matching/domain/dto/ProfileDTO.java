@@ -16,7 +16,6 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class ProfileDTO {
 
-    @NotBlank
     private Long userIdx;
 
     @NotBlank

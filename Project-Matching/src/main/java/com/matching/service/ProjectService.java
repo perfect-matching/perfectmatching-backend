@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.matching.controller.CommentController;
 import com.matching.controller.ProfileController;
 import com.matching.controller.ProjectController;
-import com.matching.domain.Comment;
-import com.matching.domain.Project;
-import com.matching.domain.UserProject;
+import com.matching.controller.TagController;
+import com.matching.domain.*;
 import com.matching.domain.dto.CommentDTO;
 import com.matching.domain.dto.MemberDTO;
 import com.matching.domain.dto.ProjectDTO;
@@ -16,6 +15,7 @@ import com.matching.domain.enums.PositionType;
 import com.matching.domain.enums.UserProjectStatus;
 import com.matching.repository.CommentRepository;
 import com.matching.repository.ProjectRepository;
+import com.matching.repository.ProjectTagRepository;
 import com.matching.repository.UserProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,6 +46,9 @@ public class ProjectService {
 
     @Autowired
     private UserProjectRepository userProjectRepo;
+
+    @Autowired
+    private ProjectTagRepository projectTagRepo;
 
     public boolean projectNullCheck(Long idx) {
         return projectRepository.findByIdx(idx) == null;
@@ -105,6 +108,7 @@ public class ProjectService {
             Resource<?> resource = new Resource<>(projectsDTO);
             resource.add(linkTo(methodOn(ProjectController.class).getProjectJsonView(project.getIdx(), response)).withSelfRel());
             resource.add(linkTo(methodOn(ProfileController.class).getProfile(project.getLeader().getIdx(), response)).withRel("Leader Profile"));
+            resource.add(linkTo(methodOn(ProjectController.class).getProjectTags(project.getIdx(), response)).withRel("Tags"));
             list.add(resource);
         }
 
@@ -166,6 +170,26 @@ public class ProjectService {
             MemberDTO memberDTO = new MemberDTO(userProject);
             Resource<?> resource = new Resource<>(memberDTO);
             resource.add(linkTo(methodOn(ProfileController.class).getProfile(memberDTO.getMemberIdx(), response)).withRel("Profile"));
+            list.add(resource);
+        }
+
+        return new Resources<>(list);
+    }
+
+    public boolean findProjectTags(Long idx) {
+        if(projectRepository.findByIdx(idx) == null)
+            return true;
+        return projectTagRepo.findByProject(projectRepository.findByIdx(idx)) == null;
+    }
+
+    public Resources<?> getProjectTags(Long idx, HttpServletResponse response) {
+        List<Resource> list = new ArrayList<>();
+        List<ProjectTag> projectTagList = projectTagRepo.findByProject(projectRepository.findByIdx(idx));
+
+        for(ProjectTag projectTag : projectTagList) {
+            Tag tag = projectTag.getTag();
+            Resource<?> resource = new Resource<>(tag);
+            resource.add(linkTo(methodOn(TagController.class).getTag(tag.getIdx(), response)).withSelfRel());
             list.add(resource);
         }
 

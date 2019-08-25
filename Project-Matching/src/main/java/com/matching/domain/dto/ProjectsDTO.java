@@ -18,14 +18,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ProjectsDTO {
 
-    @NotBlank
     private Long projectIdx;
 
     @NotBlank
     @Length(max = 30, min = 1)
     private String leader;
 
-    @NotBlank
     private Long leaderIdx;
 
     @NotBlank

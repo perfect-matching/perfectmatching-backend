@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.core.Relation;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import java.util.Set;
 @Table
 @NoArgsConstructor
 @EqualsAndHashCode(of = "idx")
+@Relation(collectionRelation = "datas")
 public class Tag implements Serializable {
 
     @Id

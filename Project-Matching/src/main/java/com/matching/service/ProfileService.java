@@ -1,18 +1,30 @@
 package com.matching.service;
 
+import com.matching.controller.DoneProjectController;
+import com.matching.controller.TagController;
+import com.matching.domain.DoneProject;
 import com.matching.domain.User;
 import com.matching.domain.UserProject;
+import com.matching.domain.UserSkill;
+import com.matching.domain.dto.DoneProjectDTO;
 import com.matching.domain.dto.ProfileDTO;
-import com.matching.domain.dto.ProfileProjectDTO;
+import com.matching.domain.dto.ProcessingProjectDTO;
+import com.matching.domain.enums.ProjectStatus;
+import com.matching.repository.DoneProjectRepository;
 import com.matching.repository.UserProjectRepository;
 import com.matching.repository.UserRepository;
+import com.matching.repository.UserSkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Service
 public class ProfileService {
@@ -23,13 +35,14 @@ public class ProfileService {
     @Autowired
     private UserProjectRepository userProjectRepository;
 
+    @Autowired
+    private UserSkillRepository userSkillRepository;
+
+    @Autowired
+    private DoneProjectRepository doneProjectRepository;
+
     public boolean findUser(Long idx) {
         return userRepository.findByIdx(idx) == null;
-    }
-
-    public boolean findUserProjects(Long idx) {
-        User user = userRepository.findByIdx(idx);
-        return userProjectRepository.findByUserOrderByProjectDesc(user) == null;
     }
 
     public Resource<?> findUserProfile(Long idx) {
@@ -40,15 +53,64 @@ public class ProfileService {
         return new Resource<>(profileDTO);
     }
 
-    public Resources<?> findProfileProjects(Long idx) {
-        User user = userRepository.findByIdx(idx);
-        List<ProfileProjectDTO> list = new ArrayList<>();
-        List<UserProject> userProjectList = userProjectRepository.findByUserOrderByProjectDesc(user);
+    public boolean findProfileSkills(Long idx) {
+        if(userRepository.findByIdx(idx) == null)
+            return true;
+        return userSkillRepository.findByUser(userRepository.findByIdx(idx)) == null;
+    }
 
-        for(UserProject userProject : userProjectList) {
-            list.add(new ProfileProjectDTO(userProject));
+    public Resources<?> getProfileSkills(Long idx, HttpServletResponse response) {
+        User user = userRepository.findByIdx(idx);
+        List<Resource> list = new ArrayList<>();
+        List<UserSkill> userSkillList = userSkillRepository.findByUser(user);
+
+        for(UserSkill userSkill : userSkillList) {
+            Resource<?> resource = new Resource<>(userSkill);
+            resource.add(linkTo(methodOn(TagController.class).getUserSkill(userSkill.getIdx(), response)).withSelfRel());
+            list.add(resource);
         }
 
         return new Resources<>(list);
+    }
+
+    public boolean findProfileProjects(Long idx) {
+        if(userRepository.findByIdx(idx) == null)
+            return  true;
+        return userProjectRepository.findByUserAndProject_StatusOrderByProjectDesc(userRepository.findByIdx(idx),
+                ProjectStatus.PROGRESS) == null;
+    }
+
+    public Resources<?> getProfileProjects(Long idx) {
+        User user = userRepository.findByIdx(idx);
+        List<ProcessingProjectDTO> list = new ArrayList<>();
+        List<UserProject> userProjectList = userProjectRepository.findByUserAndProject_StatusOrderByProjectDesc(user,
+                ProjectStatus.PROGRESS);
+
+        for(UserProject userProject : userProjectList) {
+            list.add(new ProcessingProjectDTO(userProject));
+        }
+
+        return new Resources<>(list);
+    }
+
+    public boolean findProfileDoneProjects(Long idx) {
+        if(userRepository.findByIdx(idx) == null)
+            return true;
+        return doneProjectRepository.findByUser(userRepository.findByIdx(idx)) == null;
+    }
+
+    public Resources<?> getProfileDoneProjects(Long idx, HttpServletResponse response) {
+        User user = userRepository.findByIdx(idx);
+        List<Resource> resourceList = new ArrayList<>();
+        List<DoneProject> doneProjectList = doneProjectRepository.findByUser(user);
+
+        for(DoneProject doneProject : doneProjectList) {
+            Resource<?> resource = new Resource<>(new DoneProjectDTO(doneProject));
+            resource.add(linkTo(methodOn(DoneProjectController.class).getDoneProject(doneProject.getIdx(), response)).withSelfRel());
+            resource.add(linkTo(methodOn(DoneProjectController.class).getDoneProjectUsedSkills(doneProject.getIdx(), response)).withRel("Used Skills"));
+            resourceList.add(resource);
+        }
+
+        return new Resources<>(resourceList);
     }
 }

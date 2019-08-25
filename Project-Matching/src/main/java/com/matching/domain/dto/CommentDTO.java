@@ -18,21 +18,18 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CommentDTO {
 
-    @NotBlank
     private Long commentIdx;
 
     @NotBlank
     @Length(max = 30, min = 1)
     private String userName;
 
-    @NotBlank
     private Long userIdx;
 
     @NotBlank
     @Length(max = 255, min = 1)
     private String projectTitle;
 
-    @NotBlank
     private Long projectIdx;
 
     @NotBlank

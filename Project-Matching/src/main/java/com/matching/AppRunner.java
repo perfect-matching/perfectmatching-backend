@@ -79,16 +79,17 @@ public class AppRunner implements ApplicationRunner {
         IntStream.rangeClosed(1, 300).forEach(index -> userSkillRepository.save(UserSkill.builder().user(userRepository.findByIdx
                 ((long)random.nextInt(40)+1)).text("테스트 스킬 " + index).build()));
 
-        IntStream.rangeClosed(1, 200).forEach(index -> doneProjectRepository.save(DoneProject.builder().user(userRepository.findByIdx((
-                long)random.nextInt(40)+1)).title("테스트 프로젝트 " + index).summary("테스트 프로젝트 " + index + "입니다.").content("테스트 내용 " + index).
-                createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now()).build()));
-
-        IntStream.rangeClosed(1, 300).forEach(index -> usedSkillRepository.save(UsedSkill.builder().doneProject(doneProjectRepository.findByIdx
-                ((long)random.nextInt(200)+1)).text("테스트 스킬 " + index).build()));
-
         IntStream.rangeClosed(1, 200).forEach(this::createProjectTestData);
 
         IntStream.rangeClosed(1, 100).forEach(index -> tagRepository.save(Tag.builder().text("테스트 태그 " + index).build()));
+
+        IntStream.rangeClosed(1, 200).forEach(index -> doneProjectRepository.save(DoneProject.builder().user(userRepository.findByIdx((
+                long)random.nextInt(40)+1)).title("테스트 프로젝트 " + index).summary("테스트 프로젝트 " + index + "입니다.").content("테스트 내용 " + index).
+                createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now()).projectIdx(projectRepository.findByIdx((
+                long)random.nextInt(200)+1).getIdx()).build()));
+
+        IntStream.rangeClosed(1, 300).forEach(index -> usedSkillRepository.save(UsedSkill.builder().doneProject(doneProjectRepository.findByIdx
+                ((long)random.nextInt(200)+1)).text("테스트 스킬 " + index).build()));
 
         IntStream.rangeClosed(1, 400).forEach(index -> createProjectTagTestData());
 
