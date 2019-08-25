@@ -3,6 +3,7 @@ package com.matching.repository;
 import com.matching.domain.Project;
 import com.matching.domain.User;
 import com.matching.domain.UserProject;
+import com.matching.domain.enums.ProjectStatus;
 import com.matching.domain.key.UserProjectKey;
 import com.matching.domain.enums.PositionType;
 import com.matching.domain.enums.UserProjectStatus;
@@ -14,7 +15,7 @@ public interface UserProjectRepository extends JpaRepository<UserProject, UserPr
 
     Integer countByProjectAndPositionAndStatus(Project project, PositionType positionType, UserProjectStatus status);
 
-    List<UserProject> findByUserOrderByProjectDesc(User user);
+    List<UserProject> findByUserAndProject_StatusOrderByProjectDesc(User user, ProjectStatus status);
 
     List<UserProject> findByProjectAndStatus(Project project, UserProjectStatus status);
 }

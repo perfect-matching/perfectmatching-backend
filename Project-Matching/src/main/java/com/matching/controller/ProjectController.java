@@ -74,6 +74,7 @@ public class ProjectController {
         resource.add(linkTo(methodOn(ProfileController.class).getProfile(leaderIdx, response)).withRel("Leader Profile"));
         resource.add(linkTo(methodOn(ProjectController.class).getProjectComments(idx, response)).withRel("Comments"));
         resource.add(linkTo(methodOn(ProjectController.class).getProjectMembers(idx, response)).withRel("Members"));
+        resource.add(linkTo(methodOn(ProjectController.class).getProjectTags(idx, response)).withRel("Tags"));
         return ResponseEntity.ok(resource);
     }
 
@@ -106,4 +107,17 @@ public class ProjectController {
         return ResponseEntity.ok(resources);
     }
 
+    @GetMapping(value = "/project/{idx}/tags", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProjectTags(@PathVariable Long idx, HttpServletResponse response) {
+        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
+        response.setHeader("Location", "/api/project/" + idx + "/tags");
+
+        if(projectService.findProjectTags(idx))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Resources<?> resources = projectService.getProjectTags(idx, response);
+        resources.add(linkTo(methodOn(ProjectController.class).getProjectTags(idx, response)).withSelfRel());
+
+        return ResponseEntity.ok(resources);
+    }
 }

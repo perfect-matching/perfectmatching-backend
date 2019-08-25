@@ -1,9 +1,11 @@
 package com.matching.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.core.Relation;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,6 +15,7 @@ import java.io.Serializable;
 @Table
 @NoArgsConstructor
 @EqualsAndHashCode(of = "idx")
+@Relation(collectionRelation = "datas")
 public class UserSkill implements Serializable  {
 
     @Id
@@ -24,6 +27,7 @@ public class UserSkill implements Serializable  {
     private String text;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     private User user;
 
     @Builder

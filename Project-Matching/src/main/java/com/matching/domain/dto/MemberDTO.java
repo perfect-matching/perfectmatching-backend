@@ -16,10 +16,8 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class MemberDTO {
 
-    @NotBlank
     private Long memberIdx;
 
-    @NotBlank
     private Long projectIdx;
 
     @NotBlank

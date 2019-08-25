@@ -19,17 +19,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ProjectDTO {
 
-    @NotBlank
     private Long projectIdx;
 
     @NotBlank
     @Length(max = 255, min = 1)
     private String title;
 
-    @NotBlank
     private Long leaderIdx;
 
-    @NotBlank
     @Length(max = 30, min = 1)
     private String leader;
 
@@ -62,22 +59,16 @@ public class ProjectDTO {
     @NotBlank
     private Integer marketerRecruits;
 
-    @NotBlank
     private Integer etcRecruits;
 
-    @NotBlank
     private Integer currentDeveloper;
 
-    @NotBlank
     private Integer currentDesigner;
 
-    @NotBlank
     private Integer currentPlanner;
 
-    @NotBlank
     private Integer currentMarketer;
 
-    @NotBlank
     private Integer currentEtc;
 
     @NotBlank
