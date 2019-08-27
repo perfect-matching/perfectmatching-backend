@@ -3,6 +3,7 @@ package com.matching.service;
 import com.matching.controller.TagController;
 import com.matching.domain.DoneProject;
 import com.matching.domain.UsedSkill;
+import com.matching.domain.dto.DoneProjectDTO;
 import com.matching.repository.DoneProjectRepository;
 import com.matching.repository.UsedSkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class DoneProjectService {
     }
 
     public Resource<?> getDoneProject(Long idx) {
-        return new Resource<>(doneProjectRepository.findByIdx(idx));
+        return new Resource<>(new DoneProjectDTO(doneProjectRepository.findByIdx(idx)));
     }
 
     public boolean findByDoneProjectUsedSkills(Long idx) {

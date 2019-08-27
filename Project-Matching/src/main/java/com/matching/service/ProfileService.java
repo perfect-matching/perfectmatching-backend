@@ -107,7 +107,6 @@ public class ProfileService {
         for(DoneProject doneProject : doneProjectList) {
             Resource<?> resource = new Resource<>(new DoneProjectDTO(doneProject));
             resource.add(linkTo(methodOn(DoneProjectController.class).getDoneProject(doneProject.getIdx(), response)).withSelfRel());
-            resource.add(linkTo(methodOn(DoneProjectController.class).getDoneProjectUsedSkills(doneProject.getIdx(), response)).withRel("Used Skills"));
             resourceList.add(resource);
         }
 

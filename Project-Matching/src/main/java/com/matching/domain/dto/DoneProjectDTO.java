@@ -1,6 +1,7 @@
 package com.matching.domain.dto;
 
 import com.matching.domain.DoneProject;
+import com.matching.domain.UsedSkill;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,8 @@ import org.springframework.hateoas.core.Relation;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Builder
@@ -49,6 +52,8 @@ public class DoneProjectDTO {
 
     private String socialUrl;
 
+    private Set<UsedSkill> usedSkills = new HashSet<>();
+
     public DoneProjectDTO(DoneProject doneProject) {
         this.doneProjectIdx = doneProject.getIdx();
         this.projectIdx = doneProject.getProjectIdx();
@@ -61,5 +66,6 @@ public class DoneProjectDTO {
         this.startDate = doneProject.getStartDate();
         this.endDate = doneProject.getEndDate();
         this.socialUrl = doneProject.getSocialUrl();
+        this.usedSkills.addAll(doneProject.getUsedSkills());
     }
 }

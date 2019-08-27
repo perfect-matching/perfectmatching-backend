@@ -1,5 +1,7 @@
 package com.matching.config.filter;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matching.domain.JwtToken;
 import com.matching.config.auth.SecurityConstants;
 import com.matching.repository.JwtTokenRepository;
@@ -18,7 +20,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -39,11 +45,34 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        var username = request.getParameter("username");
-        var password = request.getParameter("password");
-        var authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+        Map<String, String> map = new HashMap<>();
 
-        return authenticationManager.authenticate(authenticationToken);
+        try {
+            map = getParamsFromPost(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String username = map.get("username");
+        String password = map.get("password");
+
+        return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+    }
+
+    private Map<String, String> getParamsFromPost(HttpServletRequest request) throws IOException {
+        BufferedReader reader = request.getReader();
+        StringBuilder sb = new StringBuilder();
+        ObjectMapper mapper = new ObjectMapper();
+        String line = reader.readLine();
+
+        while (line != null) {
+            sb.append(line + "\n");
+            line = reader.readLine();
+        }
+
+        reader.close();
+
+        return new HashMap<>(mapper.readValue(sb.toString(), new TypeReference<Map<String, String>>(){})) ;
     }
 
     @Override

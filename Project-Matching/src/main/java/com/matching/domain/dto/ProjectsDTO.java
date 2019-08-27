@@ -68,7 +68,6 @@ public class ProjectsDTO {
     @Length(max = 10, min = 1)
     private String status;
 
-    @NotBlank
     private Set<Tag> tags = new HashSet<>();
 
     public ProjectsDTO(Project project) {
@@ -88,7 +87,7 @@ public class ProjectsDTO {
         this.etcRecruits = project.getEtcRecruits() > 0;
 
         for(ProjectTag projectTag : project.getProjectTags())
-            tags.add(projectTag.getTag());
+            this.tags.add(projectTag.getTag());
     }
 
 }

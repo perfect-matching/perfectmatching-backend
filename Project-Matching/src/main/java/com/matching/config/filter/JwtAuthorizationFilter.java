@@ -43,7 +43,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
-        var authentication = getAuthentication(request);
+        UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
         if (authentication == null) {
             filterChain.doFilter(request, response);
             return;
@@ -55,7 +55,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         this.jwtTokenRepository = ctx.getBean(JwtTokenRepository.class);
-        var token = request.getHeader(SecurityConstants.TOKEN_HEADER);
+        String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
 
         String findToken = token;
         findToken = token != null ? findToken.replaceAll("Bearer", "").trim() : token;
@@ -72,7 +72,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             try {
                 var signingKey = SecurityConstants.JWT_SECRET.getBytes();
 
-                 var parsedToken = Jwts.parser()
+                var parsedToken = Jwts.parser()
                         .setSigningKey(signingKey)
                         .parseClaimsJws(token.replace("Bearer ", ""));
 
