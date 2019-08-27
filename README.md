@@ -38,6 +38,8 @@ Project - Side Project Member Matching Platform
     $ git clone https://github.com/perfect-matching/perfectmatching-backend.git
     ```
 
+* 프로젝트 내 Project-Matching\src\main\java\com\matching\config 경로에 HttpConfig.java 삭제 또는 코드 내용 주석처리.
+
 * 프로젝트 내 Project-Matching\src\main\resources 경로에 `application.yml` 생성.
 
     * 밑의 양식대로 내용을 채운 뒤, `application.yml`에 삽입.
@@ -117,6 +119,8 @@ Project - Side Project Member Matching Platform
     |URI(자원)| HTTP(행위) | 기능(표현) |
     |:---:|:---:|:---:| 
     | `/api/project` | POST | Project를 생성하기 위한 요청 api |
+    | `/api/login` | POST | 서버에 로그인을 요청하기 위한 api |
+    | `/api/logout` | POST | 서버에 로그아웃을 요청하기 위한 api |
 
 * PUT
 

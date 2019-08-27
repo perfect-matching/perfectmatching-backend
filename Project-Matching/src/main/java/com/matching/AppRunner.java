@@ -9,8 +9,12 @@ import com.matching.domain.key.ProjectTagKey;
 import com.matching.domain.key.UserProjectKey;
 import com.matching.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -39,8 +43,6 @@ public class AppRunner implements ApplicationRunner {
             "무궁화 삼천리 화려 강산\n" +
             "대한 사람 대한으로 길이 보전하세";
 
-    private final String[] test_skill = {"Android", "iOS", "Windows", "Vue js", "React Js", "System", "C#", "ASP", "JSP", "Java", "RxJava", "Kotlin", "Spring", "Spring Boot", "Oracle", "MySQL", "NoSQL", "MongoDB", "Django", "Python", "RubyOnRails", "Kernel", "OS", "Network", "Algorithm", "Data Structure", "BootStrap", "ML", "AI", "Cloud" };
-
     @Autowired
     private UserRepository userRepository;
 
@@ -68,12 +70,15 @@ public class AppRunner implements ApplicationRunner {
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public void run(ApplicationArguments args) {
         Random random = new Random();
 
         IntStream.rangeClosed(1, 40).forEach(index -> userRepository.save(User.builder().email("test" + index + "@email.com")
-                .nick("testUser_" + index).password("testPassword").createdDate(LocalDateTime.now()).profileImg("Profile Image URL")
+                .nick("testUser_" + index).password(passwordEncoder.encode("testpassword")).createdDate(LocalDateTime.now()).profileImg("Profile Image URL")
                 .description("저는 이러한 사람입니다.").investTime(4).socialUrl("https://github.com/testUser").build()));
 
         IntStream.rangeClosed(1, 300).forEach(index -> userSkillRepository.save(UserSkill.builder().user(userRepository.findByIdx
@@ -96,6 +101,7 @@ public class AppRunner implements ApplicationRunner {
         IntStream.rangeClosed(1, 300).forEach(index -> createUserProjectTestData());
 
         IntStream.rangeClosed(1, 400).forEach(this::createCommentTestData);
+
     }
 
     private void createProjectTestData(int index) {
@@ -116,6 +122,7 @@ public class AppRunner implements ApplicationRunner {
                 .status(UserProjectStatus.MATCHING).simpleProfile("저는 꼭 프로젝트에 참여하고 싶습니다").user(user).project(project).build();
 
         userProjectRepository.save(userProject);
+
     }
 
 
