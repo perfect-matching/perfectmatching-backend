@@ -108,7 +108,6 @@ public class ProjectService {
             Resource<?> resource = new Resource<>(projectsDTO);
             resource.add(linkTo(methodOn(ProjectController.class).getProjectJsonView(project.getIdx(), response)).withSelfRel());
             resource.add(linkTo(methodOn(ProfileController.class).getProfile(project.getLeader().getIdx(), response)).withRel("Leader Profile"));
-            resource.add(linkTo(methodOn(ProjectController.class).getProjectTags(project.getIdx(), response)).withRel("Tags"));
             list.add(resource);
         }
 

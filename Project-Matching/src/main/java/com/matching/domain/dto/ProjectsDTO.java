@@ -1,6 +1,8 @@
 package com.matching.domain.dto;
 
 import com.matching.domain.Project;
+import com.matching.domain.ProjectTag;
+import com.matching.domain.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +12,8 @@ import org.springframework.hateoas.core.Relation;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Builder
@@ -64,6 +68,8 @@ public class ProjectsDTO {
     @Length(max = 10, min = 1)
     private String status;
 
+    private Set<Tag> tags = new HashSet<>();
+
     public ProjectsDTO(Project project) {
         this.projectIdx = project.getIdx();
         this.leader = project.getLeader().getNick();
@@ -79,6 +85,9 @@ public class ProjectsDTO {
         this.plannerRecruits = project.getPlannerRecruits() > 0;
         this.marketerRecruits = project.getMarketerRecruits() > 0;
         this.etcRecruits = project.getEtcRecruits() > 0;
+
+        for(ProjectTag projectTag : project.getProjectTags())
+            this.tags.add(projectTag.getTag());
     }
 
 }
