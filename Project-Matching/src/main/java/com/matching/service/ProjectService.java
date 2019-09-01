@@ -12,17 +12,22 @@ import com.matching.domain.dto.ProjectDTO;
 import com.matching.domain.dto.ProjectsDTO;
 import com.matching.domain.enums.LocationType;
 import com.matching.domain.enums.PositionType;
+import com.matching.domain.enums.ProjectStatus;
 import com.matching.domain.enums.UserProjectStatus;
-import com.matching.repository.CommentRepository;
-import com.matching.repository.ProjectRepository;
-import com.matching.repository.ProjectTagRepository;
-import com.matching.repository.UserProjectRepository;
+import com.matching.domain.key.ProjectTagKey;
+import com.matching.domain.key.UserProjectKey;
+import com.matching.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
@@ -30,13 +35,18 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.IntStream;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Service
 public class ProjectService {
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -46,6 +56,9 @@ public class ProjectService {
 
     @Autowired
     private UserProjectRepository userProjectRepo;
+
+    @Autowired
+    private TagRepository tagRepository;
 
     @Autowired
     private ProjectTagRepository projectTagRepo;
@@ -193,5 +206,58 @@ public class ProjectService {
         }
 
         return new Resources<>(list);
+    }
+
+    public StringBuilder validation(BindingResult bindingResult) {
+        List<ObjectError> list = bindingResult.getAllErrors();
+        StringBuilder msg = new StringBuilder();
+        for (ObjectError error : list)
+            msg.append(error.getDefaultMessage()).append("\n");
+        return msg;
+    }
+
+    public ResponseEntity<?> postProject(ProjectDTO projectDTO, User currentUser) {
+
+        if(userRepository.findByEmail(currentUser.getUsername()) == null)
+            return new ResponseEntity<>("존재하지 않는 작성자입니다.", HttpStatus.BAD_REQUEST);
+
+        com.matching.domain.User user = userRepository.findByEmail(currentUser.getUsername());
+
+        Project project = Project.builder().title(projectDTO.getTitle()).location(getLocation(projectDTO.getLocation())).summary(projectDTO.getSummary()).content(projectDTO.getContent())
+                .socialUrl(projectDTO.getSocialUrl()).designerRecruits(projectDTO.getDesignerRecruits()).developerRecruits(projectDTO.getDeveloperRecruits()).plannerRecruits(projectDTO.getPlannerRecruits())
+                .marketerRecruits(projectDTO.getMarketerRecruits()).etcRecruits(projectDTO.getEtcRecruits()).createdDate(LocalDateTime.now()).status(ProjectStatus.RECRUIT).build();
+
+        user.addProject(project);
+        projectRepository.save(project);
+
+        UserProject userProject = UserProject.builder().id(new UserProjectKey(user.getIdx(), project.getIdx())).position(PositionType.LEADER).status(UserProjectStatus.MATCHING).build();
+
+        user.addUserProject(userProject);
+        project.addUserProject(userProject);
+        userProjectRepo.save(userProject);
+
+        for(Tag tag : projectDTO.getTags()) {
+            Tag foundTag = tagRepository.findByText(tag.getText()) == null ? tagRepository.save(tag) : tagRepository.findByText(tag.getText());
+
+            ProjectTag projectTag = ProjectTag.builder().id(new ProjectTagKey(project.getIdx(), foundTag.getIdx())).build();
+
+            project.addProjectTag(projectTag);
+            tag.addProjectTag(projectTag);
+            projectTagRepo.save(projectTag);
+        }
+
+        return new ResponseEntity<>("{}", HttpStatus.CREATED);
+    }
+
+    public LocationType getLocation(String location) {
+        LocationType locationType = null;
+
+        for(int i=0; i<LocationType.values().length; i++) {
+            locationType = LocationType.getLocation(i);
+            if(locationType.getLocation().equals(location))
+                return locationType;
+        }
+
+        return locationType;
     }
 }

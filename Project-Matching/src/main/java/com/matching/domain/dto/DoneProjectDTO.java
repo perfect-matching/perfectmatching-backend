@@ -52,7 +52,7 @@ public class DoneProjectDTO {
 
     private String socialUrl;
 
-    private Set<UsedSkill> usedSkills = new HashSet<>();
+    private final Set<UsedSkill> usedSkills = new HashSet<>();
 
     public DoneProjectDTO(DoneProject doneProject) {
         this.doneProjectIdx = doneProject.getIdx();

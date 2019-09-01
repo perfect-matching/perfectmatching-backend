@@ -1,6 +1,7 @@
 package com.matching.controller;
 
 import com.matching.domain.Project;
+import com.matching.domain.dto.ProjectDTO;
 import com.matching.domain.enums.LocationType;
 import com.matching.service.ProfileService;
 import com.matching.service.ProjectService;
@@ -16,9 +17,13 @@ import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -32,7 +37,7 @@ public class ProjectController {
     private ProjectService projectService;
 
     @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getProjectsJsonView(@PageableDefault(size = 4) Pageable pageable, HttpServletResponse response,
+    public ResponseEntity<?> getProjectsJsonView(@PageableDefault(size = 12) Pageable pageable, HttpServletResponse response,
                                                     @RequestParam(required = false) LocationType location,
                                                     @RequestParam(required = false) String position) {
 
@@ -120,4 +125,18 @@ public class ProjectController {
 
         return ResponseEntity.ok(resources);
     }
+
+    @PostMapping(value = "/project")
+    public ResponseEntity<?> postProject(@Valid @RequestBody ProjectDTO projectDTO, BindingResult result, @AuthenticationPrincipal User user, HttpServletResponse response) {
+        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
+        response.setHeader("Location", "/api/project");
+
+        if (result.hasErrors()) {
+            StringBuilder msg = projectService.validation(result);
+            return new ResponseEntity<>(msg.toString(), HttpStatus.BAD_REQUEST);
+        }
+
+        return projectService.postProject(projectDTO, user);
+    }
+
 }

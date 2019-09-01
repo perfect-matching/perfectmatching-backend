@@ -9,11 +9,9 @@ import com.matching.domain.key.ProjectTagKey;
 import com.matching.domain.key.UserProjectKey;
 import com.matching.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +20,7 @@ import java.util.stream.IntStream;
 import java.util.*;
 
 @Component
+@EnableConfigurationProperties
 public class AppRunner implements ApplicationRunner {
     private final String TEST_CONTENT = "1. 동해물과 백두산이 마르고 닳도록 \n" +
             "하느님이 보우하사 우리나라 만세\n" +

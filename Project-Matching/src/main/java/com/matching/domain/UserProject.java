@@ -39,7 +39,7 @@ public class UserProject implements Serializable {
     @Enumerated(EnumType.STRING)
     private PositionType position;
 
-    @Column(nullable = false, length = 400)
+    @Column(length = 400)
     private String simpleProfile;
 
     @Builder

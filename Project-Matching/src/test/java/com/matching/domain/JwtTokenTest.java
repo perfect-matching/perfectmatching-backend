@@ -39,8 +39,7 @@ public class JwtTokenTest {
 
     @Test
     public void jwtTokenCreateTest() {
-        JwtToken jwtToken = JwtToken.builder().token(UUID.randomUUID().toString()).status(true).user(user).build();
-        jwtToken.setExpiryDate(60);
+        JwtToken jwtToken = JwtToken.builder().token(UUID.randomUUID().toString()).build();
         testEntityManager.persist(jwtToken);
 
         assertThat(jwtTokenRepository.getOne(jwtToken.getIdx())).isNotNull().isEqualTo(jwtToken);
@@ -48,12 +47,10 @@ public class JwtTokenTest {
 
     @Test
     public void jwtTokenCreateAndSearchTest() {
-        JwtToken jwtToken1 = JwtToken.builder().token(UUID.randomUUID().toString()).status(true).user(user).build();
-        jwtToken1.setExpiryDate(60);
+        JwtToken jwtToken1 = JwtToken.builder().token(UUID.randomUUID().toString()).build();
         testEntityManager.persist(jwtToken1);
 
-        JwtToken jwtToken2 = JwtToken.builder().token(UUID.randomUUID().toString()).status(true).user(user).build();
-        jwtToken2.setExpiryDate(60);
+        JwtToken jwtToken2 = JwtToken.builder().token(UUID.randomUUID().toString()).build();
         testEntityManager.persist(jwtToken2);
 
         List<JwtToken> jwtTokenList = jwtTokenRepository.findAll();
@@ -66,12 +63,10 @@ public class JwtTokenTest {
 
     @Test
     public void jwtTokenCreateAndDeleteTest() {
-        JwtToken jwtToken1 = JwtToken.builder().token(UUID.randomUUID().toString()).status(true).user(user).build();
-        jwtToken1.setExpiryDate(60);
+        JwtToken jwtToken1 = JwtToken.builder().token(UUID.randomUUID().toString()).build();
         testEntityManager.persist(jwtToken1);
 
-        JwtToken jwtToken2 = JwtToken.builder().token(UUID.randomUUID().toString()).status(true).user(user).build();
-        jwtToken2.setExpiryDate(60);
+        JwtToken jwtToken2 = JwtToken.builder().token(UUID.randomUUID().toString()).build();
         testEntityManager.persist(jwtToken2);
 
         jwtTokenRepository.deleteAll();

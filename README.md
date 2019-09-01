@@ -18,8 +18,24 @@ Project - Side Project Member Matching Platform
 
 * Entity 모델링 명세 [확인](https://docs.google.com/spreadsheets/d/1kbpWNSX8oapVMX6U6IQtt3sRyn1DrJNmXETlUz-EkQg/edit#gid=0)
 
-
 * Entity Relation Diagram [확인](https://drive.google.com/file/d/1tmBT3GAL3OIpRocH-hIGdo70-vzptTSo/view)
+
+### 개발 방법
+<details><summary>세부정보</summary>
+
+* 개발과 관련된 모든 이야기는 [Issues](https://github.com/perfect-matching/perfectmatching-backend/issues)에서 진행합니다.
+
+    * 급한 용무는 우선 순위에 따라서 카카오톡 또는 슬랙과 같은 메신저를 이용합니다.
+
+* API 및 모델링 명세를 주기적으로 최신화하면서 `README.md`를 잘 관리합니다. 
+
+* **Fork**를 통한 PR을 지향합니다.
+
+* 아래와 같은 Git Workflow를 지향하며 지키려고 노력합니다. ([참고](https://nvie.com/posts/a-successful-git-branching-model/?))
+
+    <img width=750, height=850, src="https://camo.githubusercontent.com/7f2539ff6001fe7700853313e7cdb7fd4602e16a/68747470733a2f2f6e7669652e636f6d2f696d672f6769742d6d6f64656c4032782e706e67">
+
+</details>
 
 ### 실행 방법
 <details><summary>세부정보</summary>
@@ -113,6 +129,9 @@ Project - Side Project Member Matching Platform
     | `/api/tag/{idx}` | [GET](https://donghun-dev.kro.kr:8083/api/tag/1/) | idx에 따른 Tag를 가져오기 위한 api |
     | `/api/userskill/{idx}` | [GET](https://donghun-dev.kro.kr:8083/api/userskill/1/) | idx에 따른 UserSkill을 가져오기 위한 api |
     | `/api/usedskill/{idx}` | [GET](https://donghun-dev.kro.kr:8083/api/usedskill/1/) | idx에 따른 UsedSkill을 가져오기 위한 api |
+    | `/api/tags` | [GET](https://donghun-dev.kro.kr:8083/api/tags) | DB에 등록되어 있는 Tag들을 가져오기 위한 api |
+    | `/api/userskills` | [GET](https://donghun-dev.kro.kr:8083/api/userskills) | DB에 등록되어 있는 UserSkill들을 가져오기 위한 api |
+    | `/api/usedskills` | [GET](https://donghun-dev.kro.kr:8083/api/usedskills) | DB에 등록되어 있는 UsedSkill들을 가져오기 위한 api |
 
 * POST
 
@@ -121,6 +140,10 @@ Project - Side Project Member Matching Platform
     | `/api/project` | POST | Project를 생성하기 위한 요청 api |
     | `/api/login` | POST | 서버에 로그인을 요청하기 위한 api |
     | `/api/logout` | POST | 서버에 로그아웃을 요청하기 위한 api |
+    | `/api/register` | POST | User 생성을 위해서 회원가입을 요청하는 api |
+    | `/api/register/nickcheck` | POST | User 생성을 위해 회원가입시 닉네임 중복 체크를 요청하는 api |
+    | `/api/register/emailcheck` | POST | User 생성을 위해 회원가입시 이메일 중복 체크를 요청하는 api |
+    | `/api/project` | POST | Project 생성을 요청하기 위한 api |
 
 * PUT
 

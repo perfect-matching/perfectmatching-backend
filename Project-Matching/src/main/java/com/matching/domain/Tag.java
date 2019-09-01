@@ -1,6 +1,7 @@
 package com.matching.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +17,7 @@ import java.util.Set;
 @Data
 @Table
 @NoArgsConstructor
-@EqualsAndHashCode(of = "idx")
+@EqualsAndHashCode(of = {"idx", "text"})
 @Relation(collectionRelation = "datas")
 public class Tag implements Serializable {
 
@@ -29,7 +30,7 @@ public class Tag implements Serializable {
     private String text;
 
     @OneToMany(mappedBy = "tag", fetch = FetchType.LAZY)
-    @JsonBackReference
+    @JsonIgnore
     private Set<ProjectTag> projectTags = new HashSet<>();
 
     @Builder
