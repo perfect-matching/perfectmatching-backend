@@ -2,10 +2,8 @@ package com.matching.config.filter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.matching.domain.JwtToken;
 import com.matching.config.auth.SecurityConstants;
-import com.matching.repository.JwtTokenRepository;
-import com.matching.service.UserService;
+import com.matching.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.var;
@@ -31,14 +29,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private final AuthenticationManager authenticationManager;
 
-    private final JwtTokenRepository jwtTokenRepository;
-
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager, ApplicationContext ctx) {
         this.authenticationManager = authenticationManager;
-        this.jwtTokenRepository = ctx.getBean(JwtTokenRepository.class);
-        this.userService = ctx.getBean(UserService.class);
+        this.userRepository = ctx.getBean(UserRepository.class);
 
         setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
     }
@@ -89,17 +84,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         var token = Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, signingKey)
-                .setHeaderParam("type", SecurityConstants.TOKEN_TYPE)
+                .setHeaderParam("typ", SecurityConstants.TOKEN_TYPE)
                 .setIssuer(SecurityConstants.TOKEN_ISSUER)
                 .setAudience(SecurityConstants.TOKEN_AUDIENCE)
-                .setSubject(user.getUsername())
-                .setExpiration(new Date(System.currentTimeMillis() + 864000000))
-                .claim("rol", roles)
+                .setSubject("Perfect-Matching JWT Token")
+                .claim("idx", userRepository.findByEmail(user.getUsername()).getIdx())
+                .claim("email", user.getUsername())
+                .claim("nickname", userRepository.findByEmail(user.getUsername()).getNick())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1800000))
+                .claim("role", roles)
                 .compact();
-
-        JwtToken jwtToken = JwtToken.builder().token(token).user(userService.findByEmail(user.getUsername())).status(true).build();
-        jwtToken.setExpiryDate(60);
-        jwtTokenRepository.save(jwtToken);
 
         response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
     }

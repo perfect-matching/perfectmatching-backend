@@ -1,10 +1,12 @@
 package com.matching.domain.enums;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Random;
 
 @Getter
+@ToString
 public enum LocationType {
 
     SEOUL("서울"),
@@ -30,5 +32,9 @@ public enum LocationType {
     public static LocationType getRandomLocationType() {
         Random random = new Random();
         return values()[random.nextInt(values().length)];
+    }
+
+    public static LocationType getLocation(int index) {
+        return values()[index];
     }
 }

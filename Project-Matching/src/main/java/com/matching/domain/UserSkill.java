@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Data
 @Table
 @NoArgsConstructor
-@EqualsAndHashCode(of = "idx")
+@EqualsAndHashCode(of = {"idx", "text"})
 @Relation(collectionRelation = "datas")
 public class UserSkill implements Serializable  {
 

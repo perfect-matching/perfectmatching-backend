@@ -1,6 +1,6 @@
 package com.matching.config.filter;
 
-import com.matching.domain.JwtToken;
+import com.matching.config.exception.InvalidTokenException;
 import com.matching.config.auth.SecurityConstants;
 import com.matching.repository.JwtTokenRepository;
 import io.jsonwebtoken.*;
@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -59,29 +60,22 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         String findToken = token;
         findToken = token != null ? findToken.replaceAll("Bearer", "").trim() : token;
-        JwtToken jwtToken = jwtTokenRepository.findByToken(findToken);
 
-        if(jwtToken == null) {
-            return null;
-        } else if(!jwtToken.getStatus() || jwtToken.isExpired()) {
-            jwtTokenRepository.delete(jwtToken);
-            return null;
-        }
+        if(jwtTokenRepository.findByToken(findToken) != null)
+            throw new InvalidTokenException("만료된 토큰으로 접근하였습니다.");
 
         if (StringUtils.isNotEmpty(token) && token.startsWith(SecurityConstants.TOKEN_PREFIX)) {
             try {
-                var signingKey = SecurityConstants.JWT_SECRET.getBytes();
+                byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();
 
                 var parsedToken = Jwts.parser()
                         .setSigningKey(signingKey)
                         .parseClaimsJws(token.replace("Bearer ", ""));
 
-                var username = parsedToken
-                        .getBody()
-                        .getSubject();
+                String username = (String) parsedToken.getBody().get("email");
 
-                var authorities = ((List<?>) parsedToken.getBody()
-                        .get("rol")).stream()
+                List<GrantedAuthority> authorities = ((List<?>) parsedToken.getBody()
+                        .get("role")).stream()
                         .map(authority -> new SimpleGrantedAuthority((String) authority))
                         .collect(Collectors.toList());
 

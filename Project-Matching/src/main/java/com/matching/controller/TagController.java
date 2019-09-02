@@ -3,6 +3,7 @@ package com.matching.controller;
 import com.matching.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,20 @@ public class TagController {
     @Autowired
     private TagService tagService;
 
+    @GetMapping(value = "/tags", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getTags(HttpServletResponse response) {
+        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
+        response.setHeader("Location", "/api/tags");
+
+        if(tagService.findByTags())
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Resources<?> resources = tagService.getTags(response);
+        resources.add(linkTo(methodOn(TagController.class).getTags(response)).withSelfRel());
+
+        return ResponseEntity.ok(resources);
+    }
+
     @GetMapping(value = "/tag/{idx}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTag(@PathVariable Long idx, HttpServletResponse response) {
         response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
@@ -34,6 +49,20 @@ public class TagController {
         Resource<?> resource = tagService.getTag(idx);
         resource.add(linkTo(methodOn(TagController.class).getTag(idx, response)).withSelfRel());
         return ResponseEntity.ok(resource);
+    }
+
+    @GetMapping(value = "/userskills", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUserSkills(HttpServletResponse response) {
+        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
+        response.setHeader("Location", "/api/userskills");
+
+        if(tagService.findByUserSkills())
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Resources<?> resources = tagService.getUserSkills(response);
+        resources.add(linkTo(methodOn(TagController.class).getUserSkills(response)).withSelfRel());
+
+        return ResponseEntity.ok(resources);
     }
 
     @GetMapping(value = "/userskill/{idx}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,6 +78,20 @@ public class TagController {
         return ResponseEntity.ok(resource);
     }
 
+    @GetMapping(value = "/usedskills", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUsedSkills(HttpServletResponse response) {
+        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
+        response.setHeader("Location", "/api/usedskills");
+
+        if(tagService.findByUsedSkills())
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Resources<?> resources = tagService.getUsedSkills(response);
+        resources.add(linkTo(methodOn(TagController.class).getUsedSkills(response)).withSelfRel());
+
+        return ResponseEntity.ok(resources);
+    }
+
     @GetMapping(value = "/usedskill/{idx}", produces =MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUsedSkill(@PathVariable Long idx, HttpServletResponse response) {
         response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
@@ -61,4 +104,5 @@ public class TagController {
         resource.add(linkTo(methodOn(TagController.class).getUsedSkill(idx, response)).withSelfRel());
         return ResponseEntity.ok(resource);
     }
+
 }

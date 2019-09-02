@@ -11,7 +11,8 @@ public enum PositionType {
     DESIGNER("디자이너"),
     MARKETER("마케터"),
     PLANNER("기획자"),
-    ETC("기타");
+    ETC("기타"),
+    LEADER("리더");
 
     private String position;
 

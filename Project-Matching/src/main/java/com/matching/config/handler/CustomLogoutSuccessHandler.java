@@ -24,14 +24,8 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
-
         token = token.replaceAll("Bearer", "").trim();
 
-        if(jwtTokenRepository.findByToken(token) == null)
-            throw new InvalidTokenException("토큰이 유효하지 않습니다.");
-
-        JwtToken jwtToken = jwtTokenRepository.findByToken(token);
-        jwtToken.setStatus(false);
-        jwtTokenRepository.save(jwtToken);
+        jwtTokenRepository.save(JwtToken.builder().token(token).build());
     }
 }
