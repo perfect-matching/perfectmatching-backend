@@ -207,4 +207,4 @@ modules.xml
 
 *.yml
 application.properties
-
+uploads/
