@@ -6,7 +6,6 @@ import com.matching.config.auth.SecurityConstants;
 import com.matching.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.var;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -73,16 +73,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain filterChain, Authentication authentication) {
-        var user = ((User) authentication.getPrincipal());
+        User user = ((User) authentication.getPrincipal());
 
-        var roles = user.getAuthorities()
+        List<String> roles = user.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        var signingKey = SecurityConstants.JWT_SECRET.getBytes();
+        byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();
 
-        var token = Jwts.builder()
+        String token = Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, signingKey)
                 .setHeaderParam("typ", SecurityConstants.TOKEN_TYPE)
                 .setIssuer(SecurityConstants.TOKEN_ISSUER)
