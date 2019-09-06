@@ -103,7 +103,7 @@ Project - Side Project Member Matching Platform
 
     * `https://donghun-dev.kro.kr:8083`
 
-* [GET](https://github.com/perfect-matching/perfectmatching-backend/master/documents/get.md)
+* [GET](https://github.com/ssayebee/perfectmatching-backend/blob/master/documents/get.md)
 
     |URI(자원)| HTTP(행위) | 기능(표현) |
     |:---:|:---:|:---:|
@@ -133,7 +133,7 @@ Project - Side Project Member Matching Platform
     | `/api/userskills` | GET | DB에 등록되어 있는 UserSkill들을 가져오기 위한 api |
     | `/api/usedskills` | GET | DB에 등록되어 있는 UsedSkill들을 가져오기 위한 api |
 
-* [POST](https://github.com/perfect-matching/perfectmatching-backend/master/documents/post.md)
+* [POST](https://github.com/ssayebee/perfectmatching-backend/blob/master/documents/post.md)
 
     |URI(자원)| HTTP(행위) | 기능(표현) |
     |:---:|:---:|:---:|
