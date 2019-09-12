@@ -6,6 +6,7 @@ import com.matching.config.auth.SecurityConstants;
 import com.matching.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.var;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -92,7 +93,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .claim("email", user.getUsername())
                 .claim("nickname", userRepository.findByEmail(user.getUsername()).getNick())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1800000))
+                .setExpiration(new Date(System.currentTimeMillis() + 3600000))
                 .claim("role", roles)
                 .compact();
 

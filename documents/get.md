@@ -1,3 +1,5 @@
+## GET - JSON Data Form Example
+
 * `https://donghun-dev.kro.kr:8083/api/projects`
 
   * 프로젝트 12개의 정보 출력.
@@ -90,6 +92,7 @@
   }
   ```
 
+
 * `https://donghun-dev.kro.kr:8083/api/projects?offset=1`
 
   * 데이터 출력은 `/api/projects` 요청시와 동일하고 다음 항목들을 가져옴.
@@ -107,6 +110,7 @@
 
   * Fail : Code 403
 
+
 * `https://donghun-dev.kro.kr:8083/api/projects?location=SEOUL&offset=1`
 
   * 데이터 출력은 `/api/projects` 요청시와 동일하고 지역 정보가 서울인 항목의 다음 정보들을 가져옴.
@@ -114,6 +118,7 @@
   * Success : Code 200
 
   * Fail : Code 403
+
 
 * `https://donghun-dev.kro.kr:8083/api/projects?position=DEVELOPER`
 
@@ -123,6 +128,7 @@
 
   * Fail : Code 403
 
+
 * `https://donghun-dev.kro.kr:8083/api/projects?position=DEVELOPER&offset=1`
 
   * 데이터 출력은 `/api/projects` 요청시와 동일하고 포지션 정보가 developer를 포함하고 있는 다음 항목 정보들을 가져옴.
@@ -130,6 +136,7 @@
   * Success : Code 200
 
   * Fail : Code 403
+
 
 * `https://donghun-dev.kro.kr:8083/api/projects?position=DEVELOPER&location=SEOUL`
 
@@ -139,6 +146,7 @@
 
   * Fail : Code 403
 
+
 * `https://donghun-dev.kro.kr:8083/api/projects?position=DEVELOPER&location=SEOUL&offset=1`
 
   * 데이터 출력은 `/api/projects` 요청시와 동일하고 포지션 정보가 developer를 포함하고 지역 정보가 서울인 항목의 다음 정보들을 가져옴.
@@ -146,6 +154,7 @@
   * Success : Code 200
 
   * Fail : Code 403
+
 
 * `https://donghun-dev.kro.kr:8083/api/project/1`
 
@@ -215,6 +224,7 @@
     }
   }
   ```
+
 
 * `https://donghun-dev.kro.kr:8083/api/project/1/comments`
 
@@ -301,6 +311,7 @@
     }
   }
   ```
+
 
 * `https://donghun-dev.kro.kr:8083/api/project/1/tags`
 
@@ -436,6 +447,7 @@
   }
   ```
 
+
 * `https://donghun-dev.kro.kr:8083/api/profile/1/projects`
 
   * 유저의 {idx}의 진행중인 프로젝트의 정보들을 가져옴.
@@ -477,6 +489,7 @@
     }
   }
   ```
+
 
 * `https://donghun-dev.kro.kr:8083/api/profile/1/doneprojects`
 
@@ -543,6 +556,7 @@
   }
   ```
 
+
 * `https://donghun-dev.kro.kr:8083/api/comment/1`
 
   * 댓글 {idx}의 정보를 가져옴.
@@ -569,6 +583,7 @@
   }
   ```
 
+
 * `https://donghun-dev.kro.kr:8083/api/doneproject/1`
 
   * 진행했던 프로젝트 {idx}의 정보를 가져옴.
@@ -594,6 +609,7 @@
     }
   }
   ```
+
 
 * `https://donghun-dev.kro.kr:8083/api/doneproject/1/usedskills`
 
@@ -635,6 +651,7 @@
   }
   ```
 
+
 * `https://donghun-dev.kro.kr:8083/api/tag/1`
 
   * {idx}의 태그 정보를 가져옴.
@@ -654,6 +671,7 @@
     }
   }
   ```
+
 
 * `https://donghun-dev.kro.kr:8083/api/userskill/1`
 
@@ -675,6 +693,7 @@
   }
   ```
 
+
 * `https://donghun-dev.kro.kr:8083/api/usedskill/1`
 
   * {idx}의 태그 정보를 가져옴.
@@ -694,6 +713,7 @@
     }
   }
   ```
+
 
 * `https://donghun-dev.kro.kr:8083/api/tags`
 
@@ -735,6 +755,7 @@
   }
   ```
 
+
 * `https://donghun-dev.kro.kr:8083/api/userskills`
 
   * {idx}의 태그 정보를 가져옴.
@@ -774,6 +795,7 @@
     }
   }
   ```
+
 
 * `https://donghun-dev.kro.kr:8083/api/usedskills`
 

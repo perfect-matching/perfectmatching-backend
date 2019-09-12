@@ -11,6 +11,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     Project findByIdx(long idx);
 
+    Project findByTitle(String title);
+
     Page<Project> findAllByOrderByIdxDesc(Pageable pageable);
 
     Page<Project> findByLocationOrderByIdxDesc(LocationType location, Pageable pageable);

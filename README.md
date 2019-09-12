@@ -54,7 +54,11 @@ Project - Side Project Member Matching Platform
     $ git clone https://github.com/perfect-matching/perfectmatching-backend.git
     ```
 
-* 프로젝트 내 Project-Matching\src\main\java\com\matching\config 경로에 HttpConfig.java 삭제 또는 내용 주석처리.
+* 프로젝트 내 Project-Matching\src\main\java\com\matching\config 경로에 `HttpConfig.java` 삭제 또는 내용 주석처리.
+
+* DB는 MySQL을 쓴다고 가정.
+
+    * 다른 DB를 사용한다면, 그 DB에 맞게 설정을 해야함.
 
 * 프로젝트 내 Project-Matching\src\main\resources 경로에 `application.yml` 생성.
 
@@ -64,7 +68,7 @@ Project - Side Project Member Matching Platform
     ```yml
     spring:
         datasource:
-            url: jdbc:mysql://localhost/본인_DB
+            url: jdbc:mysql://localhost:3306/본인_DB?serverTimezone=UTC
             username: 본인_DB_User
             password: 본인_DB_User_Password
             driver-class-name: com.mysql.jdbc.Driver
@@ -143,17 +147,20 @@ Project - Side Project Member Matching Platform
     | `/api/register` | POST | User 생성을 위해서 회원가입을 요청하는 api |
     | `/api/register/nickcheck` | POST | User 생성을 위해 회원가입시 닉네임 중복 체크를 요청하는 api |
     | `/api/register/emailcheck` | POST | User 생성을 위해 회원가입시 이메일 중복 체크를 요청하는 api |
+    | `/api/comment` | POST | Comment를 생성하기 위해 요청하는 api |
 
 * PUT
 
     |URI(자원)| HTTP(행위) | 기능(표현) |
     |:---:|:---:|:---:|
     | `/api/project/{idx}` | PUT | Project의 idx에 따라 Project를 수정하기 위한 api |
+    | `/api/comment/{idx}` | PUT | Comment의 idx에 따라 Comment를 수정하기 위한 api |
 
 * DELETE
 
     |URI(자원)| HTTP(행위) | 기능(표현) |
     |:---:|:---:|:---:|
     | `/api/project/{idx}` | DELETE | Project의 idx에 따라 Projet를 삭제하기 위한 api |
+    | `/api/comment/{idx}` | DELETE | Comment의 idx에 따라 Comment를 삭제하기 위한 api |
 
 </details>

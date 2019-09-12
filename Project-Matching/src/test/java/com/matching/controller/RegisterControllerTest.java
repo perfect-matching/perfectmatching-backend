@@ -50,7 +50,7 @@ public class RegisterControllerTest {
         userSkills.add(UserSkill.builder().text("유저 스길 2").build());
 
         UserDTO userDTO = UserDTO.builder().email("simpleUser@gamil.com").password("1108sun@#!").confirmPassword("1108sun@#!")
-                .nickname("simpleUser").description("이러이러한 사람입니다.").socialUrl("https://github.com").investTime(3)
+                .nickname("simpleUser").summary("이러이러한 사람입니다.").socialUrl("https://github.com").investTime(3)
                 .userSkills(userSkills).build();
 
         mockMvc.perform(post("/api/register")

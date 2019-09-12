@@ -45,7 +45,7 @@ public class UserDTO {
 
     @NotBlank(message = "자기소개가 비어있습니다.")
     @Length(max = 500, message = "자기소개는 500자 내외로 작성해주시길 바랍니다.")
-    private String description;
+    private String summary;
 
     @NotNull(message = "투자 시간이 비어있습니다.")
     private Integer investTime;
