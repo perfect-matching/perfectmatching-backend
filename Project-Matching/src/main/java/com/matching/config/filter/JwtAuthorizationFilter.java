@@ -4,7 +4,6 @@ import com.matching.config.exception.InvalidTokenException;
 import com.matching.config.auth.SecurityConstants;
 import com.matching.repository.JwtTokenRepository;
 import io.jsonwebtoken.*;
-import lombok.var;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.StringUtils;
@@ -68,7 +67,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             try {
                 byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();
 
-                var parsedToken = Jwts.parser()
+                Jws<Claims> parsedToken = Jwts.parser()
                         .setSigningKey(signingKey)
                         .parseClaimsJws(token.replace("Bearer ", ""));
 

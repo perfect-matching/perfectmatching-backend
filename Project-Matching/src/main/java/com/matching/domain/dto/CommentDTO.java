@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.hateoas.core.Relation;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
@@ -20,23 +21,21 @@ public class CommentDTO {
 
     private Long commentIdx;
 
-    @NotBlank
     @Length(max = 30, min = 1)
     private String userName;
 
     private Long userIdx;
 
-    @NotBlank
     @Length(max = 255, min = 1)
     private String projectTitle;
 
+    @NotNull(message = "project Idx가 비어있습니다.")
     private Long projectIdx;
 
-    @NotBlank
+    @NotBlank(message = "내용이 비어있습니다.")
     @Length(max = 255, min = 1)
     private String content;
 
-    @NotBlank
     private LocalDateTime createdDate;
 
     private LocalDateTime modifiedDate;

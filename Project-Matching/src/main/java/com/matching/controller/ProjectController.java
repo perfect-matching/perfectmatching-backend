@@ -3,7 +3,6 @@ package com.matching.controller;
 import com.matching.domain.Project;
 import com.matching.domain.dto.ProjectDTO;
 import com.matching.domain.enums.LocationType;
-import com.matching.service.ProfileService;
 import com.matching.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,11 +16,10 @@ import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
@@ -127,7 +125,7 @@ public class ProjectController {
     }
 
     @PostMapping(value = "/project")
-    public ResponseEntity<?> postProject(@Valid @RequestBody ProjectDTO projectDTO, BindingResult result, @AuthenticationPrincipal User user, HttpServletResponse response) {
+    public ResponseEntity<?> postProject(@Valid @RequestBody ProjectDTO projectDTO, BindingResult result, HttpServletRequest request, HttpServletResponse response) {
         response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
         response.setHeader("Location", "/api/project");
 
@@ -136,7 +134,29 @@ public class ProjectController {
             return new ResponseEntity<>(msg.toString(), HttpStatus.BAD_REQUEST);
         }
 
-        return projectService.postProject(projectDTO, user);
+        return projectService.postProject(projectDTO, request);
+    }
+
+    @PutMapping(value = "/project/{idx}")
+    public ResponseEntity<?> putProject(@Valid @RequestBody ProjectDTO projectDTO, BindingResult result, @PathVariable Long idx,
+                                        HttpServletRequest request, HttpServletResponse response) {
+        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
+        response.setHeader("Location", "/api/project/" + idx);
+
+        if(result.hasErrors()) {
+            StringBuilder msg = projectService.validation(result);
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+        }
+
+        return projectService.putProject(projectDTO, request, idx);
+    }
+
+    @DeleteMapping(value = "/project/{idx}")
+    public ResponseEntity<?> deleteProject(@PathVariable Long idx, HttpServletResponse response, HttpServletRequest request) {
+        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
+        response.setHeader("Location", "/api/project/" + idx);
+
+        return projectService.deleteProject(idx, request);
     }
 
 }

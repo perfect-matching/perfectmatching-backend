@@ -13,6 +13,9 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.PERSIST;
+
 @Entity
 @Data
 @Table

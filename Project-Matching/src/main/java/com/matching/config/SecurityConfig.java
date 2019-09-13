@@ -3,7 +3,6 @@ package com.matching.config;
 import com.matching.config.filter.JwtAuthenticationFilter;
 import com.matching.config.filter.JwtAuthorizationFilter;
 import com.matching.config.handler.CustomLogoutSuccessHandler;
-import com.matching.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setForceEncoding(true);
 
         http.cors().
+                and().
+                    csrf().
                 and().
                     httpBasic()
                 .and()

@@ -25,7 +25,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
 
-    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<Comment> comments = new HashSet<>();
 

@@ -1,10 +1,8 @@
 package com.matching.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.matching.domain.Project;
+import com.matching.domain.ProjectTag;
 import com.matching.domain.Tag;
-import com.matching.domain.enums.LocationType;
 import com.matching.domain.enums.PositionType;
 import com.matching.domain.enums.UserProjectStatus;
 import com.matching.repository.UserProjectRepository;
@@ -14,8 +12,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -49,7 +45,6 @@ public class ProjectDTO {
     @Length(max = 255, min = 1)
     private String location;
 
-    @NotNull
     private LocalDateTime createdDate;
 
     private LocalDateTime modifiedDate;
@@ -88,6 +83,10 @@ public class ProjectDTO {
 
     private Set<Tag> tags = new HashSet<>();
 
+    private Set<Tag> addTags = new HashSet<>();
+
+    private Set<Tag> removeTags = new HashSet<>();
+
     public ProjectDTO(Project project, UserProjectRepository userProjectRepo) {
         this.projectIdx = project.getIdx();
         this.title = project.getTitle();
@@ -110,5 +109,8 @@ public class ProjectDTO {
         this.currentPlanner = userProjectRepo.countByProjectAndPositionAndStatus(project, PositionType.PLANNER, UserProjectStatus.MATCHING);
         this.currentEtc = userProjectRepo.countByProjectAndPositionAndStatus(project, PositionType.ETC, UserProjectStatus.MATCHING);
         this.socialUrl = project.getSocialUrl();
+
+        for(ProjectTag projectTag : project.getProjectTags())
+            tags.add(projectTag.getTag());
     }
 }

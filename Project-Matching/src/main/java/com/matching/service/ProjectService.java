@@ -1,6 +1,6 @@
 package com.matching.service;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.matching.config.auth.SecurityConstants;
 import com.matching.controller.CommentController;
 import com.matching.controller.ProfileController;
 import com.matching.controller.ProjectController;
@@ -17,6 +17,9 @@ import com.matching.domain.enums.UserProjectStatus;
 import com.matching.domain.key.ProjectTagKey;
 import com.matching.domain.key.UserProjectKey;
 import com.matching.repository.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,20 +27,15 @@ import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.IntStream;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -216,12 +214,15 @@ public class ProjectService {
         return msg;
     }
 
-    public ResponseEntity<?> postProject(ProjectDTO projectDTO, User currentUser) {
+    public ResponseEntity<?> postProject(ProjectDTO projectDTO, HttpServletRequest request) {
 
-        if(userRepository.findByEmail(currentUser.getUsername()) == null)
-            return new ResponseEntity<>("존재하지 않는 작성자입니다.", HttpStatus.BAD_REQUEST);
+        String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
 
-        com.matching.domain.User user = userRepository.findByEmail(currentUser.getUsername());
+        Jws<Claims> parsedToken = Jwts.parser()
+                .setSigningKey(SecurityConstants.JWT_SECRET.getBytes())
+                .parseClaimsJws(token.replace("Bearer ", ""));
+
+        User user = userRepository.findByEmail((String) parsedToken.getBody().get("email"));
 
         Project project = Project.builder().title(projectDTO.getTitle()).location(getLocation(projectDTO.getLocation())).summary(projectDTO.getSummary()).content(projectDTO.getContent())
                 .socialUrl(projectDTO.getSocialUrl()).designerRecruits(projectDTO.getDesignerRecruits()).developerRecruits(projectDTO.getDeveloperRecruits()).plannerRecruits(projectDTO.getPlannerRecruits())
@@ -242,7 +243,7 @@ public class ProjectService {
             ProjectTag projectTag = ProjectTag.builder().id(new ProjectTagKey(project.getIdx(), foundTag.getIdx())).build();
 
             project.addProjectTag(projectTag);
-            tag.addProjectTag(projectTag);
+            foundTag.addProjectTag(projectTag);
             projectTagRepo.save(projectTag);
         }
 
@@ -259,5 +260,68 @@ public class ProjectService {
         }
 
         return locationType;
+    }
+
+    public ResponseEntity<?> putProject(ProjectDTO projectDTO, HttpServletRequest request, Long idx) {
+
+        Project project = projectRepository.findByIdx(idx);
+
+        String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
+
+        Jws<Claims> parsedToken = Jwts.parser()
+                .setSigningKey(SecurityConstants.JWT_SECRET.getBytes())
+                .parseClaimsJws(token.replace("Bearer ", ""));
+
+        if(!userRepository.findByEmail((String) parsedToken.getBody().get("email")).getIdx().equals(project.getLeader().getIdx()))
+            return new ResponseEntity<>("프로젝트 개설자가 아닙니다.", HttpStatus.BAD_REQUEST);
+
+        project.setTitle(projectDTO.getTitle());
+        project.setContent(projectDTO.getContent());
+        project.setSummary(projectDTO.getSummary());
+        project.setLocation(getLocation(projectDTO.getLocation()));
+        project.setModifiedDate(LocalDateTime.now());
+        project.setDeveloperRecruits(projectDTO.getDeveloperRecruits());
+        project.setDesignerRecruits(projectDTO.getDesignerRecruits());
+        project.setPlannerRecruits(projectDTO.getPlannerRecruits());
+        project.setMarketerRecruits(projectDTO.getMarketerRecruits());
+        project.setEtcRecruits(projectDTO.getEtcRecruits());
+        project.setSocialUrl(projectDTO.getSocialUrl());
+
+        project.getProjectTags().clear();
+        projectRepository.save(project);
+
+        projectTagRepo.deleteByProject(project);
+
+        for(Tag tag : projectDTO.getTags()) {
+            Tag foundTag = tagRepository.findByText(tag.getText()) == null ? tagRepository.save(tag) : tagRepository.findByText(tag.getText());
+
+            ProjectTag projectTag = ProjectTag.builder().id(new ProjectTagKey(project.getIdx(), foundTag.getIdx())).build();
+
+            project.addProjectTag(projectTag);
+            foundTag.addProjectTag(projectTag);
+            projectTagRepo.save(projectTag);
+        }
+
+        return new ResponseEntity<>("{}", HttpStatus.OK);
+
+    }
+
+    public ResponseEntity<?> deleteProject(Long idx, HttpServletRequest request) {
+        String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
+
+        Jws<Claims> parsedToken = Jwts.parser()
+                .setSigningKey(SecurityConstants.JWT_SECRET.getBytes())
+                .parseClaimsJws(token.replace("Bearer ", ""));
+
+        Project project = projectRepository.findByIdx(idx);
+
+        if(!userRepository.findByEmail((String) parsedToken.getBody().get("email")).equals(project.getLeader()))
+            return new ResponseEntity<>("본인이 개설한 프로젝트만 지울 수 있습니다.", HttpStatus.BAD_REQUEST);
+        else if(project.getStatus().getStatus().equals("진행중"))
+            return new ResponseEntity<>("진행중인 프로젝트는 삭제할 수 없습니다.", HttpStatus.BAD_REQUEST);
+
+        projectRepository.deleteById(project.getIdx());
+
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 }

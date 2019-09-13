@@ -44,7 +44,7 @@ public class RegisterService {
     public ResponseEntity<?> postUser(UserDTO userDTO) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         User user = User.builder().createdDate(LocalDateTime.now()).email(userDTO.getEmail()).nick(userDTO.getNickname()).
-                password(passwordEncoder.encode(userDTO.getPassword())).profileImg(userDTO.getProfileImag()).description(userDTO.getDescription()).
+                password(passwordEncoder.encode(userDTO.getPassword())).profileImg(userDTO.getProfileImag()).description(userDTO.getSummary()).
                 investTime(userDTO.getInvestTime()).socialUrl(userDTO.getSocialUrl()).build();
         userRepository.save(user);
 
