@@ -1,56 +1,58 @@
 package com.matching.controller;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.http.HttpStatus;
+import com.matching.domain.FileUploadResponse;
+import com.matching.service.FileUploadDownloadService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.File;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/files/multi")
+@RequestMapping("/api")
 public class FileUploadController {
-    private final String UPLOAD_DIR = "/home/ssayebee/UPLOAD_DIR/";
+    private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
 
-    @PostMapping("/upload")
-    public ResponseEntity<?> uploadAttachment(@RequestPart MultipartFile sourceFile) throws IOException {
+    @Autowired
+    private FileUploadDownloadService service;
 
-        String sourceFileName = sourceFile.getOriginalFilename();
-        String sourceFileNameExtension = FilenameUtils.getExtension(sourceFileName).toLowerCase();
+    @PostMapping("/img")
+    public FileUploadResponse uploadFile(@RequestParam("file")MultipartFile file) {
+        String fileName = service.storeFile(file);
 
-        File destinationFile;
-        String destinationFileName;
-        do {
-            destinationFileName = RandomStringUtils.randomAlphanumeric(32) + "." + sourceFileNameExtension;
-            destinationFile = new File(UPLOAD_DIR + destinationFileName);
-        } while (destinationFile.exists());
-        destinationFile.getParentFile().mkdirs();
-        sourceFile.transferTo(destinationFile);
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/img/")
+                .path(fileName)
+                .toUriString();
 
-        UploadAttachmentResponse response = new UploadAttachmentResponse();
-        response.setFileName(sourceFile.getOriginalFilename());
-        response.setFileSize(sourceFile.getSize());
-        response.setFileContentType(sourceFile.getContentType());
-        response.setAttachmentUrl("http://localhost:8080/files/multi/upload" + destinationFileName);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new FileUploadResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
     }
 
-    @NoArgsConstructor
-    @Data
-    private static class UploadAttachmentResponse {
+    @GetMapping("/img/{fileName:.+}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
+        Resource resource = service.loadFileAsResource(fileName);
 
-        private String fileName;
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException e) {
+            logger.info("Could not determine file type.");
+        }
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
 
-        private long fileSize;
-
-        private String fileContentType;
-
-        private String attachmentUrl;
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 }
