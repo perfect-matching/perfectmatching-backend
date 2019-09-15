@@ -85,8 +85,9 @@ Project - Side Project Member Matching Platform
                 enabled: true
                 max-file-size: 200MB
                 max-request-size: 215MB
-file:
-    upload-dir: ./uploads
+
+    file:
+        upload-dir: ./uploads
     ```
 
 * IntelliJ IDEA(>= 2018.3)에서 해당 프로젝트를 `Open`
