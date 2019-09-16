@@ -1,6 +1,6 @@
 package com.matching.service;
 
-import com.matching.config.auth.SecurityConstants;
+import com.matching.config.auth.JwtResolver;
 import com.matching.controller.CommentController;
 import com.matching.controller.ProfileController;
 import com.matching.controller.ProjectController;
@@ -17,9 +17,6 @@ import com.matching.domain.enums.UserProjectStatus;
 import com.matching.domain.key.ProjectTagKey;
 import com.matching.domain.key.UserProjectKey;
 import com.matching.repository.*;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -215,14 +212,8 @@ public class ProjectService {
     }
 
     public ResponseEntity<?> postProject(ProjectDTO projectDTO, HttpServletRequest request) {
-
-        String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
-
-        Jws<Claims> parsedToken = Jwts.parser()
-                .setSigningKey(SecurityConstants.JWT_SECRET.getBytes())
-                .parseClaimsJws(token.replace("Bearer ", ""));
-
-        User user = userRepository.findByEmail((String) parsedToken.getBody().get("email"));
+        JwtResolver jwtResolver = new JwtResolver(request);
+        User user = userRepository.findByEmail(jwtResolver.getUserByToken());
 
         Project project = Project.builder().title(projectDTO.getTitle()).location(getLocation(projectDTO.getLocation())).summary(projectDTO.getSummary()).content(projectDTO.getContent())
                 .socialUrl(projectDTO.getSocialUrl()).designerRecruits(projectDTO.getDesignerRecruits()).developerRecruits(projectDTO.getDeveloperRecruits()).plannerRecruits(projectDTO.getPlannerRecruits())
@@ -265,14 +256,9 @@ public class ProjectService {
     public ResponseEntity<?> putProject(ProjectDTO projectDTO, HttpServletRequest request, Long idx) {
 
         Project project = projectRepository.findByIdx(idx);
+        JwtResolver jwtResolver = new JwtResolver(request);
 
-        String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
-
-        Jws<Claims> parsedToken = Jwts.parser()
-                .setSigningKey(SecurityConstants.JWT_SECRET.getBytes())
-                .parseClaimsJws(token.replace("Bearer ", ""));
-
-        if(!userRepository.findByEmail((String) parsedToken.getBody().get("email")).getIdx().equals(project.getLeader().getIdx()))
+        if(!userRepository.findByEmail(jwtResolver.getUserByToken()).getIdx().equals(project.getLeader().getIdx()))
             return new ResponseEntity<>("프로젝트 개설자가 아닙니다.", HttpStatus.BAD_REQUEST);
 
         project.setTitle(projectDTO.getTitle());
@@ -307,15 +293,10 @@ public class ProjectService {
     }
 
     public ResponseEntity<?> deleteProject(Long idx, HttpServletRequest request) {
-        String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
-
-        Jws<Claims> parsedToken = Jwts.parser()
-                .setSigningKey(SecurityConstants.JWT_SECRET.getBytes())
-                .parseClaimsJws(token.replace("Bearer ", ""));
-
         Project project = projectRepository.findByIdx(idx);
+        JwtResolver jwtResolver = new JwtResolver(request);
 
-        if(!userRepository.findByEmail((String) parsedToken.getBody().get("email")).equals(project.getLeader()))
+        if(!userRepository.findByEmail(jwtResolver.getUserByToken()).equals(project.getLeader()))
             return new ResponseEntity<>("본인이 개설한 프로젝트만 지울 수 있습니다.", HttpStatus.BAD_REQUEST);
         else if(project.getStatus().getStatus().equals("진행중"))
             return new ResponseEntity<>("진행중인 프로젝트는 삭제할 수 없습니다.", HttpStatus.BAD_REQUEST);
