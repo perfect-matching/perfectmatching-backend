@@ -157,14 +157,14 @@ Project - Side Project Member Matching Platform
     | `/api/register/emailcheck` | POST | User 생성을 위해 회원가입시 이메일 중복 체크를 요청하는 api |
     | `/api/comment` | POST | Comment를 생성하기 위해 요청하는 api |
 
-* PUT
+* PUT( https://github.com/perfect-matching/perfectmatching-backend/blob/master/documents/put.md )
 
     |URI(자원)| HTTP(행위) | 기능(표현) |
     |:---:|:---:|:---:|
     | `/api/project/{idx}` | PUT | Project의 idx에 따라 Project를 수정하기 위한 api |
     | `/api/comment/{idx}` | PUT | Comment의 idx에 따라 Comment를 수정하기 위한 api |
 
-* DELETE
+* DELETE( https://github.com/perfect-matching/perfectmatching-backend/blob/master/documents/delete.md )
 
     |URI(자원)| HTTP(행위) | 기능(표현) |
     |:---:|:---:|:---:|

@@ -40,13 +40,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 and().
                     csrf().
                 and().
-                    httpBasic()
-                .and()
-                    .csrf().disable()
-                .authorizeRequests()
-                    .antMatchers(HttpMethod.GET, "/api/projects", "/api/userskills").permitAll()
-                    .antMatchers(HttpMethod.POST, "/api/register/**").permitAll()
-                    .anyRequest().hasAuthority("USER")
+                    httpBasic().
+                and()
+                    .authorizeRequests()
+                        .antMatchers(HttpMethod.GET, "/api/projects", "/api/userskills", "/api/img/**").permitAll()
+                        .antMatchers(HttpMethod.POST, "/api/register/**").permitAll()
+                        .anyRequest().hasAuthority("USER")
                 .and()
                     .addFilter(new JwtAuthenticationFilter(authenticationManager(), getApplicationContext()))
                     .addFilter(jwtAuthorizationFilter())

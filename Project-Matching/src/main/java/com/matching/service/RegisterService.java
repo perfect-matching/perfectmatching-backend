@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,9 +43,13 @@ public class RegisterService {
     }
 
     public ResponseEntity<?> postUser(UserDTO userDTO) {
+        String defaultProfileImg = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/img/")
+                .path("USER_DEFAULT_PROFILE_IMG.png")
+                .toUriString();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         User user = User.builder().createdDate(LocalDateTime.now()).email(userDTO.getEmail()).nick(userDTO.getNickname()).
-                password(passwordEncoder.encode(userDTO.getPassword())).profileImg(userDTO.getProfileImag()).description(userDTO.getSummary()).
+                password(passwordEncoder.encode(userDTO.getPassword())).profileImg(defaultProfileImg).description(userDTO.getSummary()).
                 investTime(userDTO.getInvestTime()).socialUrl(userDTO.getSocialUrl()).build();
         userRepository.save(user);
 
