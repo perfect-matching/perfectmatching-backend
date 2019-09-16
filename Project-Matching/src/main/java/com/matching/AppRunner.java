@@ -14,6 +14,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.stream.IntStream;
@@ -75,9 +76,10 @@ public class AppRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         Random random = new Random();
+        final String profileImg = "https://donghun-dev.kro.kr:8083/api/img/USER_DEFAULT_PROFILE_IMG.png";
 
         IntStream.rangeClosed(1, 40).forEach(index -> userRepository.save(User.builder().email("test" + index + "@email.com")
-                .nick("testUser_" + index).password(passwordEncoder.encode("testpassword")).createdDate(LocalDateTime.now()).profileImg("Profile Image URL")
+                .nick("testUser_" + index).password(passwordEncoder.encode("testpassword")).createdDate(LocalDateTime.now()).profileImg(profileImg)
                 .description("저는 이러한 사람입니다.").investTime(4).socialUrl("https://github.com/testUser").build()));
 
         IntStream.rangeClosed(1, 300).forEach(index -> userSkillRepository.save(UserSkill.builder().user(userRepository.findByIdx

@@ -1,7 +1,7 @@
 package com.matching.controller;
 
 import com.matching.domain.FileUploadResponse;
-import com.matching.service.FileUploadDownloadService;
+import com.matching.service.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,27 +18,28 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")
-public class FileUploadController {
-    private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
+public class FileController {
+    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
-    private FileUploadDownloadService service;
+    private FileService fileService;
 
-    @PostMapping("/img")
-    public FileUploadResponse uploadFile(@RequestParam("file")MultipartFile file) {
-        String fileName = service.storeFile(file);
+    @PutMapping("/img")
+    public FileUploadResponse uploadFile(@RequestParam("file")MultipartFile file, HttpServletRequest request) {
+        String fileName = fileService.uploadAndGetName(file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/api/img/")
                 .path(fileName)
                 .toUriString();
 
+        fileService.userProfileUpdate(fileDownloadUri, request);
         return new FileUploadResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
     }
 
     @GetMapping("/img/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
-        Resource resource = service.loadFileAsResource(fileName);
+        Resource resource = fileService.loadFileAsResource(fileName);
 
         String contentType = null;
         try {
