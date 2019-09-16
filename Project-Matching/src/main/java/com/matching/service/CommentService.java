@@ -1,6 +1,6 @@
 package com.matching.service;
 
-import com.matching.config.auth.SecurityConstants;
+import com.matching.config.auth.JwtResolver;
 import com.matching.domain.Comment;
 import com.matching.domain.Project;
 import com.matching.domain.User;
@@ -8,9 +8,6 @@ import com.matching.domain.dto.CommentDTO;
 import com.matching.repository.CommentRepository;
 import com.matching.repository.ProjectRepository;
 import com.matching.repository.UserRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
@@ -54,16 +51,10 @@ public class CommentService {
     }
 
     public ResponseEntity<?> postComment(CommentDTO commentDTO, HttpServletRequest request) {
+        JwtResolver jwtResolver = new JwtResolver(request);
+        User user = userRepository.findByEmail(jwtResolver.getUserByToken());
 
-        String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
-
-        Jws<Claims> parsedToken = Jwts.parser()
-                .setSigningKey(SecurityConstants.JWT_SECRET.getBytes())
-                .parseClaimsJws(token.replace("Bearer ", ""));
-
-        User user = userRepository.findByEmail((String) parsedToken.getBody().get("email"));
         Project project = projectRepository.findByIdx(commentDTO.getProjectIdx());
-
         Comment comment = Comment.builder().content(commentDTO.getContent()).createdDate(LocalDateTime.now()).build();
 
         user.addComment(comment);
@@ -77,13 +68,9 @@ public class CommentService {
 
         Comment comment = commentRepository.findByIdx(idx);
 
-        String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
+        JwtResolver jwtResolver = new JwtResolver(request);
 
-        Jws<Claims> parsedToken = Jwts.parser()
-                .setSigningKey(SecurityConstants.JWT_SECRET.getBytes())
-                .parseClaimsJws(token.replace("Bearer ", ""));
-
-        if(!userRepository.findByEmail((String) parsedToken.getBody().get("email")).getIdx().equals(comment.getWriter().getIdx()))
+        if(!userRepository.findByEmail(jwtResolver.getUserByToken()).getIdx().equals(comment.getWriter().getIdx()))
             return new ResponseEntity<>("댓글 작성자가 아닙니다.", HttpStatus.BAD_REQUEST);
 
         comment.setContent(commentDTO.getContent());
@@ -97,14 +84,9 @@ public class CommentService {
 
     public ResponseEntity<?> deleteComment(Long idx, HttpServletRequest request) {
         Comment comment = commentRepository.findByIdx(idx);
+        JwtResolver jwtResolver = new JwtResolver(request);
 
-        String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
-
-        Jws<Claims> parsedToken = Jwts.parser()
-                .setSigningKey(SecurityConstants.JWT_SECRET.getBytes())
-                .parseClaimsJws(token.replace("Bearer ", ""));
-
-        if(!userRepository.findByEmail((String) parsedToken.getBody().get("email")).getIdx().equals(comment.getWriter().getIdx()))
+        if(!userRepository.findByEmail(jwtResolver.getUserByToken()).getIdx().equals(comment.getWriter().getIdx()))
             return new ResponseEntity<>("댓글 작성자가 아닙니다.", HttpStatus.BAD_REQUEST);
 
         commentRepository.deleteById(comment.getIdx());
