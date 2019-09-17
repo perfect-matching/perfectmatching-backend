@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class FileController {
     private FileService fileService;
 
     @PutMapping("/img")
-    public FileUploadResponse uploadFile(@RequestParam("file")MultipartFile file, HttpServletRequest request) {
+    public ResponseEntity<?> uploadFile(@RequestParam("file")MultipartFile file, HttpServletRequest request) {
         String fileName = fileService.uploadAndGetName(file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -34,7 +35,13 @@ public class FileController {
                 .toUriString();
 
         fileService.userProfileUpdate(fileDownloadUri, request);
-        return new FileUploadResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
+        return new ResponseEntity<>("{}", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/img")
+    public ResponseEntity<?> deleteFile(HttpServletRequest request) {
+        fileService.setDefaultProfile(request);
+        return new ResponseEntity<>("{}", HttpStatus.OK);
     }
 
     @GetMapping("/img/{fileName:.+}")
