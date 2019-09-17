@@ -46,7 +46,7 @@ public class ProcessingProjectDTO {
     public ProcessingProjectDTO(UserProject userProject) {
         this.userIdx = userProject.getUser().getIdx();
         this.projectIdx = userProject.getProject().getIdx();
-        this.leaderNick = userProject.getUser().getNick();
+        this.leaderNick = userProject.getProject().getLeader().getNick();
         this.title = userProject.getProject().getTitle();
         this.status = userProject.getProject().getStatus().getStatus();
         this.createdDate = userProject.getProject().getCreatedDate();

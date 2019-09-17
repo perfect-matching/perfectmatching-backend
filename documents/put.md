@@ -6,7 +6,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -40,7 +40,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -55,7 +55,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   * Request Data(form-data)
   ```
@@ -71,5 +71,29 @@
       "fileDownloadUri": "http://localhost:8080/api/img/PROFILE_IMG_1568638730292.jpg",
       "fileType": "image/jpeg",
       "size": 6228
+  }
+  ```
+
+* `https://donghun-dev.kro.kr:8083/project/{idx}/status?status={name}`
+
+  * 프로젝트의 status를 변경하기 위한 api
+
+  * Success : Code 200
+
+  * Fail : Code 400
+
+* `https://donghun-dev.kro.kr:8083/api/project/matching`
+
+  * 프로젝트의 status를 변경하기 위한 api
+
+  * Success : Code 200
+
+  * Fail : Code 400
+
+  ```JSON
+  {
+  "projectIdx" : 1,
+  "userIdx" : 39,
+  "status" : "매칭"
   }
   ```

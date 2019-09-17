@@ -1,6 +1,7 @@
 package com.matching.controller;
 
 import com.matching.domain.Project;
+import com.matching.domain.dto.ProjectApplyDTO;
 import com.matching.domain.dto.ProjectDTO;
 import com.matching.domain.enums.LocationType;
 import com.matching.service.ProjectService;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -77,6 +79,7 @@ public class ProjectController {
         resource.add(linkTo(methodOn(ProfileController.class).getProfile(leaderIdx, response)).withRel("Leader Profile"));
         resource.add(linkTo(methodOn(ProjectController.class).getProjectComments(idx, response)).withRel("Comments"));
         resource.add(linkTo(methodOn(ProjectController.class).getProjectMembers(idx, response)).withRel("Members"));
+        resource.add(linkTo(methodOn(ProjectController.class).getProjectJoinMembers(idx, response)).withRel("Join Members"));
         resource.add(linkTo(methodOn(ProjectController.class).getProjectTags(idx, response)).withRel("Tags"));
         return ResponseEntity.ok(resource);
     }
@@ -106,6 +109,20 @@ public class ProjectController {
 
         Resources<?> resources = projectService.getProjectMembers(idx, response);
         resources.add(linkTo(methodOn(ProjectController.class).getProjectMembers(idx, response)).withSelfRel());
+
+        return ResponseEntity.ok(resources);
+    }
+
+    @GetMapping(value = "/project/{idx}/joinmembers", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProjectJoinMembers(@PathVariable Long idx, HttpServletResponse response) {
+        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
+        response.setHeader("Location", "/api/project/" + idx + "/joinmembers");
+
+        if(projectService.findProjectJoinMembers(idx))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Resources<?> resources = projectService.getProjectJoinMembers(idx, response);
+        resources.add(linkTo(methodOn(ProjectController.class).getProjectJoinMembers(idx, response)).withSelfRel());
 
         return ResponseEntity.ok(resources);
     }
@@ -157,6 +174,45 @@ public class ProjectController {
         response.setHeader("Location", "/api/project/" + idx);
 
         return projectService.deleteProject(idx, request);
+    }
+
+    @PutMapping(value = "/project/{idx}/status")
+    public ResponseEntity<?> putProjectStatus(@PathVariable Long idx,  @RequestParam(required = false) String status,
+                                              HttpServletRequest request, HttpServletResponse response) {
+        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
+        response.setHeader("Location", "/api/project/" + idx + "/status");
+
+        return projectService.putProjectStatus(idx, status, request);
+    }
+
+    @PostMapping(value = "/project/apply")
+    public ResponseEntity<?> postProjectApply(@Valid @RequestBody ProjectApplyDTO projectApplyDTO, BindingResult result,
+                                              HttpServletResponse response, HttpServletRequest request) {
+        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
+        response.setHeader("Location", "/api/project/apply");
+
+        if (result.hasErrors()) {
+            StringBuilder msg = projectService.validation(result);
+            return new ResponseEntity<>(msg.toString(), HttpStatus.BAD_REQUEST);
+        }
+
+        return projectService.postProjectApply(projectApplyDTO, request);
+    }
+
+    @PutMapping(value = "/project/matching")
+    public ResponseEntity<?> putProjectMatching(@RequestBody Map<String, String> map, HttpServletRequest request, HttpServletResponse response) {
+        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
+        response.setHeader("Location", "/api/project/matching");
+
+        return projectService.putProjectMatching(map, request);
+    }
+
+    @DeleteMapping(value = "/project/cancel/{idx}")
+    public ResponseEntity<?> deleteProjectCancel(@PathVariable Long idx, HttpServletResponse response, HttpServletRequest request) {
+        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
+        response.setHeader("Location", "/api/project/cancel/" + idx);
+
+        return projectService.deleteProjectCancel(idx, request);
     }
 
 }

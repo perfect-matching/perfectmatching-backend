@@ -4,9 +4,9 @@
 
   * POST Project JSON Form Data Example
 
-  * Success : Code 200
+  * Success : Code 201
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -55,9 +55,9 @@
 
   * SignUp JSON Form Data Example
 
-  * Success : Code 200
+  * Success : Code 201
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -88,7 +88,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -103,7 +103,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -116,13 +116,29 @@
 
   * POST Comment JSON Form Data Example
 
-  * Success : Code 200
+  * Success : Code 201
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
     "content" : "작성하고자 하는 댓글",
     "projectIdx" : 1
+  }
+  ```
+
+* `https://donghun-dev.kro.kr:8083/api/project/apply`
+
+  * POST Project Apply JSON Form Data Example
+
+  * Success : Code 201
+
+  * Fail : Code 400
+
+  ```JSON
+  {
+  "projectIdx" : 1,
+  "position" : "개발자",
+  "simpleProfile" : "그냥 지원하게 되었습니다."
   }
   ```

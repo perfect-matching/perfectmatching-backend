@@ -143,7 +143,10 @@ Project - Side Project Member Matching Platform
     | `/api/usedskill/{idx}` | GET | idx에 따른 UsedSkill을 가져오기 위한 api |
     | `/api/tags` | GET | DB에 등록되어 있는 Tag들을 가져오기 위한 api |
     | `/api/userskills` | GET | DB에 등록되어 있는 UserSkill들을 가져오기 위한 api |
-    | `/api/usedskills` | GET | DB에 등록되어 있는 UsedSkill들을 가져오기 위한 api |
+    | `/api/usedskills` | GET | DB에 등록되어 있는 UsedSkill들을 가져오기 위한 api | 
+    | `/api/img/{fileName:.+}` | GET | 서버에 업로드되어 있는 이미지 파일을 가져오기 위한 api |
+    | `/api/profile/{idx}/myproject` | GET | 유저가 개설한 프로젝트를 가져오기 위한 api |
+    | `/api/project/{idx}/joinmembers` | GET | 프로젝트의 지원자 목록을 가져오기 위한 api | 
 
 * [POST]( https://github.com/perfect-matching/perfectmatching-backend/blob/master/documents/post.md )
 
@@ -156,19 +159,24 @@ Project - Side Project Member Matching Platform
     | `/api/register/nickcheck` | POST | User 생성을 위해 회원가입시 닉네임 중복 체크를 요청하는 api |
     | `/api/register/emailcheck` | POST | User 생성을 위해 회원가입시 이메일 중복 체크를 요청하는 api |
     | `/api/comment` | POST | Comment를 생성하기 위해 요청하는 api |
+    | `/project/apply` | POST | 유저가 프로젝트에 지원하기 위해 요청하는 api |
 
-* PUT( https://github.com/perfect-matching/perfectmatching-backend/blob/master/documents/put.md )
+* [PUT]( https://github.com/perfect-matching/perfectmatching-backend/blob/master/documents/put.md )
 
     |URI(자원)| HTTP(행위) | 기능(표현) |
     |:---:|:---:|:---:|
     | `/api/project/{idx}` | PUT | Project의 idx에 따라 Project를 수정하기 위한 api |
     | `/api/comment/{idx}` | PUT | Comment의 idx에 따라 Comment를 수정하기 위한 api |
+    | `/api/img` | PUT | 유저의 프로필 사진을 변경하기 위한 api |
+    | `/project/{idx}/status?status={name}` | PUT | Project의 Status를 name에 따라 변경하기 위한 api |
+    | `/api/project/matching` | PUT | Project 개설자가 지원자를 매칭 또는 거절을 요청하기 위한 api |
 
-* DELETE( https://github.com/perfect-matching/perfectmatching-backend/blob/master/documents/delete.md )
+* [DELETE]( https://github.com/perfect-matching/perfectmatching-backend/blob/master/documents/delete.md )
 
     |URI(자원)| HTTP(행위) | 기능(표현) |
     |:---:|:---:|:---:|
     | `/api/project/{idx}` | DELETE | Project의 idx에 따라 Projet를 삭제하기 위한 api |
     | `/api/comment/{idx}` | DELETE | Comment의 idx에 따라 Comment를 삭제하기 위한 api |
+    | `/api/img` | DELETE | User의 기존 프로필 이미지를 삭제하고 기본 이미지로 변경하기 위한 api |
 
 </details>
