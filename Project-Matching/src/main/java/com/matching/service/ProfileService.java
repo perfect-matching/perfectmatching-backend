@@ -9,7 +9,9 @@ import com.matching.domain.UserSkill;
 import com.matching.domain.dto.DoneProjectDTO;
 import com.matching.domain.dto.ProfileDTO;
 import com.matching.domain.dto.ProcessingProjectDTO;
+import com.matching.domain.enums.PositionType;
 import com.matching.domain.enums.ProjectStatus;
+import com.matching.domain.enums.UserProjectStatus;
 import com.matching.repository.DoneProjectRepository;
 import com.matching.repository.UserProjectRepository;
 import com.matching.repository.UserRepository;
@@ -76,15 +78,15 @@ public class ProfileService {
     public boolean findProfileProjects(Long idx) {
         if(userRepository.findByIdx(idx) == null)
             return  true;
-        return userProjectRepository.findByUserAndProject_StatusOrderByProjectDesc(userRepository.findByIdx(idx),
-                ProjectStatus.PROGRESS) == null;
+        return userProjectRepository.findByUserAndProject_StatusAndStatusAndPositionNotOrderByProjectDesc(userRepository.findByIdx(idx),
+                ProjectStatus.PROGRESS, UserProjectStatus.MATCHING, PositionType.LEADER) == null;
     }
 
     public Resources<?> getProfileProjects(Long idx) {
         User user = userRepository.findByIdx(idx);
         List<ProcessingProjectDTO> list = new ArrayList<>();
-        List<UserProject> userProjectList = userProjectRepository.findByUserAndProject_StatusOrderByProjectDesc(user,
-                ProjectStatus.PROGRESS);
+        List<UserProject> userProjectList = userProjectRepository.findByUserAndProject_StatusAndStatusAndPositionNotOrderByProjectDesc(user,
+                ProjectStatus.PROGRESS, UserProjectStatus.MATCHING, PositionType.LEADER);
 
         for(UserProject userProject : userProjectList) {
             list.add(new ProcessingProjectDTO(userProject));
@@ -111,5 +113,25 @@ public class ProfileService {
         }
 
         return new Resources<>(resourceList);
+    }
+
+    public boolean findByProfileMyProjects(Long idx) {
+        if(userRepository.findByIdx(idx) == null)
+            return  true;
+        return userProjectRepository.findByUserAndStatusAndPositionOrderByProjectDesc(userRepository.findByIdx(idx),
+                UserProjectStatus.MATCHING, PositionType.LEADER) == null;
+    }
+
+    public Resources<?> getProfileMyProjects(Long idx) {
+        User user = userRepository.findByIdx(idx);
+        List<ProcessingProjectDTO> list = new ArrayList<>();
+        List<UserProject> userProjectList = userProjectRepository.findByUserAndStatusAndPositionOrderByProjectDesc(user,
+                UserProjectStatus.MATCHING, PositionType.LEADER);
+
+        for(UserProject userProject : userProjectList) {
+            list.add(new ProcessingProjectDTO(userProject));
+        }
+
+        return new Resources<>(list);
     }
 }

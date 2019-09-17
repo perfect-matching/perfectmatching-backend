@@ -69,6 +69,16 @@ public class ProfileControllerTest {
     }
 
     @Test
+    public void getProfileMyProjectsTest() throws Exception {
+        mockMvc.perform(get("/api/profile/" + user.getIdx() + "/myprojects").with(user("Test_User@gmail.com")
+                .password("test_password")))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(content().encoding("UTF-8"))
+                .andExpect(redirectedUrl("/api/profile/" + user.getIdx() + "/myprojects"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void getProfileProjectsTest() throws Exception {
         mockMvc.perform(get("/api/profile/" + user.getIdx() + "/projects").with(user("Test_User@gmail.com")
                 .password("test_password")))

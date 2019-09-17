@@ -24,4 +24,8 @@ public enum PositionType {
         Random random = new Random();
         return values()[random.nextInt(values().length)];
     }
+
+    public static PositionType getPosition(int index) {
+        return values()[index];
+    }
 }

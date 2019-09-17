@@ -6,7 +6,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -99,7 +99,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
 
 * `https://donghun-dev.kro.kr:8083/api/projects?location=SEOUL`
@@ -108,7 +108,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
 
 * `https://donghun-dev.kro.kr:8083/api/projects?location=SEOUL&offset=1`
@@ -117,7 +117,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
 
 * `https://donghun-dev.kro.kr:8083/api/projects?position=DEVELOPER`
@@ -126,7 +126,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
 
 * `https://donghun-dev.kro.kr:8083/api/projects?position=DEVELOPER&offset=1`
@@ -135,7 +135,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
 
 * `https://donghun-dev.kro.kr:8083/api/projects?position=DEVELOPER&location=SEOUL`
@@ -144,7 +144,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
 
 * `https://donghun-dev.kro.kr:8083/api/projects?position=DEVELOPER&location=SEOUL&offset=1`
@@ -153,7 +153,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
 
 * `https://donghun-dev.kro.kr:8083/api/project/1`
@@ -162,7 +162,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -232,7 +232,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -285,7 +285,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -319,7 +319,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -378,7 +378,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -413,7 +413,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -454,7 +454,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -497,7 +497,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -563,7 +563,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -590,7 +590,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -617,7 +617,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -658,7 +658,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -679,7 +679,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -700,7 +700,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -721,7 +721,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -762,7 +762,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -803,7 +803,7 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
 
   ```JSON
   {
@@ -843,4 +843,79 @@
 
   * Success : Code 200
 
-  * Fail : Code 403
+  * Fail : Code 400
+
+* `https://donghun-dev.kro.kr:8083/api/profile/1/myprojects`
+
+  * 유저의 {idx}의 개설한 프로젝트의 정보들을 가져옴.
+
+  * Success : Code 200
+
+  * Fail : Code 400
+
+  ```JSON
+  {
+    "_embedded": {
+        "datas": [
+            {
+                "userIdx": 1,
+                "projectIdx": 134,
+                "leaderNick": "testUser_1",
+                "title": "이러 이러한 Side Project 의 함께할 사람들을 찾고 있습니다. 134",
+                "status": "진행중",
+                "createdDate": "2019-09-06T17:44:03",
+                "position": "기타",
+                "summary": "이러한 프로젝트에 참여할 인원을 모집합니다."
+            },
+            {
+                "userIdx": 1,
+                "projectIdx": 125,
+                "leaderNick": "testUser_1",
+                "title": "이러 이러한 Side Project 의 함께할 사람들을 찾고 있습니다. 125",
+                "status": "진행중",
+                "createdDate": "2019-09-06T17:44:03",
+                "position": "마케터",
+                "summary": "이러한 프로젝트에 참여할 인원을 모집합니다."
+            }
+        ]
+    },
+    "_links": {
+        "self": {
+            "href": "https://donghun-dev.kro.kr:8084/api/profile/1/projects"
+        }
+    }
+  }
+  ```
+
+* `https://donghun-dev.kro.kr:8083/api/project/1/joinmembers`
+
+  * 프로젝트 {idx}의 지원자들의 정보를 가져옴.
+
+  * Success : Code 200
+
+  * Fail : Code 400
+
+  ```JSON
+  {
+    "_embedded": {
+        "datas": [
+            {
+                "memberIdx": 22,
+                "projectIdx": 1,
+                "memberNick": "testUser_22",
+                "position": "마케터",
+                "_links": {
+                    "Profile": {
+                        "href": "https://donghun-dev.kro.kr:8084/api/profile/22"
+                    }
+                }
+            }
+        ]
+    },
+    "_links": {
+        "self": {
+            "href": "https://donghun-dev.kro.kr:8084/api/project/1/members"
+        }
+    }
+  }
+  ```

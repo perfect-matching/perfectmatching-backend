@@ -21,7 +21,8 @@ public enum LocationType {
     JEOLLANAMDO("전라남도"),
     GYENONGSNAGBUKDO("경상북도"),
     GYENONGSANGNAMDO("경상남도"),
-    JEJUDO("제주도");
+    JEJUDO("제주도"),
+    ALL("모든 지역");
 
     private String location;
 

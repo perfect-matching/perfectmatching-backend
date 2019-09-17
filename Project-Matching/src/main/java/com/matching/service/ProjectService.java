@@ -6,10 +6,7 @@ import com.matching.controller.ProfileController;
 import com.matching.controller.ProjectController;
 import com.matching.controller.TagController;
 import com.matching.domain.*;
-import com.matching.domain.dto.CommentDTO;
-import com.matching.domain.dto.MemberDTO;
-import com.matching.domain.dto.ProjectDTO;
-import com.matching.domain.dto.ProjectsDTO;
+import com.matching.domain.dto.*;
 import com.matching.domain.enums.LocationType;
 import com.matching.domain.enums.PositionType;
 import com.matching.domain.enums.ProjectStatus;
@@ -17,6 +14,7 @@ import com.matching.domain.enums.UserProjectStatus;
 import com.matching.domain.key.ProjectTagKey;
 import com.matching.domain.key.UserProjectKey;
 import com.matching.repository.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -73,11 +71,24 @@ public class ProjectService {
             return projectRepository.findByPlannerRecruitsIsGreaterThanOrderByIdxDesc(0, pageable);
         else if(position.equals("ETC"))
             return projectRepository.findByEtcRecruitsIsGreaterThanOrderByIdxDesc(0, pageable);
+        else if(position.equals("ALL"))
+            return projectRepository.findAllByOrderByIdxDesc(pageable);
         return null;
     }
 
+    private Page<Project> findByProjectAllCheck(String position, LocationType location, Pageable pageable) {
+        if(position.equals("ALL") && location.getLocation().equals("ALL"))
+            return projectRepository.findAllByOrderByIdxDesc(pageable);
+        else if(position.equals("ALL") && !location.getLocation().equals("ALL"))
+            return projectRepository.findByLocationOrderByIdxDesc(location, pageable);
+        else if(!position.equals("ALL") && location.getLocation().equals("ALL"))
+            return  findPosition(position, pageable);
+        else
+            return findPositionAndLocation(position, location, pageable);
+    }
+
     private Page<Project> findPositionAndLocation(String position, LocationType location, Pageable pageable) {
-        if(position.equals("Developer"))
+        if(position.equals("DEVELOPER"))
             return projectRepository.findByLocationAndDeveloperRecruitsIsGreaterThanOrderByIdxDesc(location, 0, pageable);
         else if(position.equals("DESIGNER"))
             return projectRepository.findByLocationAndDesignerRecruitsIsGreaterThanOrderByIdxDesc(location, 0, pageable);
@@ -92,15 +103,17 @@ public class ProjectService {
 
 
     public Page<Project> findAllProject(Pageable pageable, LocationType location, String position) {
-
         if(position == null && location == null)
             return projectRepository.findAllByOrderByIdxDesc(pageable);
-        else if(position == null && location != null)
+        else if(position == null && location != null) {
+            if (location.getLocation().equals("ALL"))
+                return projectRepository.findAllByOrderByIdxDesc(pageable);
             return projectRepository.findByLocationOrderByIdxDesc(location, pageable);
+        }
         else if(position != null && location == null)
             return findPosition(position, pageable);
         else
-            return findPositionAndLocation(position, location, pageable);
+            return findByProjectAllCheck(position, location, pageable);
     }
 
     public Project findByProject(Long idx) {
@@ -241,7 +254,7 @@ public class ProjectService {
         return new ResponseEntity<>("{}", HttpStatus.CREATED);
     }
 
-    public LocationType getLocation(String location) {
+    private LocationType getLocation(String location) {
         LocationType locationType = null;
 
         for(int i=0; i<LocationType.values().length; i++) {
@@ -304,5 +317,99 @@ public class ProjectService {
         projectRepository.deleteById(project.getIdx());
 
         return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> putProjectStatus(Long idx, String status, HttpServletRequest request) {
+
+        if(status == null || (!StringUtils.equals(status, "PROGRESS") && !StringUtils.equals(status, "COMPLETE")))
+            return new ResponseEntity<>("status 값이 올바르지 않습니다.1", HttpStatus.BAD_REQUEST);
+        
+        JwtResolver jwtResolver = new JwtResolver(request);
+        User user = userRepository.findByEmail(jwtResolver.getUserByToken());
+        Project project = projectRepository.findByIdx(idx);
+
+        if(!user.getIdx().equals(project.getLeader().getIdx()))
+            return new ResponseEntity<>("프로젝트 개설자가 아닙니다.", HttpStatus.BAD_REQUEST);
+
+        if(status.equals("PROGRESS"))
+            project.setStatus(ProjectStatus.PROGRESS);
+        else
+            project.setStatus(ProjectStatus.COMPLETE);
+
+        projectRepository.save(project);
+        return new ResponseEntity<>("{}", HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> postProjectApply(ProjectApplyDTO projectApplyDTO, HttpServletRequest request) {
+        JwtResolver jwtResolver = new JwtResolver(request);
+        User user = userRepository.findByEmail(jwtResolver.getUserByToken());
+        Project project = projectRepository.findByIdx(projectApplyDTO.getProjectIdx());
+
+        UserProject userProject = UserProject.builder().id(new UserProjectKey(user.getIdx(), project.getIdx())).position(getPosition(projectApplyDTO.getPosition()))
+                .simpleProfile(projectApplyDTO.getSimpleProfile()).status(UserProjectStatus.WAIT).build();
+
+        user.addUserProject(userProject);
+        project.addUserProject(userProject);
+        userProjectRepo.save(userProject);
+
+        return new ResponseEntity<>("{}", HttpStatus.CREATED);
+    }
+
+    private PositionType getPosition(String position) {
+        PositionType positionType = null;
+
+        for(int i=0; i<PositionType.values().length; i++) {
+            positionType = PositionType.getPosition(i);
+            if(positionType.getPosition().equals(position))
+                return positionType;
+        }
+
+        return positionType;
+    }
+
+    public ResponseEntity<?> putProjectMatching(Map<String, String> map, HttpServletRequest request) {
+        JwtResolver jwtResolver = new JwtResolver(request);
+        User user = userRepository.findByEmail(jwtResolver.getUserByToken());
+        Project project = projectRepository.findByIdx(Long.parseLong(map.get("projectIdx")));
+
+        if(!user.getIdx().equals(project.getLeader().getIdx()))
+            return new ResponseEntity<>("프로젝트 개설자가 아닙니다.", HttpStatus.BAD_REQUEST);
+
+        UserProject userProject = userProjectRepo.findByUserAndProject(userRepository.findByIdx(Long.parseLong(map.get("userIdx"))), project);
+
+        userProject.setStatus(map.get("status").equals("매칭") ? UserProjectStatus.MATCHING : UserProjectStatus.FAIL);
+        userProjectRepo.save(userProject);
+
+        return new ResponseEntity<>("{}", HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> deleteProjectCancel(Long idx, HttpServletRequest request) {
+        JwtResolver jwtResolver = new JwtResolver(request);
+        User user = userRepository.findByEmail(jwtResolver.getUserByToken());
+        Project project = projectRepository.findByIdx(idx);
+
+        userProjectRepo.deleteById(new UserProjectKey(user.getIdx(), project.getIdx()));
+
+        return new ResponseEntity<>("{}", HttpStatus.OK);
+    }
+
+    public boolean findProjectJoinMembers(Long idx) {
+        if(projectRepository.findByIdx(idx) == null)
+            return true;
+        return userProjectRepo.findByProjectAndStatus(projectRepository.findByIdx(idx), UserProjectStatus.WAIT) == null;
+    }
+
+    public Resources<?> getProjectJoinMembers(Long idx, HttpServletResponse response) {
+        List<Resource> list = new ArrayList<>();
+        List<UserProject> userProjectList = userProjectRepo.findByProjectAndStatus(projectRepository.findByIdx(idx), UserProjectStatus.WAIT);
+
+        for(UserProject userProject : userProjectList) {
+            MemberDTO memberDTO = new MemberDTO(userProject);
+            Resource<?> resource = new Resource<>(memberDTO);
+            resource.add(linkTo(methodOn(ProfileController.class).getProfile(memberDTO.getMemberIdx(), response)).withRel("Profile"));
+            list.add(resource);
+        }
+
+        return new Resources<>(list);
     }
 }

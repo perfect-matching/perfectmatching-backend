@@ -3,6 +3,7 @@ package com.matching.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matching.config.auth.SecurityConstants;
 import com.matching.domain.*;
+import com.matching.domain.dto.ProjectApplyDTO;
 import com.matching.domain.dto.ProjectDTO;
 import com.matching.domain.enums.LocationType;
 import com.matching.domain.enums.PositionType;
@@ -22,16 +23,14 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -255,6 +254,174 @@ public class ProjectControllerTest {
         mockMvc.perform(delete("/api/project/" + projectRepository.findByTitle("테스트 타이틀 12312321").getIdx()).header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(projectdto)).with(user(userDetails)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void putProjectStatusProgressTest() throws Exception {
+
+        Set<Tag> tag = new HashSet<>();
+
+        tag.add(Tag.builder().text("테스트 코드 태그 1").build());
+        tag.add(Tag.builder().text("테스트 코드 태그 2").build());
+
+        ProjectDTO projectdto = ProjectDTO.builder().title("테스트 타이틀 12312321").location("서울").summary("요로요러한 프로젝트")
+                .designerRecruits(1).developerRecruits(1).plannerRecruits(1).marketerRecruits(1).etcRecruits(1).tags(tag).build();
+
+        mockMvc.perform(post("/api/project").header(SecurityConstants.TOKEN_HEADER, token)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(projectdto)).with(user(userDetails)))
+                .andExpect(status().isCreated());
+
+        Long projectIdx = projectRepository.findByTitle("테스트 타이틀 12312321").getIdx();
+
+        mockMvc.perform(put("/api/project/" + projectIdx + "/status?status=PROGRESS" ).header(SecurityConstants.TOKEN_HEADER, token)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void putProjectStatusCompleteTest() throws Exception {
+
+        Set<Tag> tag = new HashSet<>();
+
+        tag.add(Tag.builder().text("테스트 코드 태그 1").build());
+        tag.add(Tag.builder().text("테스트 코드 태그 2").build());
+
+        ProjectDTO projectdto = ProjectDTO.builder().title("테스트 타이틀 12312321").location("서울").summary("요로요러한 프로젝트")
+                .designerRecruits(1).developerRecruits(1).plannerRecruits(1).marketerRecruits(1).etcRecruits(1).tags(tag).build();
+
+        mockMvc.perform(post("/api/project").header(SecurityConstants.TOKEN_HEADER, token)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(projectdto)).with(user(userDetails)))
+                .andExpect(status().isCreated());
+
+        Long projectIdx = projectRepository.findByTitle("테스트 타이틀 12312321").getIdx();
+
+        mockMvc.perform(put("/api/project/" + projectIdx + "/status?status=COMPLETE" ).header(SecurityConstants.TOKEN_HEADER, token)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void postProjectApplyTest() throws Exception {
+        Set<Tag> tag = new HashSet<>();
+
+        tag.add(Tag.builder().text("테스트 코드 태그 1").build());
+        tag.add(Tag.builder().text("테스트 코드 태그 2").build());
+
+        ProjectDTO projectdto = ProjectDTO.builder().title("테스트 타이틀 12312321").location("서울").summary("요로요러한 프로젝트")
+                .designerRecruits(1).developerRecruits(1).plannerRecruits(1).marketerRecruits(1).etcRecruits(1).tags(tag).build();
+
+        mockMvc.perform(post("/api/project").header(SecurityConstants.TOKEN_HEADER, token)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(projectdto)).with(user(userDetails)))
+                .andExpect(status().isCreated());
+
+        Long projectIdx = projectRepository.findByTitle("테스트 타이틀 12312321").getIdx();
+
+        ProjectApplyDTO projectApplyDTO = ProjectApplyDTO.builder().projectIdx(projectIdx).position("디자이너").simpleProfile("지원 사유").build();
+
+        mockMvc.perform(post("/api/project/apply").header(SecurityConstants.TOKEN_HEADER, token)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(projectApplyDTO)).with(user(userDetails)))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void putProjectMatchingTest() throws Exception {
+        Set<Tag> tag = new HashSet<>();
+
+        tag.add(Tag.builder().text("테스트 코드 태그 1").build());
+        tag.add(Tag.builder().text("테스트 코드 태그 2").build());
+
+        ProjectDTO projectdto = ProjectDTO.builder().title("테스트 타이틀 12312321").location("서울").summary("요로요러한 프로젝트")
+                .designerRecruits(1).developerRecruits(1).plannerRecruits(1).marketerRecruits(1).etcRecruits(1).tags(tag).build();
+
+        mockMvc.perform(post("/api/project").header(SecurityConstants.TOKEN_HEADER, token)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(projectdto)).with(user(userDetails)))
+                .andExpect(status().isCreated());
+
+        Long projectIdx = projectRepository.findByTitle("테스트 타이틀 12312321").getIdx();
+
+        ProjectApplyDTO projectApplyDTO = ProjectApplyDTO.builder().projectIdx(projectIdx).position("디자이너").simpleProfile("지원 사유").build();
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        User user = User.builder().nick("Test User222").email("Test_User333@gmail.com").password(passwordEncoder.encode("test_password"))
+                .profileImg("image..").description("test desc..").createdDate(LocalDateTime.now())
+                .investTime(4).socialUrl("https://github.com/testUser").build();
+
+        userRepository.save(user);
+
+        UserDetails userDetails2 = userService.loadUserByUsername(user.getEmail());
+
+        List<String> roles = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        String token2 = Jwts.builder()
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.JWT_SECRET.getBytes())
+                .setHeaderParam("typ", SecurityConstants.TOKEN_TYPE)
+                .setIssuer(SecurityConstants.TOKEN_ISSUER)
+                .setAudience(SecurityConstants.TOKEN_AUDIENCE)
+                .setSubject("Perfect-Matching JWT Token")
+                .claim("idx", userRepository.findByEmail(user.getEmail()).getIdx())
+                .claim("email", user.getEmail())
+                .claim("nickname", user.getNick())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1800000))
+                .claim("role", roles)
+                .compact();
+
+
+        mockMvc.perform(post("/api/project/apply").header(SecurityConstants.TOKEN_HEADER, token2)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(projectApplyDTO)).with(user(userDetails2)))
+                .andExpect(status().isCreated());
+
+        Map<String, String> map = new HashMap<>();
+
+        map.put("projectIdx", String.valueOf(projectIdx));
+        map.put("userIdx", String.valueOf(user.getIdx()));
+        map.put("status", "매칭");
+
+        mockMvc.perform(put("/api/project/matching").header(SecurityConstants.TOKEN_HEADER, token)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(map)).with(user(userDetails)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void deleteProjectCancelTest() throws Exception {
+        Set<Tag> tag = new HashSet<>();
+
+        tag.add(Tag.builder().text("테스트 코드 태그 1").build());
+        tag.add(Tag.builder().text("테스트 코드 태그 2").build());
+
+        ProjectDTO projectdto = ProjectDTO.builder().title("테스트 타이틀 12312321").location("서울").summary("요로요러한 프로젝트")
+                .designerRecruits(1).developerRecruits(1).plannerRecruits(1).marketerRecruits(1).etcRecruits(1).tags(tag).build();
+
+        mockMvc.perform(post("/api/project").header(SecurityConstants.TOKEN_HEADER, token)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(projectdto)).with(user(userDetails)))
+                .andExpect(status().isCreated());
+
+        Long projectIdx = projectRepository.findByTitle("테스트 타이틀 12312321").getIdx();
+
+        ProjectApplyDTO projectApplyDTO = ProjectApplyDTO.builder().projectIdx(projectIdx).position("디자이너").simpleProfile("지원 사유").build();
+
+        mockMvc.perform(post("/api/project/apply").header(SecurityConstants.TOKEN_HEADER, token)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(projectApplyDTO)).with(user(userDetails)))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(delete("/api/project/cancel/" + projectIdx).header(SecurityConstants.TOKEN_HEADER, token)
+                .contentType(MediaType.APPLICATION_JSON_VALUE).with(user(userDetails)))
                 .andExpect(status().isOk());
     }
 
