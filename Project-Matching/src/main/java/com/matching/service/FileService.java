@@ -13,6 +13,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -90,5 +91,20 @@ public class FileService {
         } catch (MalformedURLException e) {
             throw new FileDownloadException(fileName + "파일을 찾을 수 없습니다.");
         }
+    }
+
+    public void setDefaultProfile(HttpServletRequest request) {
+        JwtResolver jwtResolver = new JwtResolver(request);
+        String email = jwtResolver.getUserByToken();
+        User user = userRepository.findByEmail(email);
+        String originUrl = user.getProfileImg();
+        deleteOriginProfile(originUrl);
+
+        String defaultImgUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/img/")
+                .path(DEFAULT_PROFILE_IMG)
+                .toUriString();
+        user.setProfileImg(defaultImgUri);
+        userRepository.save(user);
     }
 }
