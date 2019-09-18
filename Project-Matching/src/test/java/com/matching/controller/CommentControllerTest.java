@@ -121,8 +121,10 @@ public class CommentControllerTest {
                 .password("test_password")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(content().encoding("UTF-8"))
-                .andExpect(redirectedUrl("/api/comment/" + comment.getIdx()))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
+
     }
 
     @Test
@@ -135,6 +137,8 @@ public class CommentControllerTest {
         mockMvc.perform(post("/api/comment").header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(commentDTO)).with(user("Test_User@gmail.com").password("test_password")))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isCreated());
     }
 
@@ -147,6 +151,8 @@ public class CommentControllerTest {
         mockMvc.perform(post("/api/comment").header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(commentDTO)).with(user("Test_User@gmail.com").password("test_password")))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isCreated());
 
         commentDTO.setContent("테스크 코드에서 수정된 댓글...");
@@ -155,6 +161,8 @@ public class CommentControllerTest {
                 .header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(commentDTO)).with(user("Test_User@gmail.com").password("test_password")))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
     }
 
@@ -167,12 +175,16 @@ public class CommentControllerTest {
         mockMvc.perform(post("/api/comment").header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(commentDTO)).with(user("Test_User@gmail.com").password("test_password")))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isCreated());
 
         mockMvc.perform(delete("/api/comment/" + commentRepository.findByContent("테스트 코드에서 작성하는 댓글").getIdx())
                 .header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(commentDTO)).with(user("Test_User@gmail.com").password("test_password")))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
     }
 

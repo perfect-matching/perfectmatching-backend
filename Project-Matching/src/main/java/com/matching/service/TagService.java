@@ -35,13 +35,13 @@ public class TagService {
         return tagRepository.findAll() == null;
     }
 
-    public Resources<?> getTags(HttpServletResponse response) {
+    public Resources<?> getTags() {
         List<Resource> resources = new ArrayList<>();
         List<Tag> tags = tagRepository.findAll();
 
         for(Tag tag : tags) {
             Resource<?> resource = new Resource<>(tag);
-            resource.add(linkTo(methodOn(TagController.class).getTag(tag.getIdx(), response)).withSelfRel());
+            resource.add(linkTo(methodOn(TagController.class).getTag(tag.getIdx())).withSelfRel());
             resources.add(resource);
         }
 
@@ -60,13 +60,13 @@ public class TagService {
         return userSkillRepository.findAll() == null;
     }
 
-    public Resources<?> getUserSkills(HttpServletResponse response) {
+    public Resources<?> getUserSkills() {
         List<Resource> resources = new ArrayList<>();
         List<UserSkill> userSkills = userSkillRepository.findAll();
 
         for(UserSkill userSkill : userSkills) {
             Resource<?> resource = new Resource<>(userSkill);
-            resource.add(linkTo(methodOn(TagController.class).getUserSkill(userSkill.getIdx(), response)).withSelfRel());
+            resource.add(linkTo(methodOn(TagController.class).getUserSkill(userSkill.getIdx())).withSelfRel());
             resources.add(resource);
         }
 
@@ -85,13 +85,13 @@ public class TagService {
         return usedSkillRepository.findAll() == null;
     }
 
-    public Resources<?> getUsedSkills(HttpServletResponse response) {
+    public Resources<?> getUsedSkills() {
         List<Resource> resourceList = new ArrayList<>();
         List<UsedSkill> usedSkills = usedSkillRepository.findAll();
 
         for(UsedSkill usedSkill : usedSkills) {
             Resource<?> resource = new Resource<>(usedSkill);
-            resource.add(linkTo(methodOn(TagController.class).getUsedSkill(usedSkill.getIdx(), response)).withSelfRel());
+            resource.add(linkTo(methodOn(TagController.class).getUsedSkill(usedSkill.getIdx())).withSelfRel());
             resourceList.add(resource);
         }
 

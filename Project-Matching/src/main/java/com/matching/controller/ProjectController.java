@@ -1,13 +1,15 @@
 package com.matching.controller;
 
 import com.matching.domain.Project;
+import com.matching.domain.docs.RestDocs;
 import com.matching.domain.dto.ProjectApplyDTO;
 import com.matching.domain.dto.ProjectDTO;
 import com.matching.domain.enums.LocationType;
 import com.matching.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
@@ -21,7 +23,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -38,19 +39,16 @@ public class ProjectController {
     private ProjectService projectService;
 
     @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getProjectsJsonView(@PageableDefault(size = 12) Pageable pageable, HttpServletResponse response,
+    public ResponseEntity<?> getProjectsJsonView(@PageableDefault(size = 12) Pageable pageable,
                                                     @RequestParam(required = false) LocationType location,
                                                     @RequestParam(required = false) String position) {
-
-        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/projects");
 
         Page<Project> collection = projectService.findAllProject(pageable, location, position);
 
         if(collection == null)
-            return new ResponseEntity<>("잘못된 요청입니다." ,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("{\"message\": \"잘못된 요청입니다.\"}" ,HttpStatus.BAD_REQUEST);
 
-        List<Resource> list = projectService.getProjectsDTOList(response, collection);
+        List<Resource> list = projectService.getProjectsDTOList(collection);
 
         Page<?> page = new PageImpl<>(list, pageable, list.size());
 
@@ -63,13 +61,13 @@ public class ProjectController {
         resources.add(new Link(projectService.getCurrentUriGetString()).withSelfRel());
         resources.add(new Link(uriString).withRel("next"));
 
-        return ResponseEntity.ok(resources);
+        URI uri = linkTo(methodOn(ProjectController.class).getProjectsJsonView(pageable, location, position)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return new ResponseEntity<>(resources, restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/project/{idx}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getProjectJsonView(@PathVariable final Long idx, HttpServletResponse response) {
-        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/project/" + idx);
+    public ResponseEntity<?> getProjectJsonView(@PathVariable final Long idx) {
 
         if(projectService.projectNullCheck(idx))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -77,144 +75,147 @@ public class ProjectController {
         Resource<?> resource = projectService.getProject(idx);
         Long leaderIdx = projectService.findByProject(idx).getLeader().getIdx();
 
-        resource.add(linkTo(methodOn(ProjectController.class).getProjectJsonView(idx, response)).withSelfRel());
-        resource.add(linkTo(methodOn(ProfileController.class).getProfile(leaderIdx, response)).withRel("Leader Profile"));
-        resource.add(linkTo(methodOn(ProjectController.class).getProjectComments(idx, response)).withRel("Comments"));
-        resource.add(linkTo(methodOn(ProjectController.class).getProjectMembers(idx, response)).withRel("Members"));
-        resource.add(linkTo(methodOn(ProjectController.class).getProjectJoinMembers(idx, response)).withRel("Join Members"));
-        resource.add(linkTo(methodOn(ProjectController.class).getProjectTags(idx, response)).withRel("Tags"));
-        return ResponseEntity.ok(resource);
+        resource.add(linkTo(methodOn(ProjectController.class).getProjectJsonView(idx)).withSelfRel());
+        resource.add(linkTo(methodOn(ProfileController.class).getProfile(leaderIdx)).withRel("Leader Profile"));
+        resource.add(linkTo(methodOn(ProjectController.class).getProjectComments(idx)).withRel("Comments"));
+        resource.add(linkTo(methodOn(ProjectController.class).getProjectMembers(idx)).withRel("Members"));
+        resource.add(linkTo(methodOn(ProjectController.class).getProjectJoinMembers(idx)).withRel("Join Members"));
+        resource.add(linkTo(methodOn(ProjectController.class).getProjectTags(idx)).withRel("Tags"));
+
+        URI uri = linkTo(methodOn(ProjectController.class).getProjectJsonView(idx)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return new ResponseEntity<>(resource, restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 
 
     @GetMapping(value = "/project/{idx}/comments", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getProjectComments (@PathVariable Long idx, HttpServletResponse response) {
-        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/project/" + idx + "/comments");
+    public ResponseEntity<?> getProjectComments (@PathVariable Long idx) {
 
         if(projectService.findProjectComments(idx))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        Resources<?> resources = projectService.getProjectComments(idx, response);
-        resources.add(linkTo(methodOn(ProjectController.class).getProjectComments(idx, response)).withSelfRel());
+        Resources<?> resources = projectService.getProjectComments(idx);
+        resources.add(linkTo(methodOn(ProjectController.class).getProjectComments(idx)).withSelfRel());
 
-        return ResponseEntity.ok(resources);
+        URI uri = linkTo(methodOn(ProjectController.class).getProjectComments(idx)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return new ResponseEntity<>(resources, restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/project/{idx}/members", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getProjectMembers(@PathVariable Long idx, HttpServletResponse response) {
-        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/project/" + idx + "/members");
+    public ResponseEntity<?> getProjectMembers(@PathVariable Long idx) {
 
         if(projectService.findProjectMembers(idx))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        Resources<?> resources = projectService.getProjectMembers(idx, response);
-        resources.add(linkTo(methodOn(ProjectController.class).getProjectMembers(idx, response)).withSelfRel());
+        Resources<?> resources = projectService.getProjectMembers(idx);
+        resources.add(linkTo(methodOn(ProjectController.class).getProjectMembers(idx)).withSelfRel());
 
-        return ResponseEntity.ok(resources);
+        URI uri = linkTo(methodOn(ProjectController.class).getProjectMembers(idx)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return new ResponseEntity<>(resources, restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/project/{idx}/joinmembers", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getProjectJoinMembers(@PathVariable Long idx, HttpServletResponse response) {
-        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/project/" + idx + "/joinmembers");
+    public ResponseEntity<?> getProjectJoinMembers(@PathVariable Long idx) {
 
         if(projectService.findProjectJoinMembers(idx))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        Resources<?> resources = projectService.getProjectJoinMembers(idx, response);
-        resources.add(linkTo(methodOn(ProjectController.class).getProjectJoinMembers(idx, response)).withSelfRel());
+        Resources<?> resources = projectService.getProjectJoinMembers(idx);
+        resources.add(linkTo(methodOn(ProjectController.class).getProjectJoinMembers(idx)).withSelfRel());
 
-        return ResponseEntity.ok(resources);
+        URI uri = linkTo(methodOn(ProjectController.class).getProjectJoinMembers(idx)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return new ResponseEntity<>(resources, restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/project/{idx}/tags", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getProjectTags(@PathVariable Long idx, HttpServletResponse response) {
-        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/project/" + idx + "/tags");
+    public ResponseEntity<?> getProjectTags(@PathVariable Long idx) {
 
         if(projectService.findProjectTags(idx))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        Resources<?> resources = projectService.getProjectTags(idx, response);
-        resources.add(linkTo(methodOn(ProjectController.class).getProjectTags(idx, response)).withSelfRel());
+        Resources<?> resources = projectService.getProjectTags(idx);
+        resources.add(linkTo(methodOn(ProjectController.class).getProjectTags(idx)).withSelfRel());
 
-        return ResponseEntity.ok(resources);
+        URI uri = linkTo(methodOn(ProjectController.class).getProjectTags(idx)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return new ResponseEntity<>(resources, restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/project")
-    public ResponseEntity<?> postProject(@Valid @RequestBody ProjectDTO projectDTO, BindingResult result, HttpServletRequest request, HttpServletResponse response) {
-        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/project");
+    public ResponseEntity<?> postProject(@Valid @RequestBody ProjectDTO projectDTO, BindingResult result, HttpServletRequest request) {
 
         if (result.hasErrors()) {
             StringBuilder msg = projectService.validation(result);
             return new ResponseEntity<>(msg.toString(), HttpStatus.BAD_REQUEST);
         }
 
-        return projectService.postProject(projectDTO, request);
+        URI uri = linkTo(methodOn(ProjectController.class).postProject(projectDTO, result, request)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return projectService.postProject(projectDTO, request, restDocs);
     }
 
     @PutMapping(value = "/project/{idx}")
     public ResponseEntity<?> putProject(@Valid @RequestBody ProjectDTO projectDTO, BindingResult result, @PathVariable Long idx,
-                                        HttpServletRequest request, HttpServletResponse response) {
-        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/project/" + idx);
+                                        HttpServletRequest request) {
 
         if(result.hasErrors()) {
             StringBuilder msg = projectService.validation(result);
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
 
-        return projectService.putProject(projectDTO, request, idx);
+        URI uri = linkTo(methodOn(ProjectController.class).putProject(projectDTO, result, idx, request)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return projectService.putProject(projectDTO, request, idx, restDocs);
     }
 
     @DeleteMapping(value = "/project/{idx}")
-    public ResponseEntity<?> deleteProject(@PathVariable Long idx, HttpServletResponse response, HttpServletRequest request) {
-        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/project/" + idx);
+    public ResponseEntity<?> deleteProject(@PathVariable Long idx, HttpServletRequest request) {
 
-        return projectService.deleteProject(idx, request);
+        URI uri = linkTo(methodOn(ProjectController.class).deleteProject(idx, request)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return projectService.deleteProject(idx, request, restDocs);
     }
 
     @PutMapping(value = "/project/{idx}/status")
     public ResponseEntity<?> putProjectStatus(@PathVariable Long idx,  @RequestParam(required = false) String status,
-                                              HttpServletRequest request, HttpServletResponse response) {
-        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/project/" + idx + "/status");
+                                              HttpServletRequest request) {
 
-        return projectService.putProjectStatus(idx, status, request);
+        URI uri = linkTo(methodOn(ProjectController.class).putProjectStatus(idx, status, request)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return projectService.putProjectStatus(idx, status, request, restDocs);
     }
 
     @PostMapping(value = "/project/apply")
     public ResponseEntity<?> postProjectApply(@Valid @RequestBody ProjectApplyDTO projectApplyDTO, BindingResult result,
-                                              HttpServletResponse response, HttpServletRequest request) {
-        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/project/apply");
+                                              HttpServletRequest request) {
 
         if (result.hasErrors()) {
             StringBuilder msg = projectService.validation(result);
             return new ResponseEntity<>(msg.toString(), HttpStatus.BAD_REQUEST);
         }
 
-        return projectService.postProjectApply(projectApplyDTO, request);
+        URI uri = linkTo(methodOn(ProjectController.class).postProjectApply(projectApplyDTO, result, request)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return projectService.postProjectApply(projectApplyDTO, request, restDocs);
     }
 
     @PutMapping(value = "/project/matching")
-    public ResponseEntity<?> putProjectMatching(@RequestBody Map<String, String> map, HttpServletRequest request, HttpServletResponse response) {
-        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/project/matching");
+    public ResponseEntity<?> putProjectMatching(@RequestBody Map<String, String> map, HttpServletRequest request) {
 
-        return projectService.putProjectMatching(map, request);
+        URI uri = linkTo(methodOn(ProjectController.class).putProjectMatching(map, request)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return projectService.putProjectMatching(map, request, restDocs);
     }
 
     @DeleteMapping(value = "/project/cancel/{idx}")
-    public ResponseEntity<?> deleteProjectCancel(@PathVariable Long idx, HttpServletResponse response, HttpServletRequest request) {
-        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/project/cancel/" + idx);
+    public ResponseEntity<?> deleteProjectCancel(@PathVariable Long idx, HttpServletRequest request) {
 
-        return projectService.deleteProjectCancel(idx, request);
+        URI uri = linkTo(methodOn(ProjectController.class).deleteProjectCancel(idx, request)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return projectService.deleteProjectCancel(idx, request, restDocs);
     }
 
 }

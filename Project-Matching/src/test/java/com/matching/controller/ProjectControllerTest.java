@@ -132,7 +132,8 @@ public class ProjectControllerTest {
         mockMvc.perform(get("/api/projects"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(content().encoding("UTF-8"))
-                .andExpect(redirectedUrl("/api/projects"))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
     }
 
@@ -141,7 +142,8 @@ public class ProjectControllerTest {
         mockMvc.perform(get("/api/projects?location=BUSAN"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(content().encoding("UTF-8"))
-                .andExpect(redirectedUrl("/api/projects"))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
     }
 
@@ -151,7 +153,8 @@ public class ProjectControllerTest {
                 .password("test_password")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(content().encoding("UTF-8"))
-                .andExpect(redirectedUrl("/api/project/" + project.getIdx()))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
     }
 
@@ -161,7 +164,8 @@ public class ProjectControllerTest {
                 .password("test_password")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(content().encoding("UTF-8"))
-                .andExpect(redirectedUrl("/api/project/" + project.getIdx() + "/comments"))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
     }
 
@@ -171,7 +175,8 @@ public class ProjectControllerTest {
                 .password("test_password")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(content().encoding("UTF-8"))
-                .andExpect(redirectedUrl("/api/project/" + project.getIdx() + "/members"))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
     }
 
@@ -181,7 +186,8 @@ public class ProjectControllerTest {
                 .password("test_password")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(content().encoding("UTF-8"))
-                .andExpect(redirectedUrl("/api/project/" + project.getIdx() + "/tags"))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
     }
 
@@ -199,6 +205,8 @@ public class ProjectControllerTest {
         mockMvc.perform(post("/api/project").header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(projectdto)).with(user(userDetails)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isCreated());
     }
 
@@ -215,6 +223,8 @@ public class ProjectControllerTest {
         mockMvc.perform(post("/api/project").header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(projectdto)).with(user(userDetails)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isCreated());
 
         Set<Tag> tag2 = new HashSet<>();
@@ -228,6 +238,8 @@ public class ProjectControllerTest {
         mockMvc.perform(put("/api/project/" + projectRepository.findByTitle("테스트 타이틀 12312321").getIdx()).header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(projectdto)).with(user(userDetails)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
     }
 
@@ -244,6 +256,8 @@ public class ProjectControllerTest {
         mockMvc.perform(post("/api/project").header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(projectdto)).with(user(userDetails)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isCreated());
 
         Comment comment = Comment.builder().writer(userRepository.findByEmail("Test_User@gmail.com")).project(projectRepository.findByTitle("테스트 타이틀 12312321"))
@@ -254,6 +268,8 @@ public class ProjectControllerTest {
         mockMvc.perform(delete("/api/project/" + projectRepository.findByTitle("테스트 타이틀 12312321").getIdx()).header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(projectdto)).with(user(userDetails)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
     }
 
@@ -271,12 +287,16 @@ public class ProjectControllerTest {
         mockMvc.perform(post("/api/project").header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(projectdto)).with(user(userDetails)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isCreated());
 
         Long projectIdx = projectRepository.findByTitle("테스트 타이틀 12312321").getIdx();
 
         mockMvc.perform(put("/api/project/" + projectIdx + "/status?status=PROGRESS" ).header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
 
     }
@@ -295,12 +315,16 @@ public class ProjectControllerTest {
         mockMvc.perform(post("/api/project").header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(projectdto)).with(user(userDetails)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isCreated());
 
         Long projectIdx = projectRepository.findByTitle("테스트 타이틀 12312321").getIdx();
 
         mockMvc.perform(put("/api/project/" + projectIdx + "/status?status=COMPLETE" ).header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
 
     }
@@ -318,6 +342,8 @@ public class ProjectControllerTest {
         mockMvc.perform(post("/api/project").header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(projectdto)).with(user(userDetails)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isCreated());
 
         Long projectIdx = projectRepository.findByTitle("테스트 타이틀 12312321").getIdx();
@@ -327,6 +353,8 @@ public class ProjectControllerTest {
         mockMvc.perform(post("/api/project/apply").header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(projectApplyDTO)).with(user(userDetails)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isCreated());
     }
 
@@ -343,6 +371,8 @@ public class ProjectControllerTest {
         mockMvc.perform(post("/api/project").header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(projectdto)).with(user(userDetails)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isCreated());
 
         Long projectIdx = projectRepository.findByTitle("테스트 타이틀 12312321").getIdx();
@@ -382,6 +412,8 @@ public class ProjectControllerTest {
         mockMvc.perform(post("/api/project/apply").header(SecurityConstants.TOKEN_HEADER, token2)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(projectApplyDTO)).with(user(userDetails2)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isCreated());
 
         Map<String, String> map = new HashMap<>();
@@ -409,6 +441,8 @@ public class ProjectControllerTest {
         mockMvc.perform(post("/api/project").header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(projectdto)).with(user(userDetails)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isCreated());
 
         Long projectIdx = projectRepository.findByTitle("테스트 타이틀 12312321").getIdx();
@@ -418,10 +452,14 @@ public class ProjectControllerTest {
         mockMvc.perform(post("/api/project/apply").header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(projectApplyDTO)).with(user(userDetails)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isCreated());
 
         mockMvc.perform(delete("/api/project/cancel/" + projectIdx).header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE).with(user(userDetails)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
     }
 

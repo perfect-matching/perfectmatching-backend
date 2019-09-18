@@ -19,6 +19,8 @@ import javax.validation.Valid;
 
 import java.net.URI;
 
+import java.net.URI;
+
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
@@ -30,30 +32,32 @@ public class DoneProjectController {
     private DoneProjectService doneProjectService;
 
     @GetMapping(value = "/{idx}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getDoneProject(@PathVariable Long idx, HttpServletResponse response) {
-        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/doneproject/" + idx);
+    public ResponseEntity<?> getDoneProject(@PathVariable Long idx) {
 
         if(doneProjectService.findByDoneProject(idx))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         Resource<?> resource = doneProjectService.getDoneProject(idx);
-        resource.add(linkTo(methodOn(DoneProjectController.class).getDoneProject(idx, response)).withSelfRel());
-        resource.add(linkTo(methodOn(DoneProjectController.class).getDoneProjectUsedSkills(idx, response)).withRel("Used Skills"));
-        return ResponseEntity.ok(resource);
+        resource.add(linkTo(methodOn(DoneProjectController.class).getDoneProject(idx)).withSelfRel());
+        resource.add(linkTo(methodOn(DoneProjectController.class).getDoneProjectUsedSkills(idx)).withRel("Used Skills"));
+
+        URI uri = linkTo(methodOn(DoneProjectController.class).getDoneProject(idx)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return new ResponseEntity<>(resource, restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{idx}/usedskills", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getDoneProjectUsedSkills(@PathVariable Long idx, HttpServletResponse response) {
-        response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/doneproject/" + idx + "/usedskills");
+    public ResponseEntity<?> getDoneProjectUsedSkills(@PathVariable Long idx) {
 
         if(doneProjectService.findByDoneProjectUsedSkills(idx))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        Resources<?> resources = doneProjectService.getDoneProjectUsedSkills(idx, response);
-        resources.add(linkTo(methodOn(DoneProjectController.class).getDoneProjectUsedSkills(idx, response)).withSelfRel());
-        return ResponseEntity.ok(resources);
+        Resources<?> resources = doneProjectService.getDoneProjectUsedSkills(idx);
+        resources.add(linkTo(methodOn(DoneProjectController.class).getDoneProjectUsedSkills(idx)).withSelfRel());
+
+        URI uri = linkTo(methodOn(DoneProjectController.class).getDoneProjectUsedSkills(idx)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return new ResponseEntity<>(resources, restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping
