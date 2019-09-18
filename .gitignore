@@ -206,5 +206,6 @@ modules.xml
 #SpringBoot
 
 *.yml
+*.txt
 application.properties
 uploads/PROFILE*

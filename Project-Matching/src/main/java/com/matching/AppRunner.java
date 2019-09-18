@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.stream.IntStream;
 import java.util.*;
@@ -74,28 +75,36 @@ public class AppRunner implements ApplicationRunner {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public void run(ApplicationArguments args) {
+    public void run(ApplicationArguments args) throws IOException {
         Random random = new Random();
         final String profileImg = "https://donghun-dev.kro.kr:8083/api/img/USER_DEFAULT_PROFILE_IMG.png";
+
+        List<String> list = getTagsDataSet();
+
+        for(String tag : list) {
+            tagRepository.save(Tag.builder().text(tag).build());
+        }
+
+        int tagSize = list.size();
 
         IntStream.rangeClosed(1, 40).forEach(index -> userRepository.save(User.builder().email("test" + index + "@email.com")
                 .nick("testUser_" + index).password(passwordEncoder.encode("testpassword")).createdDate(LocalDateTime.now()).profileImg(profileImg)
                 .description("저는 이러한 사람입니다.").investTime(4).socialUrl("https://github.com/testUser").build()));
 
         IntStream.rangeClosed(1, 300).forEach(index -> userSkillRepository.save(UserSkill.builder().user(userRepository.findByIdx
-                ((long)random.nextInt(40)+1)).text("테스트 스킬 " + index).build()));
+                ((long)random.nextInt(40)+1)).text(tagRepository.findByIdx((long)(random.nextInt(tagSize) + 1)).getText()).build()));
 
         IntStream.rangeClosed(1, 200).forEach(this::createProjectTestData);
-
-        IntStream.rangeClosed(1, 100).forEach(index -> tagRepository.save(Tag.builder().text("테스트 태그 " + index).build()));
 
         IntStream.rangeClosed(1, 200).forEach(index -> doneProjectRepository.save(DoneProject.builder().user(userRepository.findByIdx((
                 long)random.nextInt(40)+1)).title("테스트 프로젝트 " + index).summary("테스트 프로젝트 " + index + "입니다.").content("테스트 내용 " + index).
                 createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now()).projectIdx(projectRepository.findByIdx((
                 long)random.nextInt(200)+1).getIdx()).build()));
 
-        IntStream.rangeClosed(1, 300).forEach(index -> usedSkillRepository.save(UsedSkill.builder().doneProject(doneProjectRepository.findByIdx
-                ((long)random.nextInt(200)+1)).text("테스트 스킬 " + index).build()));
+        IntStream.rangeClosed(1, 300).forEach(index -> {
+            usedSkillRepository.save(UsedSkill.builder().doneProject(doneProjectRepository.findByIdx((long) random.nextInt(200) + 1))
+                    .text(tagRepository.findByIdx((long)(random.nextInt(tagSize) + 1)).getText()).build());
+        });
 
         IntStream.rangeClosed(1, 400).forEach(index -> createProjectTagTestData());
 
@@ -119,7 +128,7 @@ public class AppRunner implements ApplicationRunner {
         projectRepository.save(project);
 
         UserProjectKey key = new UserProjectKey(user.getIdx(), project.getIdx());
-        UserProject userProject = UserProject.builder().id(key).position(PositionType.getRandomPositionType())
+        UserProject userProject = UserProject.builder().id(key).position(PositionType.LEADER)
                 .status(UserProjectStatus.MATCHING).simpleProfile("저는 꼭 프로젝트에 참여하고 싶습니다").user(user).project(project).build();
 
         userProjectRepository.save(userProject);
@@ -173,5 +182,26 @@ public class AppRunner implements ApplicationRunner {
             projectTagRepository.save(projectTag);
         }
 
+    }
+
+    private List<String> getTagsDataSet() throws IOException {
+        List<String> list = new ArrayList<>();
+        try {
+            File file = new File("tags.txt");
+            FileReader filereader = new FileReader(file);
+            BufferedReader bufReader = new BufferedReader(filereader);
+            String line = "";
+            while ((line = bufReader.readLine()) != null) {
+                list.add(line);
+            }
+
+            bufReader.close();
+        } catch (FileNotFoundException e) {
+            // TODO: handle exception
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+
+        return list;
     }
 }

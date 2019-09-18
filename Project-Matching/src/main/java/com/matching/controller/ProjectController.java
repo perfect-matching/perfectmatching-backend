@@ -49,6 +49,7 @@ public class ProjectController {
             return new ResponseEntity<>("{\"message\": \"잘못된 요청입니다.\"}" ,HttpStatus.BAD_REQUEST);
 
         List<Resource> list = projectService.getProjectsDTOList(collection);
+
         Page<?> page = new PageImpl<>(list, pageable, list.size());
 
         String uriString = projectService.getCurrentUriGetString();

@@ -54,7 +54,7 @@ public class DoneProject implements Serializable {
     @Column
     private Long projectIdx;
 
-    @OneToMany(mappedBy = "doneProject", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "doneProject", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonBackReference
     private Set<UsedSkill> usedSkills = new HashSet<>();
 

@@ -35,7 +35,7 @@ public class ProjectDTO {
     @Length(max = 30, min = 1)
     private String leader;
 
-    @Length(max = 5000, min = 1)
+    @Length(max = 5000)
     private String content;
 
     @Length(max = 10, min = 1)
@@ -78,7 +78,7 @@ public class ProjectDTO {
     @Length(max = 100, min = 1)
     private String summary;
 
-    @Length(max = 100, min = 1)
+    @Length(max = 100)
     private String socialUrl;
 
     private Set<Tag> tags = new HashSet<>();

@@ -10,4 +10,6 @@ public interface UsedSkillRepository extends JpaRepository<UsedSkill, Long> {
     List<UsedSkill> findByDoneProject(DoneProject doneProject);
 
     UsedSkill findByIdx(Long idx);
+
+    void deleteAllByDoneProject(DoneProject doneProject);
 }

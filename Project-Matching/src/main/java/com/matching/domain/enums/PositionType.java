@@ -22,7 +22,7 @@ public enum PositionType {
 
     public static PositionType getRandomPositionType() {
         Random random = new Random();
-        return values()[random.nextInt(values().length)];
+        return values()[random.nextInt(values().length-1)];
     }
 
     public static PositionType getPosition(int index) {
