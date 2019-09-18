@@ -2,14 +2,19 @@ package com.matching.service;
 
 import com.matching.config.FileConfig;
 import com.matching.config.auth.JwtResolver;
-import com.matching.config.exception.FileDownloadException;
 import com.matching.config.exception.FileUploadException;
+import com.matching.controller.FileController;
 import com.matching.domain.User;
+import com.matching.domain.docs.RestDocs;
 import com.matching.repository.UserRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,10 +23,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Service
 public class FileService {
@@ -42,18 +51,45 @@ public class FileService {
         }
     }
 
-    public void userProfileUpdate(String fileUri, HttpServletRequest request) {
+    public ResponseEntity<?> uploadFile(MultipartFile file, HttpServletRequest request) {
+        String originFileName = StringUtils.cleanPath(file.getOriginalFilename());
+
         JwtResolver jwtResolver = new JwtResolver(request);
         User user = userRepository.findByEmail(jwtResolver.getUserByToken());
         String originUrl = user.getProfileImg();
-        deleteOriginProfile(originUrl);
-        user.setProfileImg(fileUri);
-        userRepository.save(user);
+
+        if (originFileName.contains(".."))
+            return new ResponseEntity<>("{\"message\": \"파일에 부적합한 문자가 있습니다.\"}", HttpStatus.BAD_REQUEST);
+
+        String extension = FilenameUtils.getExtension(originFileName);
+        String fileName = FILE_PREFIX + System.currentTimeMillis() + "." + extension;
+        Path targetLocation = this.fileLocation.resolve(fileName);
+
+        if (!"jpg".equals(extension) && !"jpeg".equals(extension) && !"png".equals(extension)) {
+            return new ResponseEntity<>("{\"message\": \"올바르지 않은 확장자 입니다.\"}", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+            String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/api/image/")
+                    .path(fileName)
+                    .toUriString();
+            deleteOriginProfile(originUrl);
+            user.setProfileImg(fileDownloadUri);
+            userRepository.save(user);
+
+            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+            RestDocs restDocs = new RestDocs(uri);
+            return new ResponseEntity<>("{\"image\": \""+ fileDownloadUri +"\"}", restDocs.getHttpHeaders(), HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>("{\"message\": \"파일에 업로드에 실패했습니다.\"}", HttpStatus.BAD_REQUEST);
+        }
     }
 
     private void deleteOriginProfile(String url) {
-        String fileName = url.substring(url.lastIndexOf('/')+1);
-        if(fileName.equals(DEFAULT_PROFILE_IMG)) return;
+        String fileName = url.substring(url.lastIndexOf('/') + 1);
+        if (fileName.equals(DEFAULT_PROFILE_IMG)) return;
         Path path = this.fileLocation.resolve(fileName).normalize();
         try {
             Files.delete(path);
@@ -62,38 +98,38 @@ public class FileService {
         }
     }
 
-    public String uploadAndGetName(MultipartFile file) {
-        String originFileName = StringUtils.cleanPath(file.getOriginalFilename());
-        try {
-            if(originFileName.contains(".."))
-                throw new FileUploadException("파일명에 부적합한 문자가 포함되어 있습니다.");
-            String extension = FilenameUtils.getExtension(originFileName);
-            String fileName = FILE_PREFIX + System.currentTimeMillis() + "." + extension;
-            Path targetLocation = this.fileLocation.resolve(fileName);
-
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return fileName;
-        } catch (Exception e) {
-            throw new FileUploadException("["+file+"] 파일 업로드 실패, 다시 시도하십시오.", e);
-        }
-    }
-
-    public Resource loadFileAsResource(String fileName) {
+    public ResponseEntity<?> loadFileAsResponse(String fileName, HttpServletRequest request) {
         try {
             Path filePath = this.fileLocation.resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
 
             if (resource.exists()) {
-                return resource;
+                String contentType = null;
+                try {
+                    contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+                } catch (IOException e) {
+                    return new ResponseEntity<>("{\"message\": \"파일을 타입이 올바르지 않습니다.\"}", HttpStatus.BAD_REQUEST);
+                }
+                if (contentType == null) {
+                    contentType = "application/octet-stream";
+                }
+
+                URI uri = linkTo(methodOn(FileController.class).getImage(fileName, request)).toUri();
+                RestDocs restDocs = new RestDocs(uri);
+
+                HttpHeaders headers = restDocs.getHttpHeaders();
+                headers.setContentType(MediaType.parseMediaType(contentType));
+                return new ResponseEntity<>(resource, headers, HttpStatus.OK);
             } else {
-                throw new FileDownloadException(fileName + " 파일을 찾을 수 없습니다.");
+                return new ResponseEntity<>("{\"message\": \"" + fileName + "파일을 찾을 수 없습니다.\"}", HttpStatus.BAD_REQUEST);
             }
         } catch (MalformedURLException e) {
-            throw new FileDownloadException(fileName + "파일을 찾을 수 없습니다.");
+            return new ResponseEntity<>("{\"message\": \"" + fileName + "파일을 찾을 수 없습니다.\"}", HttpStatus.BAD_REQUEST);
         }
+
     }
 
-    public void setDefaultProfile(HttpServletRequest request) {
+    public String setDefaultProfile(HttpServletRequest request) {
         JwtResolver jwtResolver = new JwtResolver(request);
         String email = jwtResolver.getUserByToken();
         User user = userRepository.findByEmail(email);
@@ -101,10 +137,11 @@ public class FileService {
         deleteOriginProfile(originUrl);
 
         String defaultImgUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/img/")
+                .path("/api/image/")
                 .path(DEFAULT_PROFILE_IMG)
                 .toUriString();
         user.setProfileImg(defaultImgUri);
         userRepository.save(user);
+        return defaultImgUri;
     }
 }

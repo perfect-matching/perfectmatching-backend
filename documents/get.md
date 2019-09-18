@@ -837,9 +837,9 @@
   }
   ```
 
-* `https://donghun-dev.kro.kr:8083/api/img/USER_DEFAULT_PROFILE_IMG.png`
+* `https://donghun-dev.kro.kr:8083/api/image/{fileName}`
 
-  * /img/{profileImg} 해당 이미지를 가져옴
+  * {fileName}에 해당 이미지를 가져옴
 
   * Success : Code 200
 
