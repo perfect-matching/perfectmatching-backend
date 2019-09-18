@@ -41,14 +41,14 @@ public class DoneProjectService {
         return usedSkillRepository.findByDoneProject(doneProjectRepository.findByIdx(idx)) == null;
     }
 
-    public Resources<?> getDoneProjectUsedSkills(Long idx, HttpServletResponse response) {
+    public Resources<?> getDoneProjectUsedSkills(Long idx) {
         DoneProject doneProject = doneProjectRepository.findByIdx(idx);
         List<Resource> resourceList = new ArrayList<>();
         List<UsedSkill> usedSkills = usedSkillRepository.findByDoneProject(doneProject);
 
         for(UsedSkill usedSkill : usedSkills) {
             Resource<?> resource = new Resource<>(usedSkill);
-            resource.add(linkTo(methodOn(TagController.class).getUsedSkill(usedSkill.getIdx(), response)).withSelfRel());
+            resource.add(linkTo(methodOn(TagController.class).getUsedSkill(usedSkill.getIdx())).withSelfRel());
             resourceList.add(resource);
         }
 

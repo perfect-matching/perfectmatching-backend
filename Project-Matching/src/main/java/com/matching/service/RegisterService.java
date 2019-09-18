@@ -2,6 +2,7 @@ package com.matching.service;
 
 import com.matching.domain.User;
 import com.matching.domain.UserSkill;
+import com.matching.domain.docs.RestDocs;
 import com.matching.domain.dto.UserDTO;
 import com.matching.repository.UserRepository;
 import com.matching.repository.UserSkillRepository;
@@ -42,7 +43,7 @@ public class RegisterService {
         return userRepository.findByEmail(email);
     }
 
-    public ResponseEntity<?> postUser(UserDTO userDTO) {
+    public ResponseEntity<?> postUser(UserDTO userDTO, RestDocs restDocs) {
         String defaultProfileImg = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/api/img/")
                 .path("USER_DEFAULT_PROFILE_IMG.png")
@@ -55,11 +56,11 @@ public class RegisterService {
 
         for(UserSkill userSkill : userDTO.getUserSkills()) {
             if (userSkill.getText().length() > 255)
-                return new ResponseEntity<>("태그의 길이가 255자 이상입니다.", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("{\"message\": \"태그의 길이가 255자 이상입니다.\"}", HttpStatus.BAD_REQUEST);
             user.addUserSkill(userSkill);
             userSkillRepository.save(userSkill);
         }
 
-        return new ResponseEntity<>("{}", HttpStatus.CREATED);
+        return new ResponseEntity<>(user, restDocs.getHttpHeaders(), HttpStatus.CREATED);
     }
 }

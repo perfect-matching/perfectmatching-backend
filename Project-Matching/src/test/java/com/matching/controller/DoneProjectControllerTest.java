@@ -64,7 +64,8 @@ public class DoneProjectControllerTest {
                 .password("test_password")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(content().encoding("UTF-8"))
-                .andExpect(redirectedUrl("/api/doneproject/" + doneProject.getIdx()))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
     }
 
@@ -74,7 +75,8 @@ public class DoneProjectControllerTest {
                 .password("test_password")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(content().encoding("UTF-8"))
-                .andExpect(redirectedUrl("/api/doneproject/" + doneProject.getIdx() + "/usedskills"))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
     }
 

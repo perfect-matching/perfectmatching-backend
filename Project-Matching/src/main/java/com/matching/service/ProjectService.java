@@ -6,6 +6,7 @@ import com.matching.controller.ProfileController;
 import com.matching.controller.ProjectController;
 import com.matching.controller.TagController;
 import com.matching.domain.*;
+import com.matching.domain.docs.RestDocs;
 import com.matching.domain.dto.*;
 import com.matching.domain.enums.LocationType;
 import com.matching.domain.enums.PositionType;
@@ -29,6 +30,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -120,15 +122,15 @@ public class ProjectService {
         return projectRepository.findByIdx(idx);
     }
 
-    public List<Resource> getProjectsDTOList(HttpServletResponse response, Page<Project> page) {
+    public List<Resource> getProjectsDTOList(Page<Project> page) {
 
         List<Resource> list = new ArrayList<>();
 
         for(Project project : page) {
             ProjectsDTO projectsDTO = new ProjectsDTO(project);
             Resource<?> resource = new Resource<>(projectsDTO);
-            resource.add(linkTo(methodOn(ProjectController.class).getProjectJsonView(project.getIdx(), response)).withSelfRel());
-            resource.add(linkTo(methodOn(ProfileController.class).getProfile(project.getLeader().getIdx(), response)).withRel("Leader Profile"));
+            resource.add(linkTo(methodOn(ProjectController.class).getProjectJsonView(project.getIdx())).withSelfRel());
+            resource.add(linkTo(methodOn(ProfileController.class).getProfile(project.getLeader().getIdx())).withRel("Leader Profile"));
             list.add(resource);
         }
 
@@ -165,12 +167,12 @@ public class ProjectService {
         return commentRepository.findByProject(projectRepository.findByIdx(idx)) == null;
     }
 
-    public Resources<?> getProjectComments(Long idx, HttpServletResponse response) {
+    public Resources<?> getProjectComments(Long idx) {
         List<Resource> list = new ArrayList<>();
         for(Comment comment : commentRepository.findByProject(projectRepository.findByIdx(idx))) {
             CommentDTO commentDTO = new CommentDTO(comment);
             Resource<?> resource = new Resource<>(commentDTO);
-            resource.add(linkTo(methodOn(CommentController.class).getComment(comment.getIdx(), response)).withSelfRel());
+            resource.add(linkTo(methodOn(CommentController.class).getComment(comment.getIdx())).withSelfRel());
             list.add(resource);
         }
         return new Resources<>(list);
@@ -182,14 +184,14 @@ public class ProjectService {
         return userProjectRepo.findByProjectAndStatus(projectRepository.findByIdx(idx), UserProjectStatus.MATCHING) == null;
     }
 
-    public Resources<?> getProjectMembers(Long idx, HttpServletResponse response) {
+    public Resources<?> getProjectMembers(Long idx) {
         List<Resource> list = new ArrayList<>();
         List<UserProject> userProjectList = userProjectRepo.findByProjectAndStatus(projectRepository.findByIdx(idx), UserProjectStatus.MATCHING);
 
         for(UserProject userProject : userProjectList) {
             MemberDTO memberDTO = new MemberDTO(userProject);
             Resource<?> resource = new Resource<>(memberDTO);
-            resource.add(linkTo(methodOn(ProfileController.class).getProfile(memberDTO.getMemberIdx(), response)).withRel("Profile"));
+            resource.add(linkTo(methodOn(ProfileController.class).getProfile(memberDTO.getMemberIdx())).withRel("Profile"));
             list.add(resource);
         }
 
@@ -202,14 +204,14 @@ public class ProjectService {
         return projectTagRepo.findByProject(projectRepository.findByIdx(idx)) == null;
     }
 
-    public Resources<?> getProjectTags(Long idx, HttpServletResponse response) {
+    public Resources<?> getProjectTags(Long idx) {
         List<Resource> list = new ArrayList<>();
         List<ProjectTag> projectTagList = projectTagRepo.findByProject(projectRepository.findByIdx(idx));
 
         for(ProjectTag projectTag : projectTagList) {
             Tag tag = projectTag.getTag();
             Resource<?> resource = new Resource<>(tag);
-            resource.add(linkTo(methodOn(TagController.class).getTag(tag.getIdx(), response)).withSelfRel());
+            resource.add(linkTo(methodOn(TagController.class).getTag(tag.getIdx())).withSelfRel());
             list.add(resource);
         }
 
@@ -224,7 +226,7 @@ public class ProjectService {
         return msg;
     }
 
-    public ResponseEntity<?> postProject(ProjectDTO projectDTO, HttpServletRequest request) {
+    public ResponseEntity<?> postProject(ProjectDTO projectDTO, HttpServletRequest request, RestDocs restDocs) {
         JwtResolver jwtResolver = new JwtResolver(request);
         User user = userRepository.findByEmail(jwtResolver.getUserByToken());
 
@@ -250,8 +252,7 @@ public class ProjectService {
             foundTag.addProjectTag(projectTag);
             projectTagRepo.save(projectTag);
         }
-
-        return new ResponseEntity<>("{}", HttpStatus.CREATED);
+        return new ResponseEntity<>(project, restDocs.getHttpHeaders(), HttpStatus.CREATED);
     }
 
     private LocationType getLocation(String location) {
@@ -266,7 +267,7 @@ public class ProjectService {
         return locationType;
     }
 
-    public ResponseEntity<?> putProject(ProjectDTO projectDTO, HttpServletRequest request, Long idx) {
+    public ResponseEntity<?> putProject(ProjectDTO projectDTO, HttpServletRequest request, Long idx, RestDocs restDocs) {
 
         Project project = projectRepository.findByIdx(idx);
         JwtResolver jwtResolver = new JwtResolver(request);
@@ -301,11 +302,11 @@ public class ProjectService {
             projectTagRepo.save(projectTag);
         }
 
-        return new ResponseEntity<>("{}", HttpStatus.OK);
+        return new ResponseEntity<>(project, restDocs.getHttpHeaders(), HttpStatus.OK);
 
     }
 
-    public ResponseEntity<?> deleteProject(Long idx, HttpServletRequest request) {
+    public ResponseEntity<?> deleteProject(Long idx, HttpServletRequest request, RestDocs restDocs) {
         Project project = projectRepository.findByIdx(idx);
         JwtResolver jwtResolver = new JwtResolver(request);
 
@@ -316,10 +317,10 @@ public class ProjectService {
 
         projectRepository.deleteById(project.getIdx());
 
-        return new ResponseEntity<>("", HttpStatus.OK);
+        return new ResponseEntity<>(project, restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 
-    public ResponseEntity<?> putProjectStatus(Long idx, String status, HttpServletRequest request) {
+    public ResponseEntity<?> putProjectStatus(Long idx, String status, HttpServletRequest request, RestDocs restDocs) {
 
         if(status == null || (!StringUtils.equals(status, "PROGRESS") && !StringUtils.equals(status, "COMPLETE")))
             return new ResponseEntity<>("status 값이 올바르지 않습니다.1", HttpStatus.BAD_REQUEST);
@@ -337,10 +338,10 @@ public class ProjectService {
             project.setStatus(ProjectStatus.COMPLETE);
 
         projectRepository.save(project);
-        return new ResponseEntity<>("{}", HttpStatus.OK);
+        return new ResponseEntity<>(project, restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 
-    public ResponseEntity<?> postProjectApply(ProjectApplyDTO projectApplyDTO, HttpServletRequest request) {
+    public ResponseEntity<?> postProjectApply(ProjectApplyDTO projectApplyDTO, HttpServletRequest request, RestDocs restDocs) {
         JwtResolver jwtResolver = new JwtResolver(request);
         User user = userRepository.findByEmail(jwtResolver.getUserByToken());
         Project project = projectRepository.findByIdx(projectApplyDTO.getProjectIdx());
@@ -352,7 +353,7 @@ public class ProjectService {
         project.addUserProject(userProject);
         userProjectRepo.save(userProject);
 
-        return new ResponseEntity<>("{}", HttpStatus.CREATED);
+        return new ResponseEntity<>(userProject, restDocs.getHttpHeaders(), HttpStatus.CREATED);
     }
 
     private PositionType getPosition(String position) {
@@ -367,7 +368,7 @@ public class ProjectService {
         return positionType;
     }
 
-    public ResponseEntity<?> putProjectMatching(Map<String, String> map, HttpServletRequest request) {
+    public ResponseEntity<?> putProjectMatching(Map<String, String> map, HttpServletRequest request, RestDocs restDocs) {
         JwtResolver jwtResolver = new JwtResolver(request);
         User user = userRepository.findByEmail(jwtResolver.getUserByToken());
         Project project = projectRepository.findByIdx(Long.parseLong(map.get("projectIdx")));
@@ -380,17 +381,17 @@ public class ProjectService {
         userProject.setStatus(map.get("status").equals("매칭") ? UserProjectStatus.MATCHING : UserProjectStatus.FAIL);
         userProjectRepo.save(userProject);
 
-        return new ResponseEntity<>("{}", HttpStatus.OK);
+        return new ResponseEntity<>(userProject, restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 
-    public ResponseEntity<?> deleteProjectCancel(Long idx, HttpServletRequest request) {
+    public ResponseEntity<?> deleteProjectCancel(Long idx, HttpServletRequest request, RestDocs restDocs) {
         JwtResolver jwtResolver = new JwtResolver(request);
         User user = userRepository.findByEmail(jwtResolver.getUserByToken());
         Project project = projectRepository.findByIdx(idx);
 
         userProjectRepo.deleteById(new UserProjectKey(user.getIdx(), project.getIdx()));
 
-        return new ResponseEntity<>("{}", HttpStatus.OK);
+        return new ResponseEntity<>("{}", restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 
     public boolean findProjectJoinMembers(Long idx) {
@@ -399,14 +400,14 @@ public class ProjectService {
         return userProjectRepo.findByProjectAndStatus(projectRepository.findByIdx(idx), UserProjectStatus.WAIT) == null;
     }
 
-    public Resources<?> getProjectJoinMembers(Long idx, HttpServletResponse response) {
+    public Resources<?> getProjectJoinMembers(Long idx) {
         List<Resource> list = new ArrayList<>();
         List<UserProject> userProjectList = userProjectRepo.findByProjectAndStatus(projectRepository.findByIdx(idx), UserProjectStatus.WAIT);
 
         for(UserProject userProject : userProjectList) {
             MemberDTO memberDTO = new MemberDTO(userProject);
             Resource<?> resource = new Resource<>(memberDTO);
-            resource.add(linkTo(methodOn(ProfileController.class).getProfile(memberDTO.getMemberIdx(), response)).withRel("Profile"));
+            resource.add(linkTo(methodOn(ProfileController.class).getProfile(memberDTO.getMemberIdx())).withRel("Profile"));
             list.add(resource);
         }
 

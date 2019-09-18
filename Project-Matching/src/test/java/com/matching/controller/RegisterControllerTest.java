@@ -1,6 +1,5 @@
 package com.matching.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matching.domain.UserSkill;
 import com.matching.domain.dto.UserDTO;
@@ -15,11 +14,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -54,24 +56,34 @@ public class RegisterControllerTest {
                 .userSkills(userSkills).build();
 
         mockMvc.perform(post("/api/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDTO)))
-                        .andExpect(status().isCreated());
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userDTO)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Location"))
+                .andExpect(status().isCreated());
     }
 
     @Test
     public void nickCheckTest() throws Exception {
+        Map<String, String > nick = new HashMap<>();
+        nick.put("nick", "SimpleUser22");
         mockMvc.perform(post("/api/register/nickcheck")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString("SimpleUser2222")))
+                .content(objectMapper.writeValueAsString(nick)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void emailCheckTest() throws Exception {
+        Map<String, String > email = new HashMap<>();
+        email.put("email", "SimpleUser22@email.com");
         mockMvc.perform(post("/api/register/emailcheck")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString("SimpleUser2222@gmail.com")))
+                .content(objectMapper.writeValueAsString(email)))
+                .andExpect(header().exists("Location"))
+                .andExpect(header().exists("Link"))
                 .andExpect(status().isOk());
     }
 

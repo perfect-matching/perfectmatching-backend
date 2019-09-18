@@ -4,6 +4,7 @@ import com.matching.config.auth.JwtResolver;
 import com.matching.domain.Comment;
 import com.matching.domain.Project;
 import com.matching.domain.User;
+import com.matching.domain.docs.RestDocs;
 import com.matching.domain.dto.CommentDTO;
 import com.matching.repository.CommentRepository;
 import com.matching.repository.ProjectRepository;
@@ -50,7 +51,7 @@ public class CommentService {
         return msg;
     }
 
-    public ResponseEntity<?> postComment(CommentDTO commentDTO, HttpServletRequest request) {
+    public ResponseEntity<?> postComment(CommentDTO commentDTO, HttpServletRequest request, RestDocs restDocs) {
         JwtResolver jwtResolver = new JwtResolver(request);
         User user = userRepository.findByEmail(jwtResolver.getUserByToken());
 
@@ -61,10 +62,10 @@ public class CommentService {
         project.addComment(comment);
         commentRepository.save(comment);
 
-        return new ResponseEntity<>("{}", HttpStatus.CREATED);
+        return new ResponseEntity<>(comment, restDocs.getHttpHeaders(), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<?> putComment(CommentDTO commentDTO, HttpServletRequest request, Long idx) {
+    public ResponseEntity<?> putComment(CommentDTO commentDTO, HttpServletRequest request, Long idx, RestDocs restDocs) {
 
         Comment comment = commentRepository.findByIdx(idx);
 
@@ -78,11 +79,11 @@ public class CommentService {
 
         commentRepository.save(comment);
 
-        return new ResponseEntity<>("{}", HttpStatus.OK);
+        return new ResponseEntity<>(comment, restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 
 
-    public ResponseEntity<?> deleteComment(Long idx, HttpServletRequest request) {
+    public ResponseEntity<?> deleteComment(Long idx, HttpServletRequest request, RestDocs restDocs) {
         Comment comment = commentRepository.findByIdx(idx);
         JwtResolver jwtResolver = new JwtResolver(request);
 
@@ -91,6 +92,6 @@ public class CommentService {
 
         commentRepository.deleteById(comment.getIdx());
 
-        return new ResponseEntity<>("{}", HttpStatus.OK);
+        return new ResponseEntity<>(comment, restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 }

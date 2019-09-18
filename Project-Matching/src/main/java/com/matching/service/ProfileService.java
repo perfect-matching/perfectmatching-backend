@@ -61,14 +61,14 @@ public class ProfileService {
         return userSkillRepository.findByUser(userRepository.findByIdx(idx)) == null;
     }
 
-    public Resources<?> getProfileSkills(Long idx, HttpServletResponse response) {
+    public Resources<?> getProfileSkills(Long idx) {
         User user = userRepository.findByIdx(idx);
         List<Resource> list = new ArrayList<>();
         List<UserSkill> userSkillList = userSkillRepository.findByUser(user);
 
         for(UserSkill userSkill : userSkillList) {
             Resource<?> resource = new Resource<>(userSkill);
-            resource.add(linkTo(methodOn(TagController.class).getUserSkill(userSkill.getIdx(), response)).withSelfRel());
+            resource.add(linkTo(methodOn(TagController.class).getUserSkill(userSkill.getIdx())).withSelfRel());
             list.add(resource);
         }
 
@@ -101,14 +101,14 @@ public class ProfileService {
         return doneProjectRepository.findByUser(userRepository.findByIdx(idx)) == null;
     }
 
-    public Resources<?> getProfileDoneProjects(Long idx, HttpServletResponse response) {
+    public Resources<?> getProfileDoneProjects(Long idx) {
         User user = userRepository.findByIdx(idx);
         List<Resource> resourceList = new ArrayList<>();
         List<DoneProject> doneProjectList = doneProjectRepository.findByUser(user);
 
         for(DoneProject doneProject : doneProjectList) {
             Resource<?> resource = new Resource<>(new DoneProjectDTO(doneProject));
-            resource.add(linkTo(methodOn(DoneProjectController.class).getDoneProject(doneProject.getIdx(), response)).withSelfRel());
+            resource.add(linkTo(methodOn(DoneProjectController.class).getDoneProject(doneProject.getIdx())).withSelfRel());
             resourceList.add(resource);
         }
 

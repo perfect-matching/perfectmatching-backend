@@ -1,6 +1,7 @@
 package com.matching.controller;
 
 import com.matching.domain.FileUploadResponse;
+import com.matching.domain.docs.RestDocs;
 import com.matching.service.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.URI;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api")
@@ -35,13 +40,19 @@ public class FileController {
                 .toUriString();
 
         fileService.userProfileUpdate(fileDownloadUri, request);
-        return new ResponseEntity<>("{}", HttpStatus.OK);
+
+        URI uri = linkTo(methodOn(FileController.class).uploadFile(file, request)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return new ResponseEntity<>("{}", restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 
     @DeleteMapping("/img")
     public ResponseEntity<?> deleteFile(HttpServletRequest request) {
         fileService.setDefaultProfile(request);
-        return new ResponseEntity<>("{}", HttpStatus.OK);
+
+        URI uri = linkTo(methodOn(FileController.class).deleteFile(request)).toUri();
+        RestDocs restDocs = new RestDocs(uri);
+        return new ResponseEntity<>("{}", restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/img/{fileName:.+}")
