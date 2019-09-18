@@ -36,7 +36,7 @@ public class ProjectsDTOTest {
         assertThat(projectsDTO.getCreatedDate()).isEqualTo(project.getCreatedDate());
         assertThat(projectsDTO.getLeader()).isEqualTo(project.getLeader().getNick());
         assertThat(projectsDTO.getLeaderIdx()).isEqualTo(project.getLeader().getIdx());
-        assertThat(projectsDTO.getLeaderImage()).isEqualTo(project.getLeader().getProfileImg());
+        assertThat(projectsDTO.getProfileImage()).isEqualTo(project.getLeader().getProfileImg());
         assertThat(projectsDTO.getLocation()).isEqualTo(project.getLocation().getLocation());
         assertThat(projectsDTO.getDesignerRecruits()).isEqualTo(project.getDesignerRecruits() > 0);
         assertThat(projectsDTO.getDeveloperRecruits()).isEqualTo(project.getDeveloperRecruits() > 0);

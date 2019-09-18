@@ -41,9 +41,10 @@ public class ProjectController {
     @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProjectsJsonView(@PageableDefault(size = 12) Pageable pageable,
                                                     @RequestParam(required = false) LocationType location,
-                                                    @RequestParam(required = false) String position) {
+                                                    @RequestParam(required = false) String position,
+                                                    @RequestParam(required = false) String tag) {
 
-        Page<Project> collection = projectService.findAllProject(pageable, location, position);
+        Page<Project> collection = projectService.findAllProject(pageable, location, position, tag);
 
         if(collection == null)
             return new ResponseEntity<>("{\"message\": \"잘못된 요청입니다.\"}" ,HttpStatus.BAD_REQUEST);
@@ -61,7 +62,7 @@ public class ProjectController {
         resources.add(new Link(projectService.getCurrentUriGetString()).withSelfRel());
         resources.add(new Link(uriString).withRel("next"));
 
-        URI uri = linkTo(methodOn(ProjectController.class).getProjectsJsonView(pageable, location, position)).toUri();
+        URI uri = linkTo(methodOn(ProjectController.class).getProjectsJsonView(pageable, location, position, tag)).toUri();
         RestDocs restDocs = new RestDocs(uri);
         return new ResponseEntity<>(resources, restDocs.getHttpHeaders(), HttpStatus.OK);
     }
@@ -210,7 +211,7 @@ public class ProjectController {
         return projectService.putProjectMatching(map, request, restDocs);
     }
 
-    @DeleteMapping(value = "/project/cancel/{idx}")
+    @DeleteMapping(value = "/project/cancle/{idx}")
     public ResponseEntity<?> deleteProjectCancel(@PathVariable Long idx, HttpServletRequest request) {
 
         URI uri = linkTo(methodOn(ProjectController.class).deleteProjectCancel(idx, request)).toUri();

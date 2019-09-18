@@ -26,6 +26,8 @@ public class CommentDTO {
 
     private Long userIdx;
 
+    private String profileImageURL;
+
     @Length(max = 255, min = 1)
     private String projectTitle;
 
@@ -44,6 +46,7 @@ public class CommentDTO {
         this.commentIdx = comment.getIdx();
         this.userName = comment.getWriter().getNick();
         this.userIdx = comment.getWriter().getIdx();
+        this.profileImageURL = comment.getWriter().getProfileImg();
         this.projectTitle = comment.getProject().getTitle();
         this.projectIdx = comment.getProject().getIdx();
         this.content = comment.getContent();

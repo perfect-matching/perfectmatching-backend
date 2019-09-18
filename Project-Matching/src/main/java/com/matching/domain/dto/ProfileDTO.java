@@ -26,6 +26,8 @@ public class ProfileDTO {
     @Length(max = 500)
     private String summary;
 
+    private String profileImage;
+
     @NotBlank
     @Email
     @Length(max = 30, min = 3)
@@ -45,6 +47,7 @@ public class ProfileDTO {
         this.userIdx = user.getIdx();
         this.nickname = user.getNick();
         this.summary = user.getDescription();
+        this.profileImage = user.getProfileImg();
         this.email = user.getEmail();
         this.profileImg = user.getProfileImg();
         this.investTime = user.getInvestTime();
