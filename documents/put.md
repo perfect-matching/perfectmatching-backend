@@ -49,7 +49,7 @@
   }
   ```
 
-* `https://donghun-dev.kro.kr:8083/api/img`
+* `https://donghun-dev.kro.kr:8083/api/image`
 
   * 요청 유저의 프로필 사진 수정
 
@@ -65,12 +65,10 @@
   ```
 
   * Response Data
+
   ```JSON
   {
-      "fileName": "PROFILE_IMG_1568638730292.jpg",
-      "fileDownloadUri": "http://localhost:8080/api/img/PROFILE_IMG_1568638730292.jpg",
-      "fileType": "image/jpeg",
-      "size": 6228
+      "image": "https://donghun-dev.kro.kr:8083/api/image/PROFILE_IMG_1568638730292.jpg",
   }
   ```
 

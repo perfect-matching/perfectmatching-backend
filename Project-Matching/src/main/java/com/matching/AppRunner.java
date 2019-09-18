@@ -77,7 +77,7 @@ public class AppRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws IOException {
         Random random = new Random();
-        final String profileImg = "https://donghun-dev.kro.kr:8083/api/img/USER_DEFAULT_PROFILE_IMG.png";
+        final String profileImg = "https://donghun-dev.kro.kr:8083/api/image/USER_DEFAULT_PROFILE_IMG.png";
 
         List<String> list = getTagsDataSet();
 
