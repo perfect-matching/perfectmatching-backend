@@ -180,6 +180,7 @@ Project - Side Project Member Matching Platform
     | `/api/project/{idx}` | DELETE | Project의 idx에 따라 Projet를 삭제하기 위한 api |
     | `/api/comment/{idx}` | DELETE | Comment의 idx에 따라 Comment를 삭제하기 위한 api |
     | `/api/img` | DELETE | User의 기존 프로필 이미지를 삭제하고 기본 이미지로 변경하기 위한 api |
-    | `/api/doneproject/{idx}` | PUT | DoneProject의 idx에 따라 DoneProject를 삭제하기 위한 api |
+    | `/api/project/cancel/{idx}` | DELETE | Project의 Idx에 따라 지원취소를 요청하기 위한 api | 
+    | `/api/doneproject/{idx}` | DELETE | DoneProject의 idx에 따라 DoneProject를 삭제하기 위한 api | 
     
 </details>

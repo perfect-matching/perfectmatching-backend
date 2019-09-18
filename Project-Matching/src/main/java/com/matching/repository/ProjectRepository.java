@@ -28,4 +28,5 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     Page<Project> findByLocationAndMarketerRecruitsIsGreaterThanOrderByIdxDesc(LocationType locationType, int age, Pageable pageable);
     Page<Project> findByLocationAndPlannerRecruitsIsGreaterThanOrderByIdxDesc(LocationType locationType, int age, Pageable pageable);
     Page<Project> findByLocationAndEtcRecruitsIsGreaterThanOrderByIdxDesc(LocationType locationType, int age, Pageable pageable);
+
 }

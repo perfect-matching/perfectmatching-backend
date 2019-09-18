@@ -20,16 +20,22 @@ public class MemberDTO {
 
     private Long projectIdx;
 
+    private String profileImage;
+
     @NotBlank
     private String memberNick;
 
     @NotBlank
     private String position;
 
+    private String simpleProfile;
+
     public MemberDTO(UserProject userProject) {
         this.memberIdx = userProject.getUser().getIdx();
+        this.profileImage = userProject.getUser().getProfileImg();
         this.projectIdx = userProject.getProject().getIdx();
         this.memberNick = userProject.getUser().getNick();
+        this.simpleProfile = userProject.getSimpleProfile();
         this.position = userProject.getPosition().getPosition();
     }
 }

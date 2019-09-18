@@ -18,6 +18,7 @@ import com.matching.repository.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -79,7 +80,7 @@ public class ProjectService {
     }
 
     private Page<Project> findByProjectAllCheck(String position, LocationType location, Pageable pageable) {
-        if(position.equals("ALL") && location.getLocation().equals("ALL"))
+        if(position.equals("ALL") && location.getLocation().equals("전체"))
             return projectRepository.findAllByOrderByIdxDesc(pageable);
         else if(position.equals("ALL") && !location.getLocation().equals("ALL"))
             return projectRepository.findByLocationOrderByIdxDesc(location, pageable);
@@ -104,18 +105,192 @@ public class ProjectService {
     }
 
 
-    public Page<Project> findAllProject(Pageable pageable, LocationType location, String position) {
-        if(position == null && location == null)
+    public Page<Project> findAllProject(Pageable pageable, LocationType location, String position, String tag) {
+        if(position == null && location == null && tag == null)
             return projectRepository.findAllByOrderByIdxDesc(pageable);
-        else if(position == null && location != null) {
+        else if(position == null && location != null && tag == null) {
             if (location.getLocation().equals("전체"))
                 return projectRepository.findAllByOrderByIdxDesc(pageable);
             return projectRepository.findByLocationOrderByIdxDesc(location, pageable);
         }
-        else if(position != null && location == null)
+        else if(position != null && location == null && tag == null)
             return findPosition(position, pageable);
-        else
+        else if(position != null  && location != null && tag == null)
             return findByProjectAllCheck(position, location, pageable);
+        else if(position == null && location == null && tag != null)
+            return findByTagCheck(tag, pageable);
+        else if(position == null && location != null && tag != null)
+            return findByLocationAndTagCheck(location, tag, pageable);
+        else if(position != null && location == null && tag != null)
+            return findByPositionAndTagCheck(position, tag, pageable);
+        else
+            return findByLocationAndPositionAndTagCheck(location, position, tag, pageable);
+    }
+
+    private Page<Project> findByLocationAndPositionAndTagCheck(LocationType location, String position, String text, Pageable pageable) {
+        if( position.equals("ALL") && location.getLocation().equals("전체") && text.equals("ALL"))
+            return projectRepository.findAllByOrderByIdxDesc(pageable);
+        else if(position.equals("ALL") && !location.getLocation().equals("전체") && text.equals("ALL")) {
+            return projectRepository.findByLocationOrderByIdxDesc(location, pageable);
+        }
+        else if(!position.equals("ALL") && location.getLocation().equals("전체") && text.equals("ALL"))
+            return findPosition(position, pageable);
+        else if(!position.equals("ALL") && !location.getLocation().equals("전체") && text.equals("ALL"))
+            return findByProjectAllCheck(position, location, pageable);
+        else if(position.equals("ALL") && location.getLocation().equals("전체") && !text.equals("ALL"))
+            return findByTagCheck(text, pageable);
+        else if(position.equals("ALL") && !location.getLocation().equals("전체") && !text.equals("ALL"))
+            return findByLocationAndTagCheck(location, text, pageable);
+        else if(!position.equals("ALL") && location.getLocation().equals("전체") && !text.equals("ALL"))
+            return findByPositionAndTagCheck(position, text, pageable);
+        else {
+            Tag tag = tagRepository.findByText(text);
+            Page<ProjectTag> projectTags = projectTagRepo.findByProject_LocationAndTagOrderByProjectDesc(location, tag, pageable);
+            List<Project> projects = new ArrayList<>();
+
+            if(position.equals("DEVELOPER")) {
+                for(ProjectTag projectTag : projectTags) {
+                    Project project = projectTag.getProject();
+                    if(project.getDeveloperRecruits() > 0)
+                        projects.add(project);
+                }
+                return new PageImpl<>(projects, pageable, projects.size());
+            }
+            else if(position.equals("DESIGNER")) {
+                for(ProjectTag projectTag : projectTags) {
+                    Project project = projectTag.getProject();
+                    if(project.getDesignerRecruits() > 0)
+                        projects.add(project);
+                }
+                return new PageImpl<>(projects, pageable, projects.size());
+            }
+            else if(position.equals("MARKETER")) {
+                for(ProjectTag projectTag : projectTags) {
+                    Project project = projectTag.getProject();
+                    if(project.getMarketerRecruits() > 0)
+                        projects.add(project);
+                }
+                return new PageImpl<>(projects, pageable, projects.size());
+            }
+            else if(position.equals("PLANNER")) {
+                for(ProjectTag projectTag : projectTags) {
+                    Project project = projectTag.getProject();
+                    if(project.getPlannerRecruits() > 0)
+                        projects.add(project);
+                }
+                return new PageImpl<>(projects, pageable, projects.size());
+            }
+            else {
+                for(ProjectTag projectTag : projectTags) {
+                    Project project = projectTag.getProject();
+                    if(project.getEtcRecruits() > 0)
+                        projects.add(project);
+                }
+                return new PageImpl<>(projects, pageable, projects.size());
+            }
+        }
+    }
+
+    private Page<Project> findByPositionAndTagCheck(String position, String text, Pageable pageable) {
+        if(text.equals("ALL") && position.equals("ALL"))
+            return projectRepository.findAllByOrderByIdxDesc(pageable);
+        else if(text.equals("ALL") && !position.equals("ALL")) {
+            return findPosition(position, pageable);
+        }
+        else if(!text.equals("ALL") && position.equals("ALL")) {
+            return findByTagCheck(text, pageable);
+        }
+        else {
+            Tag tag = tagRepository.findByText(text);
+            Page<ProjectTag> projectTags = projectTagRepo.findByTagOrderByProjectDesc(tag, pageable);
+            List<Project> projects = new ArrayList<>();
+
+            if(position.equals("DEVELOPER")) {
+                for(ProjectTag projectTag : projectTags) {
+                    Project project = projectTag.getProject();
+                    if(project.getDeveloperRecruits() > 0)
+                        projects.add(project);
+                }
+                return new PageImpl<>(projects, pageable, projects.size());
+            }
+            else if(position.equals("DESIGNER")) {
+                for(ProjectTag projectTag : projectTags) {
+                    Project project = projectTag.getProject();
+                    if(project.getDesignerRecruits() > 0)
+                        projects.add(project);
+                }
+                return new PageImpl<>(projects, pageable, projects.size());
+            }
+            else if(position.equals("MARKETER")) {
+                for(ProjectTag projectTag : projectTags) {
+                    Project project = projectTag.getProject();
+                    if(project.getMarketerRecruits() > 0)
+                        projects.add(project);
+                }
+                return new PageImpl<>(projects, pageable, projects.size());
+            }
+            else if(position.equals("PLANNER")) {
+                for(ProjectTag projectTag : projectTags) {
+                    Project project = projectTag.getProject();
+                    if(project.getPlannerRecruits() > 0)
+                        projects.add(project);
+                }
+                return new PageImpl<>(projects, pageable, projects.size());
+            }
+            else {
+                for(ProjectTag projectTag : projectTags) {
+                    Project project = projectTag.getProject();
+                    if(project.getEtcRecruits() > 0)
+                        projects.add(project);
+                }
+                return new PageImpl<>(projects, pageable, projects.size());
+            }
+        }
+    }
+
+    private Page<Project> findByLocationAndTagCheck(LocationType location, String text, Pageable pageable) {
+        if(text.equals("ALL") && location.getLocation().equals("전체"))
+            return projectRepository.findAllByOrderByIdxDesc(pageable);
+        else if(text.equals("ALL") && !location.getLocation().equals("전체")) {
+            return projectRepository.findByLocationOrderByIdxDesc(location, pageable);
+        }
+        else if(!text.equals("ALL") && location.getLocation().equals("전체")) {
+            return findByTagCheck(text, pageable);
+        }
+        else {
+            Tag tag = tagRepository.findByText(text);
+            Page<ProjectTag> projectTags = projectTagRepo.findByProject_LocationAndTagOrderByProjectDesc(location, tag, pageable);
+            List<Project> projects = new ArrayList<>();
+
+            for(ProjectTag projectTag : projectTags) {
+                projects.add(projectTag.getProject());
+            }
+            return new PageImpl<>(projects, pageable, projects.size());
+        }
+    }
+
+
+    private Page<Project> findByTagCheck(String text, Pageable pageable) {
+
+        if(text.equals("ALL")) {
+           List<ProjectTag> projectTags = projectTagRepo.findAll();
+           List<Project> list = new ArrayList<>();
+
+           for(ProjectTag projectTag : projectTags)
+               list.add(projectTag.getProject());
+
+            return new PageImpl<>(list, pageable, list.size());
+        }
+
+        Tag tag = tagRepository.findByText(text);
+        Page<ProjectTag> projectTags = projectTagRepo.findByTagOrderByProjectDesc(tag, pageable);
+        List<Project> projects = new ArrayList<>();
+
+        for(ProjectTag projectTag : projectTags) {
+            projects.add(projectTag.getProject());
+        }
+
+        return new PageImpl<>(projects, pageable, projects.size());
     }
 
     public Project findByProject(Long idx) {
@@ -244,7 +419,7 @@ public class ProjectService {
         userProjectRepo.save(userProject);
 
         for(Tag tag : projectDTO.getTags()) {
-            Tag foundTag = tagRepository.findByText(tag.getText()) == null ? tagRepository.save(tag) : tagRepository.findByText(tag.getText());
+            Tag foundTag = tagRepository.findByText(tag.getText());
 
             ProjectTag projectTag = ProjectTag.builder().id(new ProjectTagKey(project.getIdx(), foundTag.getIdx())).build();
 

@@ -25,6 +25,8 @@ public class ProcessingProjectDTO {
     @NotBlank
     private String leaderNick;
 
+    private String profileImage;
+
     @NotBlank
     @Length(max = 255, min = 1)
     private String title;
@@ -47,6 +49,7 @@ public class ProcessingProjectDTO {
         this.userIdx = userProject.getUser().getIdx();
         this.projectIdx = userProject.getProject().getIdx();
         this.leaderNick = userProject.getProject().getLeader().getNick();
+        this.profileImage = userProject.getProject().getLeader().getProfileImg();
         this.title = userProject.getProject().getTitle();
         this.status = userProject.getProject().getStatus().getStatus();
         this.createdDate = userProject.getProject().getCreatedDate();

@@ -28,6 +28,8 @@ public class DoneProjectDTO {
 
     private Long userIdx;
 
+    private String profileImage;
+
     @NotBlank
     @Length(max = 255, min = 1)
     private String title;
@@ -58,6 +60,7 @@ public class DoneProjectDTO {
         this.doneProjectIdx = doneProject.getIdx();
         this.projectIdx = doneProject.getProjectIdx();
         this.userIdx = doneProject.getUser().getIdx();
+        this.profileImage = doneProject.getUser().getProfileImg();
         this.title = doneProject.getTitle();
         this.summary = doneProject.getSummary();
         this.content = doneProject.getContent();

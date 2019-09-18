@@ -170,7 +170,7 @@ public class AppRunner implements ApplicationRunner {
         Random random = new Random();
 
         long projectIdx = random.nextInt(200)+1;
-        long tagIdx = random.nextInt(100)+1;
+        long tagIdx = random.nextInt(465)+1;
 
         ProjectTagKey key = new ProjectTagKey(projectIdx, tagIdx);
 

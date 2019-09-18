@@ -32,6 +32,8 @@ public class ProjectDTO {
 
     private Long leaderIdx;
 
+    private String profileImage;
+
     @Length(max = 30, min = 1)
     private String leader;
 
@@ -92,6 +94,7 @@ public class ProjectDTO {
         this.title = project.getTitle();
         this.leader = project.getLeader().getNick();
         this.leaderIdx = project.getLeader().getIdx();
+        this.profileImage = project.getLeader().getProfileImg();
         this.content = project.getContent();
         this.status = project.getStatus().getStatus();
         this.location = project.getLocation().getLocation();
