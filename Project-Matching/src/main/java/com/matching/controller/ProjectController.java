@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +51,7 @@ public class ProjectController {
             return new ResponseEntity<>("잘못된 요청입니다." ,HttpStatus.BAD_REQUEST);
 
         List<Resource> list = projectService.getProjectsDTOList(response, collection);
+
         Page<?> page = new PageImpl<>(list, pageable, list.size());
 
         String uriString = projectService.getCurrentUriGetString();

@@ -31,3 +31,11 @@
   * Success : Code 200
 
   * Fail : Code 400
+
+* `https://donghun-dev.kro.kr:8083/api/doneproject/{idx}`
+
+  * {idx} DoneProject 삭제.
+
+  * Success : Code 200
+
+  * Fail : Code 400

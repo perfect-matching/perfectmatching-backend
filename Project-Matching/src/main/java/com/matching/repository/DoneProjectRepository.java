@@ -11,4 +11,6 @@ public interface DoneProjectRepository extends JpaRepository<DoneProject, Long> 
     DoneProject findByIdx(Long idx);
 
     List<DoneProject> findByUser(User user);
+
+    DoneProject findByTitle(String title);
 }
