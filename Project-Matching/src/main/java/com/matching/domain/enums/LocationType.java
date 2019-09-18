@@ -22,7 +22,7 @@ public enum LocationType {
     GYENONGSNAGBUKDO("경상북도"),
     GYENONGSANGNAMDO("경상남도"),
     JEJUDO("제주도"),
-    ALL("모든 지역");
+    ALL("전체");
 
     private String location;
 
@@ -32,7 +32,7 @@ public enum LocationType {
 
     public static LocationType getRandomLocationType() {
         Random random = new Random();
-        return values()[random.nextInt(values().length)];
+        return values()[random.nextInt(values().length-1)];
     }
 
     public static LocationType getLocation(int index) {

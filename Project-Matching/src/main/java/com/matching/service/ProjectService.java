@@ -106,7 +106,7 @@ public class ProjectService {
         if(position == null && location == null)
             return projectRepository.findAllByOrderByIdxDesc(pageable);
         else if(position == null && location != null) {
-            if (location.getLocation().equals("ALL"))
+            if (location.getLocation().equals("전체"))
                 return projectRepository.findAllByOrderByIdxDesc(pageable);
             return projectRepository.findByLocationOrderByIdxDesc(location, pageable);
         }
@@ -323,7 +323,7 @@ public class ProjectService {
 
         if(status == null || (!StringUtils.equals(status, "PROGRESS") && !StringUtils.equals(status, "COMPLETE")))
             return new ResponseEntity<>("status 값이 올바르지 않습니다.1", HttpStatus.BAD_REQUEST);
-        
+
         JwtResolver jwtResolver = new JwtResolver(request);
         User user = userRepository.findByEmail(jwtResolver.getUserByToken());
         Project project = projectRepository.findByIdx(idx);

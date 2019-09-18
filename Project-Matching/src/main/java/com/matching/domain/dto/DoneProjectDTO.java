@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.hateoas.core.Relation;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,15 +40,14 @@ public class DoneProjectDTO {
     @Length(max = 5000, min = 1)
     private String content;
 
-    @NotBlank
     private LocalDateTime createdDate;
 
     private LocalDateTime modifiedDate;
 
-    @NotBlank
+    @NotNull
     private LocalDateTime startDate;
 
-    @NotBlank
+    @NotNull
     private LocalDateTime endDate;
 
     private String socialUrl;

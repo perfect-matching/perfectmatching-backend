@@ -43,7 +43,7 @@ public class RegisterController {
     @PostMapping("/nickcheck")
     public ResponseEntity<?> nickCheck(@RequestBody String nick, HttpServletResponse response) {
         response.setHeader("Link", "<https://github.com/perfect-matching/perfectmatching-backend>; rel=\"profile\"");
-        response.setHeader("Location", "/api/register/nickcheck");;
+        response.setHeader("Location", "/api/register/nickcheck");
         return registerService.findUserNick(nick) != null ? new ResponseEntity<>("이미 사용중인 닉네임입니다.", HttpStatus.BAD_REQUEST)
                 : new ResponseEntity<>("사용가능한 멋진 닉네임입니다.", HttpStatus.OK);
     }
