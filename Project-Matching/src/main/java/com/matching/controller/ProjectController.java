@@ -211,7 +211,7 @@ public class ProjectController {
         return projectService.putProjectMatching(map, request, restDocs);
     }
 
-    @DeleteMapping(value = "/project/cancle/{idx}")
+    @DeleteMapping(value = "/project/cancel/{idx}")
     public ResponseEntity<?> deleteProjectCancel(@PathVariable Long idx, HttpServletRequest request) {
 
         URI uri = linkTo(methodOn(ProjectController.class).deleteProjectCancel(idx, request)).toUri();
