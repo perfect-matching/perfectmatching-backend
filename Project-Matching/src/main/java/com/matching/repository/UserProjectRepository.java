@@ -10,7 +10,6 @@ import com.matching.domain.enums.UserProjectStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserProjectRepository extends JpaRepository<UserProject, UserProjectKey> {
 
@@ -22,5 +21,8 @@ public interface UserProjectRepository extends JpaRepository<UserProject, UserPr
 
     List<UserProject> findByUserAndProject_StatusAndStatusAndPositionNotOrderByProjectDesc(User user, ProjectStatus status, UserProjectStatus userProjectStatus, PositionType positionType);
 
+    List<UserProject> findByUserAndStatusAndPositionNotOrderByProjectDesc(User user, UserProjectStatus userProjectStatus, PositionType positionType);
+
     List<UserProject> findByProjectAndStatus(Project project, UserProjectStatus status);
+
 }

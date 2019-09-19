@@ -87,7 +87,7 @@ public class DoneProjectService {
         user.addDoneProject(doneProject);
         doneProjectRepository.save(doneProject);
 
-        for(UsedSkill usedSkill : doneProjectDTO.getUsedSkills()) {
+        for(UsedSkill usedSkill : doneProjectDTO.getTags()) {
             doneProject.addUsedSkill(usedSkill);
             usedSkillRepository.save(usedSkill);
         }
@@ -114,7 +114,7 @@ public class DoneProjectService {
         doneProject.getUsedSkills().clear();
         doneProjectRepository.save(doneProject);
 
-        for(UsedSkill usedSkill : doneProjectDTO.getUsedSkills()) {
+        for(UsedSkill usedSkill : doneProjectDTO.getTags()) {
             doneProject.addUsedSkill(usedSkill);
             usedSkillRepository.save(usedSkill);
         }

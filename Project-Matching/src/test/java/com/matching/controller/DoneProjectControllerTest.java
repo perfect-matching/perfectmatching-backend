@@ -132,7 +132,7 @@ public class DoneProjectControllerTest {
         usedSkills.add(UsedSkill.builder().text("Spring").build());
 
         DoneProjectDTO doneProjectDTO = DoneProjectDTO.builder().title("돈 프로젝트 테스트 타이틀").summary("테스트").content("타이틀")
-                .usedSkills(usedSkills).startDate(LocalDateTime.now()).endDate(LocalDateTime.now()).socialUrl("Github").build();
+                .tags(usedSkills).startDate(LocalDateTime.now()).endDate(LocalDateTime.now()).socialUrl("Github").build();
 
         mockMvc.perform(post("/api/doneproject").header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -150,7 +150,7 @@ public class DoneProjectControllerTest {
         usedSkills.add(UsedSkill.builder().text("Spring").build());
 
         DoneProjectDTO doneProjectDTO = DoneProjectDTO.builder().title("돈 프로젝트 테스트 타이틀").summary("테스트").content("타이틀")
-                .usedSkills(usedSkills).startDate(LocalDateTime.now()).endDate(LocalDateTime.now()).socialUrl("Github").build();
+                .tags(usedSkills).startDate(LocalDateTime.now()).endDate(LocalDateTime.now()).socialUrl("Github").build();
 
         mockMvc.perform(post("/api/doneproject").header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -167,7 +167,7 @@ public class DoneProjectControllerTest {
         usedSkills.remove(UsedSkill.builder().text("Spring").build());
         usedSkills.add(UsedSkill.builder().text("Python").build());
 
-        doneProjectDTO.setUsedSkills(usedSkills);
+        doneProjectDTO.setTags(usedSkills);
 
         Long doneProjectIdx = doneProjectRepository.findByTitle("돈 프로젝트 테스트 타이틀").getIdx();
 
@@ -186,7 +186,7 @@ public class DoneProjectControllerTest {
         usedSkills.add(UsedSkill.builder().text("Spring").build());
 
         DoneProjectDTO doneProjectDTO = DoneProjectDTO.builder().title("돈 프로젝트 테스트 타이틀").summary("테스트").content("타이틀")
-                .usedSkills(usedSkills).startDate(LocalDateTime.now()).endDate(LocalDateTime.now()).socialUrl("Github").build();
+                .tags(usedSkills).startDate(LocalDateTime.now()).endDate(LocalDateTime.now()).socialUrl("Github").build();
 
         mockMvc.perform(post("/api/doneproject").header(SecurityConstants.TOKEN_HEADER, token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)

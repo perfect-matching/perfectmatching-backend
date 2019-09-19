@@ -919,3 +919,36 @@
     }
   }
   ```
+
+* `https://donghun-dev.kro.kr:8083/api/profile/{idx}/applyprojects`
+
+  * User {idx}의 지원한 프로젝트들의 정보를 가져옴.
+
+  * Success : Code 200
+
+  * Fail : Code 400
+
+  ```JSON
+  {
+    "_embedded": {
+        "datas": [
+            {
+                "userIdx": 1,
+                "projectIdx": 84,
+                "leaderNick": "testUser_3",
+                "profileImage": "https://donghun-dev.kro.kr:8083/api/image/USER_DEFAULT_PROFILE_IMG.png",
+                "title": "이러 이러한 Side Project 의 함께할 사람들을 찾고 있습니다. 84",
+                "status": "모집중",
+                "createdDate": "2019-09-19T23:09:27",
+                "position": "개발자",
+                "summary": "이러한 프로젝트에 참여할 인원을 모집합니다."
+            }
+        ]
+    },
+    "_links": {
+        "self": {
+            "href": "https://donghun-dev.kro.kr:8084/api/profile/1/applyprojects"
+        }
+    }
+    }
+  ```

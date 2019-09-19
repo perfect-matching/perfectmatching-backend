@@ -405,6 +405,12 @@ public class ProjectService {
         JwtResolver jwtResolver = new JwtResolver(request);
         User user = userRepository.findByEmail(jwtResolver.getUserByToken());
 
+        int currentRecruits = projectDTO.getDesignerRecruits() + projectDTO.getDeveloperRecruits() + projectDTO.getPlannerRecruits()
+                + projectDTO.getMarketerRecruits() + projectDTO.getEtcRecruits();
+
+        if(currentRecruits == 0)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         Project project = Project.builder().title(projectDTO.getTitle()).location(getLocation(projectDTO.getLocation())).summary(projectDTO.getSummary()).content(projectDTO.getContent())
                 .socialUrl(projectDTO.getSocialUrl()).designerRecruits(projectDTO.getDesignerRecruits()).developerRecruits(projectDTO.getDeveloperRecruits()).plannerRecruits(projectDTO.getPlannerRecruits())
                 .marketerRecruits(projectDTO.getMarketerRecruits()).etcRecruits(projectDTO.getEtcRecruits()).createdDate(LocalDateTime.now()).status(ProjectStatus.RECRUIT).build();
@@ -513,6 +519,14 @@ public class ProjectService {
             project.setStatus(ProjectStatus.COMPLETE);
 
         projectRepository.save(project);
+
+        List<UserProject> userProjectList = userProjectRepo.findByProjectAndStatus(project, UserProjectStatus.WAIT);
+
+        for(UserProject userProject : userProjectList) {
+            userProject.setStatus(UserProjectStatus.FAIL);
+            userProjectRepo.save(userProject);
+        }
+
         return new ResponseEntity<>(project, restDocs.getHttpHeaders(), HttpStatus.OK);
     }
 
