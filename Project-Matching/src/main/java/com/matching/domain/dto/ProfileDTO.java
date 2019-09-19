@@ -1,6 +1,7 @@
 package com.matching.domain.dto;
 
 import com.matching.domain.User;
+import com.matching.domain.UserSkill;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,9 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Builder
@@ -26,6 +30,8 @@ public class ProfileDTO {
     @Length(max = 500)
     private String summary;
 
+    @NotBlank
+    @Length(max = 100)
     private String profileImage;
 
     @NotBlank
@@ -33,15 +39,13 @@ public class ProfileDTO {
     @Length(max = 30, min = 3)
     private String email;
 
-    @NotBlank
-    @Length(max = 100)
-    private String profileImg;
-
-    @NotBlank
+    @NotNull
     private Integer investTime;
 
     @Length(max = 100)
     private String socialUrl;
+
+    private Set<UserSkill> userSkills = new HashSet<>();
 
     public ProfileDTO(User user) {
         this.userIdx = user.getIdx();
@@ -49,7 +53,6 @@ public class ProfileDTO {
         this.summary = user.getDescription();
         this.profileImage = user.getProfileImg();
         this.email = user.getEmail();
-        this.profileImg = user.getProfileImg();
         this.investTime = user.getInvestTime();
         this.socialUrl = user.getSocialUrl();
     }

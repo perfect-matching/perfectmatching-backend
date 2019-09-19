@@ -146,6 +146,7 @@ Project - Side Project Member Matching Platform
     | `/api/usedskills` | GET | DB에 등록되어 있는 UsedSkill들을 가져오기 위한 api | 
     | `/api/img/{fileName:.+}` | GET | 서버에 업로드되어 있는 이미지 파일을 가져오기 위한 api |
     | `/api/profile/{idx}/myprojects` | GET | 유저가 개설한 프로젝트를 가져오기 위한 api |
+    | `/api/profile/{idx}/applyprojects` | GET | 유저가 지원한 프로젝트를 가져오기 위한 api |
     | `/api/project/{idx}/joinmembers` | GET | 프로젝트의 지원자 목록을 가져오기 위한 api | 
 
 * [POST]( https://github.com/perfect-matching/perfectmatching-backend/blob/master/documents/post.md )
@@ -160,7 +161,9 @@ Project - Side Project Member Matching Platform
     | `/api/register/emailcheck` | POST | User 생성을 위해 회원가입시 이메일 중복 체크를 요청하는 api |
     | `/api/comment` | POST | Comment를 생성하기 위해 요청하는 api |
     | `/api/project/apply` | POST | 유저가 프로젝트에 지원하기 위해 요청하는 api |
-    | `/api/doneproject` | POST | DoneProject를 생성하기 위해 요청하는 api |
+    | `/api/doneproject` | POST | DoneProject를 생성하기 위해 요청하는 api | 
+    | `/api/modify/nickcheck` | POST | User 정보 수정시에 닉네임 중복 체크를 요청하는 api | 
+
 
 * [PUT]( https://github.com/perfect-matching/perfectmatching-backend/blob/master/documents/put.md )
 
@@ -172,6 +175,7 @@ Project - Side Project Member Matching Platform
     | `/api/project/{idx}/status?status={name}` | PUT | Project의 Status를 name에 따라 변경하기 위한 api |
     | `/api/project/matching` | PUT | Project 개설자가 지원자를 매칭 또는 거절을 요청하기 위한 api |
     | `/api/doneproject/{idx}` | PUT | DoneProject의 idx에 따라 DoneProject를 수정하기 위한 api |
+    | `/api/profile/{idx}` | PUT | User의 idx에 따라 Profile을 수정하기 위한 api | 
 
 * [DELETE]( https://github.com/perfect-matching/perfectmatching-backend/blob/master/documents/delete.md )
 

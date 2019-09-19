@@ -54,7 +54,7 @@ public class DoneProjectDTO {
 
     private String socialUrl;
 
-    private Set<UsedSkill> usedSkills = new HashSet<>();
+    private Set<UsedSkill> tags = new HashSet<>();
 
     public DoneProjectDTO(DoneProject doneProject) {
         this.doneProjectIdx = doneProject.getIdx();
@@ -69,6 +69,6 @@ public class DoneProjectDTO {
         this.startDate = doneProject.getStartDate();
         this.endDate = doneProject.getEndDate();
         this.socialUrl = doneProject.getSocialUrl();
-        this.usedSkills.addAll(doneProject.getUsedSkills());
+        this.tags.addAll(doneProject.getUsedSkills());
     }
 }

@@ -169,3 +169,17 @@
      ]
   }
   ```
+
+* `https://donghun-dev.kro.kr:8083/api/profile/modify/nickcheck`
+
+  * 회원정보 수정 닉네임 중복 체크 api form example
+
+  * Success : Code 200
+
+  * Fail : Code 400
+
+  ```JSON
+  {
+    "nick" : "admin"
+  }
+  ```
