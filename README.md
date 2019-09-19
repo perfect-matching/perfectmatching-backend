@@ -143,8 +143,8 @@ Project - Side Project Member Matching Platform
     | `/api/usedskill/{idx}` | GET | idx에 따른 UsedSkill을 가져오기 위한 api |
     | `/api/tags` | GET | DB에 등록되어 있는 Tag들을 가져오기 위한 api |
     | `/api/userskills` | GET | DB에 등록되어 있는 UserSkill들을 가져오기 위한 api |
-    | `/api/usedskills` | GET | DB에 등록되어 있는 UsedSkill들을 가져오기 위한 api | 
-    | `/api/img/{fileName:.+}` | GET | 서버에 업로드되어 있는 이미지 파일을 가져오기 위한 api |
+    | `/api/usedskills` | GET | DB에 등록되어 있는 UsedSkill들을 가져오기 위한 api |
+    | `/api/image/{fileName}` | GET | 서버에 업로드되어 있는 이미지 파일을 가져오기 위한 api |
     | `/api/profile/{idx}/myprojects` | GET | 유저가 개설한 프로젝트를 가져오기 위한 api |
     | `/api/profile/{idx}/applyprojects` | GET | 유저가 지원한 프로젝트를 가져오기 위한 api |
     | `/api/project/{idx}/joinmembers` | GET | 프로젝트의 지원자 목록을 가져오기 위한 api | 
@@ -171,7 +171,7 @@ Project - Side Project Member Matching Platform
     |:---:|:---:|:---:|
     | `/api/project/{idx}` | PUT | Project의 idx에 따라 Project를 수정하기 위한 api |
     | `/api/comment/{idx}` | PUT | Comment의 idx에 따라 Comment를 수정하기 위한 api |
-    | `/api/img` | PUT | 유저의 프로필 사진을 변경하기 위한 api |
+    | `/api/image` | PUT | 유저의 프로필 사진을 변경하기 위한 api |
     | `/api/project/{idx}/status?status={name}` | PUT | Project의 Status를 name에 따라 변경하기 위한 api |
     | `/api/project/matching` | PUT | Project 개설자가 지원자를 매칭 또는 거절을 요청하기 위한 api |
     | `/api/doneproject/{idx}` | PUT | DoneProject의 idx에 따라 DoneProject를 수정하기 위한 api |
@@ -183,8 +183,8 @@ Project - Side Project Member Matching Platform
     |:---:|:---:|:---:|
     | `/api/project/{idx}` | DELETE | Project의 idx에 따라 Projet를 삭제하기 위한 api |
     | `/api/comment/{idx}` | DELETE | Comment의 idx에 따라 Comment를 삭제하기 위한 api |
-    | `/api/img` | DELETE | User의 기존 프로필 이미지를 삭제하고 기본 이미지로 변경하기 위한 api |
-    | `/api/project/cancel/{idx}` | DELETE | Project의 Idx에 따라 지원취소를 요청하기 위한 api | 
-    | `/api/doneproject/{idx}` | DELETE | DoneProject의 idx에 따라 DoneProject를 삭제하기 위한 api | 
-    
+    | `/api/image` | DELETE | User의 기존 프로필 이미지를 삭제하고 기본 이미지로 변경하기 위한 api |
+    | `/api/project/cancel/{idx}` | DELETE | Project의 Idx에 따라 지원취소를 요청하기 위한 api |
+    | `/api/doneproject/{idx}` | DELETE | DoneProject의 idx에 따라 DoneProject를 삭제하기 위한 api |
+
 </details>
