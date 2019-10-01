@@ -11,7 +11,6 @@ import com.matching.domain.docs.RestDocs;
 import com.matching.domain.dto.DoneProjectDTO;
 import com.matching.domain.dto.ProfileDTO;
 import com.matching.domain.dto.ProcessingProjectDTO;
-import com.matching.domain.dto.UserDTO;
 import com.matching.domain.enums.PositionType;
 import com.matching.domain.enums.ProjectStatus;
 import com.matching.domain.enums.UserProjectStatus;
@@ -19,7 +18,6 @@ import com.matching.repository.DoneProjectRepository;
 import com.matching.repository.UserProjectRepository;
 import com.matching.repository.UserRepository;
 import com.matching.repository.UserSkillRepository;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -30,9 +28,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,15 +85,15 @@ public class ProfileService {
     public boolean findProfileProjects(Long idx) {
         if(userRepository.findByIdx(idx) == null)
             return  true;
-        return userProjectRepository.findByUserAndProject_StatusAndStatusAndPositionNotOrderByProjectDesc(userRepository.findByIdx(idx),
-                ProjectStatus.PROGRESS, UserProjectStatus.MATCHING, PositionType.LEADER) == null;
+        return userProjectRepository.findByUserAndProject_StatusNotAndStatusAndPositionNotOrderByProjectDesc(userRepository.findByIdx(idx),
+                ProjectStatus.COMPLETE, UserProjectStatus.MATCHING, PositionType.LEADER) == null;
     }
 
     public Resources<?> getProfileProjects(Long idx) {
         User user = userRepository.findByIdx(idx);
         List<ProcessingProjectDTO> list = new ArrayList<>();
-        List<UserProject> userProjectList = userProjectRepository.findByUserAndProject_StatusAndStatusAndPositionNotOrderByProjectDesc(user,
-                ProjectStatus.PROGRESS, UserProjectStatus.MATCHING, PositionType.LEADER);
+        List<UserProject> userProjectList = userProjectRepository.findByUserAndProject_StatusNotAndStatusAndPositionNotOrderByProjectDesc(user,
+                ProjectStatus.COMPLETE, UserProjectStatus.MATCHING, PositionType.LEADER);
 
         for(UserProject userProject : userProjectList) {
             list.add(new ProcessingProjectDTO(userProject));

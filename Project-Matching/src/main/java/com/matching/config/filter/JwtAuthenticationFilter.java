@@ -93,7 +93,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .claim("email", user.getUsername())
                 .claim("nickname", userRepository.findByEmail(user.getUsername()).getNick())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 999999999999999999L))
+                .setExpiration(new Date(System.currentTimeMillis() + 31536000))
                 .claim("role", roles)
                 .compact();
 

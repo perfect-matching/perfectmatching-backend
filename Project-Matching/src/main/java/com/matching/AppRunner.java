@@ -14,7 +14,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -24,25 +23,6 @@ import java.util.*;
 @Component
 @EnableConfigurationProperties
 public class AppRunner implements ApplicationRunner {
-    private final String TEST_CONTENT = "1. 동해물과 백두산이 마르고 닳도록 \n" +
-            "하느님이 보우하사 우리나라 만세\n" +
-            "무궁화 삼천리 화려 강산\n" +
-            "대한 사람 대한으로 길이 보전하세\n" +
-            "\n" +
-            "2. 남산 위에 저 소나무 철갑을 두른 듯 \n" +
-            "바람 서리 불변함은 우리 기상일세\n" +
-            "무궁화 삼천리 화려 강산 \n" +
-            "대한 사람 대한으로 길이 보전하세\n" +
-            "\n" +
-            "3. 가을 하늘 공활한데 높고 구름 없이 \n" +
-            "밝은 달은 우리 가슴 일편단심일세\n" +
-            "무궁화 삼천리 화려 강산\n" +
-            "대한 사람 대한으로 길이 보전하세\n" +
-            "\n" +
-            "4. 이 기상과 이 맘으로 충성을 다하여 \n" +
-            "괴로우나 즐거우나 나라 사랑하세\n" +
-            "무궁화 삼천리 화려 강산\n" +
-            "대한 사람 대한으로 길이 보전하세";
 
     @Autowired
     private UserRepository userRepository;
@@ -75,35 +55,42 @@ public class AppRunner implements ApplicationRunner {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public void run(ApplicationArguments args) throws IOException {
+    public void run(ApplicationArguments args) {
         Random random = new Random();
         final String profileImg = "https://donghun-dev.kro.kr:8083/api/image/USER_DEFAULT_PROFILE_IMG.png";
 
-        List<String> list = getTagsDataSet();
+        List<String> tags = getDataSet("tag");
+        List<String> titles = getDataSet("title");
+        List<String> userNames = getDataSet("user");
 
-        for(String tag : list) {
+        for (String tag : tags) {
             tagRepository.save(Tag.builder().text(tag).build());
         }
 
-        int tagSize = list.size();
+        int tagSize = tags.size();
 
-        IntStream.rangeClosed(1, 40).forEach(index -> userRepository.save(User.builder().email("test" + index + "@email.com")
-                .nick("testUser_" + index).password(passwordEncoder.encode("testpassword")).createdDate(LocalDateTime.now()).profileImg(profileImg)
-                .description("저는 이러한 사람입니다.").investTime(4).socialUrl("https://github.com/testUser").build()));
+        IntStream.rangeClosed(1, 40).forEach(index -> {
+
+            String name = userNames.remove(random.nextInt(userNames.size()));
+
+            userRepository.save(User.builder().email(name + "@email.com")
+                    .nick(name).password(passwordEncoder.encode("testpassword")).createdDate(LocalDateTime.now()).profileImg(profileImg)
+                    .description("저는 이러한 사람입니다.").investTime(4).socialUrl("https://github.com/testUser").build());
+        });
 
         IntStream.rangeClosed(1, 300).forEach(index -> userSkillRepository.save(UserSkill.builder().user(userRepository.findByIdx
-                ((long)random.nextInt(40)+1)).text(tagRepository.findByIdx((long)(random.nextInt(tagSize) + 1)).getText()).build()));
+                ((long) random.nextInt(40) + 1)).text(tagRepository.findByIdx((long) (random.nextInt(tagSize) + 1)).getText()).build()));
 
-        IntStream.rangeClosed(1, 200).forEach(this::createProjectTestData);
+        IntStream.rangeClosed(1, 200).forEach(index -> createProjectTestData(titles));
 
         IntStream.rangeClosed(1, 200).forEach(index -> doneProjectRepository.save(DoneProject.builder().user(userRepository.findByIdx((
-                long)random.nextInt(40)+1)).title("테스트 프로젝트 " + index).summary("테스트 프로젝트 " + index + "입니다.").content("테스트 내용 " + index).
+                long) random.nextInt(40) + 1)).title("테스트 프로젝트 " + index).summary("테스트 프로젝트 " + index + "입니다.").content("테스트 내용 " + index).
                 createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now()).projectIdx(projectRepository.findByIdx((
-                long)random.nextInt(200)+1).getIdx()).build()));
+                long) random.nextInt(200) + 1).getIdx()).build()));
 
         IntStream.rangeClosed(1, 300).forEach(index -> {
             usedSkillRepository.save(UsedSkill.builder().doneProject(doneProjectRepository.findByIdx((long) random.nextInt(200) + 1))
-                    .text(tagRepository.findByIdx((long)(random.nextInt(tagSize) + 1)).getText()).build());
+                    .text(tagRepository.findByIdx((long) (random.nextInt(tagSize) + 1)).getText()).build());
         });
 
         IntStream.rangeClosed(1, 400).forEach(index -> createProjectTagTestData());
@@ -114,13 +101,24 @@ public class AppRunner implements ApplicationRunner {
 
     }
 
-    private void createProjectTestData(int index) {
+    private void createProjectTestData(List<String> titles) {
         Random random = new Random();
-        String title = "이러 이러한 Side Project 의 함께할 사람들을 찾고 있습니다. ";
+        String title = titles.remove(random.nextInt(titles.size()));
         User user = userRepository.findByIdx(random.nextInt(40) + 1);
 
-        Project project = Project.builder().content(TEST_CONTENT).title(title + index).
-                summary("이러한 프로젝트에 참여할 인원을 모집합니다.").
+        String username = user.getNick();
+
+        Project project = Project.builder().content("안녕하세요 :D<br>" +
+                "부산에서 서버 사이드 개발자로 활동하고 있는 " + username + "입니다.<br>"
+                + title + "에서 함께 프로젝트를 진행하실 분들을 모집합니다.<br>" +
+                "<br>" +
+                "현재 저희 프로젝트는 저를 포함한 서버 개발자 2명, 디자이너 2명, 기획자 1명으로 구성되어 있습니다.<br>" +
+                "저희는 서버는 Spring Boot, 데이터베이스는 Mysql로 진행 할 예정이며, 프론트 엔드 개발자님을 기다리고 있습니다.<br>" +
+                "프론트 엔드의 기술은 현재 정해진 바가 없어서, 원하시는 기술 사용하시면 될거 같습니다.<br>" +
+                "저희의 REST API를 이용한 웹서비스를 런칭 하는 것을 목표로 하고 있습니다.<br>" +
+                "<br>" +
+                "많은 지원과 관심 부탁드립니다.<br>").title(title + "에서 진행하는 사이드 프로젝트 팀원을 구합니다.").
+                summary(title + "에서 프론트앤드 프로젝트  ").
                 location(LocationType.getRandomLocationType()).createdDate(LocalDateTime.now()).status(ProjectStatus.getRandomProjectStatus()).leader(user).
                 developerRecruits(random.nextInt(6)).designerRecruits(random.nextInt(6)).plannerRecruits(random.nextInt(6)).
                 marketerRecruits(random.nextInt(6)).etcRecruits(random.nextInt(6)).socialUrl("https://github.com/testUser/testProject").build();
@@ -139,12 +137,12 @@ public class AppRunner implements ApplicationRunner {
     private void createUserProjectTestData() {
         Random random = new Random();
 
-        long userIdx = random.nextInt(40)+1;
-        long projectIdx = random.nextInt(200)+1;
+        long userIdx = random.nextInt(40) + 1;
+        long projectIdx = random.nextInt(200) + 1;
 
         UserProjectKey key = new UserProjectKey(userIdx, projectIdx);
 
-        if(!userProjectRepository.findById(key).isPresent()) {
+        if (!userProjectRepository.findById(key).isPresent()) {
             User user = userRepository.findByIdx(userIdx);
             Project project = projectRepository.findByIdx(projectIdx);
 
@@ -158,8 +156,8 @@ public class AppRunner implements ApplicationRunner {
     private void createCommentTestData(int index) {
         Random random = new Random();
 
-        User user = userRepository.findByIdx((long) (random.nextInt(40)+1));
-        Project project = projectRepository.findByIdx((long) (random.nextInt(200)+1));
+        User user = userRepository.findByIdx((long) (random.nextInt(40) + 1));
+        Project project = projectRepository.findByIdx((long) (random.nextInt(200) + 1));
         Comment comment = Comment.builder().content("테스트 댓글 " + index).createdDate(LocalDateTime.now())
                 .writer(user).project(project).build();
 
@@ -169,12 +167,12 @@ public class AppRunner implements ApplicationRunner {
     private void createProjectTagTestData() {
         Random random = new Random();
 
-        long projectIdx = random.nextInt(200)+1;
-        long tagIdx = random.nextInt(465)+1;
+        long projectIdx = random.nextInt(200) + 1;
+        long tagIdx = random.nextInt(1198) + 1;
 
         ProjectTagKey key = new ProjectTagKey(projectIdx, tagIdx);
 
-        if(!projectTagRepository.findById(key).isPresent()) {
+        if (!projectTagRepository.findById(key).isPresent()) {
             Project project = projectRepository.findByIdx(projectIdx);
             Tag tag = tagRepository.findByIdx(tagIdx);
 
@@ -184,10 +182,18 @@ public class AppRunner implements ApplicationRunner {
 
     }
 
-    private List<String> getTagsDataSet() throws IOException {
+    private List<String> getDataSet(String subject) {
         List<String> list = new ArrayList<>();
         try {
-            File file = new File("tags.txt");
+            File file = null;
+
+            if (subject.equals("tag"))
+                file = new File("tags.txt");
+            else if (subject.equals("user"))
+                file = new File("name.txt");
+            else
+                file = new File("title.txt");
+
             FileReader filereader = new FileReader(file);
             BufferedReader bufReader = new BufferedReader(filereader);
             String line = "";
@@ -204,4 +210,5 @@ public class AppRunner implements ApplicationRunner {
 
         return list;
     }
+
 }

@@ -45,7 +45,7 @@ public class RegisterService {
 
     public ResponseEntity<?> postUser(UserDTO userDTO, RestDocs restDocs) {
         String defaultProfileImg = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/img/")
+                .path("/api/image/")
                 .path("USER_DEFAULT_PROFILE_IMG.png")
                 .toUriString();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
