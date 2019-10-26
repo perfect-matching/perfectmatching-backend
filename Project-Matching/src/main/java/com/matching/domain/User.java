@@ -25,23 +25,23 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
 
-    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonBackReference
     private Set<Comment> comments = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonBackReference
     private Set<UserProject> userProjects = new HashSet<>();
 
-    @OneToMany(mappedBy = "leader", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "leader", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonBackReference
     private Set<Project> projects = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonBackReference
     private Set<DoneProject> doneProjects = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonBackReference
     private Set<UserSkill> userSkills = new HashSet<>();
 

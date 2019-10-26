@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     httpBasic().
                 and()
                     .authorizeRequests()
-                        .antMatchers(HttpMethod.GET, "/api/projects", "/api/tags", "/api/image/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/api/projects", "/api/tags", "/api/image/**", "/h2-console").permitAll()
                         .antMatchers(HttpMethod.POST, "/api/register/**").permitAll()
                         .anyRequest().hasAuthority("USER")
                 .and()

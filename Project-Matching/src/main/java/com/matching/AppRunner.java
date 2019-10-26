@@ -66,38 +66,38 @@ public class AppRunner implements ApplicationRunner {
         for (String tag : tags) {
             tagRepository.save(Tag.builder().text(tag).build());
         }
-
-        int tagSize = tags.size();
-
-        IntStream.rangeClosed(1, 40).forEach(index -> {
-
-            String name = userNames.remove(random.nextInt(userNames.size()));
-
-            userRepository.save(User.builder().email(name + "@email.com")
-                    .nick(name).password(passwordEncoder.encode("testpassword")).createdDate(LocalDateTime.now()).profileImg(profileImg)
-                    .description("저는 이러한 사람입니다.").investTime(4).socialUrl("https://github.com/testUser").build());
-        });
-
-        IntStream.rangeClosed(1, 300).forEach(index -> userSkillRepository.save(UserSkill.builder().user(userRepository.findByIdx
-                ((long) random.nextInt(40) + 1)).text(tagRepository.findByIdx((long) (random.nextInt(tagSize) + 1)).getText()).build()));
-
-        IntStream.rangeClosed(1, 200).forEach(index -> createProjectTestData(titles));
-
-        IntStream.rangeClosed(1, 200).forEach(index -> doneProjectRepository.save(DoneProject.builder().user(userRepository.findByIdx((
-                long) random.nextInt(40) + 1)).title("테스트 프로젝트 " + index).summary("테스트 프로젝트 " + index + "입니다.").content("테스트 내용 " + index).
-                createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now()).projectIdx(projectRepository.findByIdx((
-                long) random.nextInt(200) + 1).getIdx()).build()));
-
-        IntStream.rangeClosed(1, 300).forEach(index -> {
-            usedSkillRepository.save(UsedSkill.builder().doneProject(doneProjectRepository.findByIdx((long) random.nextInt(200) + 1))
-                    .text(tagRepository.findByIdx((long) (random.nextInt(tagSize) + 1)).getText()).build());
-        });
-
-        IntStream.rangeClosed(1, 400).forEach(index -> createProjectTagTestData());
-
-        IntStream.rangeClosed(1, 300).forEach(index -> createUserProjectTestData());
-
-        IntStream.rangeClosed(1, 400).forEach(this::createCommentTestData);
+//
+//        int tagSize = tags.size();
+//
+//        IntStream.rangeClosed(1, 40).forEach(index -> {
+//
+//            String name = userNames.remove(random.nextInt(userNames.size()));
+//
+//            userRepository.save(User.builder().email(name + "@email.com")
+//                    .nick(name).password(passwordEncoder.encode("testpassword")).createdDate(LocalDateTime.now()).profileImg(profileImg)
+//                    .description("저는 이러한 사람입니다.").investTime(4).socialUrl("https://github.com/testUser").build());
+//        });
+//
+//        IntStream.rangeClosed(1, 300).forEach(index -> userSkillRepository.save(UserSkill.builder().user(userRepository.findByIdx
+//                ((long) random.nextInt(40) + 1)).text(tagRepository.findByIdx((long) (random.nextInt(tagSize) + 1)).getText()).build()));
+//
+//        IntStream.rangeClosed(1, 200).forEach(index -> createProjectTestData(titles));
+//
+//        IntStream.rangeClosed(1, 200).forEach(index -> doneProjectRepository.save(DoneProject.builder().user(userRepository.findByIdx((
+//                long) random.nextInt(40) + 1)).title("테스트 프로젝트 " + index).summary("테스트 프로젝트 " + index + "입니다.").content("테스트 내용 " + index).
+//                createdDate(LocalDateTime.now()).startDate(LocalDateTime.now()).endDate(LocalDateTime.now()).projectIdx(projectRepository.findByIdx((
+//                long) random.nextInt(200) + 1).getIdx()).build()));
+//
+//        IntStream.rangeClosed(1, 300).forEach(index -> {
+//            usedSkillRepository.save(UsedSkill.builder().doneProject(doneProjectRepository.findByIdx((long) random.nextInt(200) + 1))
+//                    .text(tagRepository.findByIdx((long) (random.nextInt(tagSize) + 1)).getText()).build());
+//        });
+//
+//        IntStream.rangeClosed(1, 400).forEach(index -> createProjectTagTestData());
+//
+//        IntStream.rangeClosed(1, 300).forEach(index -> createUserProjectTestData());
+//
+//        IntStream.rangeClosed(1, 400).forEach(this::createCommentTestData);
 
     }
 

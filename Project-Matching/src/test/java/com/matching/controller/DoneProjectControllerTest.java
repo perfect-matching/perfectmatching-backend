@@ -11,10 +11,13 @@ import com.matching.repository.UserRepository;
 import com.matching.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,6 +41,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@AutoConfigureTestDatabase
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "donghun-dev.kro.kr")
 public class DoneProjectControllerTest {
 
     @Autowired
@@ -101,6 +106,12 @@ public class DoneProjectControllerTest {
                 .setExpiration(new Date(System.currentTimeMillis() + 1800000))
                 .claim("role", roles)
                 .compact();
+    }
+
+    @After
+    public void setDB() {
+        User user = userRepository.findByEmail(userDetails.getUsername());
+        userRepository.deleteById(user.getIdx());
     }
 
     @Test

@@ -1,9 +1,12 @@
+
 plugins {
     id 'org.springframework.boot' version '2.1.6.RELEASE'
     id 'java'
+    id "org.asciidoctor.convert" version "1.5.3"
 }
 
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.asciidoctor.convert'
 
 group = 'com.matching'
 version = '0.0.1-SNAPSHOT'
@@ -19,12 +22,34 @@ configurations {
     }
 }
 
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+test {
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
+}
+
 bootRun {
     main = 'com.matching.MatchingApplication'
 }
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 
@@ -62,5 +87,6 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 }
-

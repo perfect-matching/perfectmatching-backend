@@ -1,14 +1,16 @@
 ## GET - JSON Data Form Example
 
-* `https://donghun-dev.kro.kr:8083/api/projects`
+* `https://donghun:8083/api/projects` 
 
-  * 프로젝트 12개의 정보 출력.
+  + 프로젝트 12개의 정보 출력.
 
-  * Success : Code 200
+  + Success : Code 200
 
-  * Fail : Code 400
+  + Fail : Code 400
 
-  ```JSON
+  
+
+``` JSON
   {
     "_embedded": {
       "datas": [
@@ -35,10 +37,10 @@
           ],
           "_links": {
             "self": {
-              "href": "https://donghun-dev.kro.kr:8084/api/project/200"
+              "href": "https://donghun.dev:8083/api/project/200"
             },
             "Leader Profile": {
-              "href": "https://donghun-dev.kro.kr:8084/api/profile/8"
+              "href": "https://donghun.dev:8083/api/profile/8"
             }
           }
         },
@@ -65,10 +67,10 @@
           ],
           "_links": {
             "self": {
-              "href": "https://donghun-dev.kro.kr:8084/api/project/199"
+              "href": "https://donghun.dev:8083/api/project/199"
             },
             "Leader Profile": {
-              "href": "https://donghun-dev.kro.kr:8084/api/profile/32"
+              "href": "https://donghun.dev:8083/api/profile/32"
             }
           }
         },
@@ -77,10 +79,10 @@
     },
     "_links": {
       "self": {
-        "href": "https://donghun-dev.kro.kr:8084/api/projects"
+        "href": "https://donghun.dev:8083/api/projects"
       },
       "next": {
-        "href": "https://donghun-dev.kro.kr:8084/api/projects?offset=1"
+        "href": "https://donghun.dev:8083/api/projects?offset=1"
       }
     },
     "page": {
@@ -92,79 +94,73 @@
   }
   ```
 
+* `https://donghun.dev:8083/api/projects?offset=1` 
 
-* `https://donghun-dev.kro.kr:8083/api/projects?offset=1`
+  + 데이터 출력은 `/api/projects` 요청시와 동일하고 다음 항목들을 가져옴.
 
-  * 데이터 출력은 `/api/projects` 요청시와 동일하고 다음 항목들을 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+* `https://donghun.dev:8083/api/projects?location=SEOUL` 
 
+  + 데이터 출력은 `/api/projects` 요청시와 동일하고 지역 정보가 서울인 항목을 가져옴.
 
-* `https://donghun-dev.kro.kr:8083/api/projects?location=SEOUL`
+  + Success : Code 200
 
-  * 데이터 출력은 `/api/projects` 요청시와 동일하고 지역 정보가 서울인 항목을 가져옴.
+  + Fail : Code 400
 
-  * Success : Code 200
+* `https://donghun.dev:8083/api/projects?location=SEOUL&offset=1` 
 
-  * Fail : Code 400
+  + 데이터 출력은 `/api/projects` 요청시와 동일하고 지역 정보가 서울인 항목의 다음 정보들을 가져옴.
 
+  + Success : Code 200
 
-* `https://donghun-dev.kro.kr:8083/api/projects?location=SEOUL&offset=1`
+  + Fail : Code 400
 
-  * 데이터 출력은 `/api/projects` 요청시와 동일하고 지역 정보가 서울인 항목의 다음 정보들을 가져옴.
+* `https://donghun.dev:8083/api/projects?position=DEVELOPER` 
 
-  * Success : Code 200
+  + 데이터 출력은 `/api/projects` 요청시와 동일하고 포지션 정보가 developer를 포함하고 있는 항목의 정보를 가져옴.
 
-  * Fail : Code 400
+  + Success : Code 200
 
+  + Fail : Code 400
 
-* `https://donghun-dev.kro.kr:8083/api/projects?position=DEVELOPER`
+* `https://donghun.dev:8083/api/projects?position=DEVELOPER&offset=1` 
 
-  * 데이터 출력은 `/api/projects` 요청시와 동일하고 포지션 정보가 developer를 포함하고 있는 항목의 정보를 가져옴.
+  + 데이터 출력은 `/api/projects` 요청시와 동일하고 포지션 정보가 developer를 포함하고 있는 다음 항목 정보들을 가져옴.
 
-  * Success : Code 200
+  + Success : Code 200
 
-  * Fail : Code 400
+  + Fail : Code 400
 
+* `https://donghun.dev:8083/api/projects?position=DEVELOPER&location=SEOUL` 
 
-* `https://donghun-dev.kro.kr:8083/api/projects?position=DEVELOPER&offset=1`
+  + 데이터 출력은 `/api/projects` 요청시와 동일하고 포지션 정보가 developer를 포함하고 지역 정보가 서울인 항목의 정보를 가져옴.
 
-  * 데이터 출력은 `/api/projects` 요청시와 동일하고 포지션 정보가 developer를 포함하고 있는 다음 항목 정보들을 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+* `https://donghun.dev:8083/api/projects?position=DEVELOPER&location=SEOUL&offset=1` 
 
+  + 데이터 출력은 `/api/projects` 요청시와 동일하고 포지션 정보가 developer를 포함하고 지역 정보가 서울인 항목의 다음 정보들을 가져옴.
 
-* `https://donghun-dev.kro.kr:8083/api/projects?position=DEVELOPER&location=SEOUL`
+  + Success : Code 200
 
-  * 데이터 출력은 `/api/projects` 요청시와 동일하고 포지션 정보가 developer를 포함하고 지역 정보가 서울인 항목의 정보를 가져옴.
+  + Fail : Code 400
 
-  * Success : Code 200
+* `https://donghun.dev:8083/api/project/1` 
 
-  * Fail : Code 400
+  + 프로젝트 {idx}의 상세 정보를 가져옴.
 
+  + Success : Code 200
 
-* `https://donghun-dev.kro.kr:8083/api/projects?position=DEVELOPER&location=SEOUL&offset=1`
+  + Fail : Code 400
 
-  * 데이터 출력은 `/api/projects` 요청시와 동일하고 포지션 정보가 developer를 포함하고 지역 정보가 서울인 항목의 다음 정보들을 가져옴.
+  
 
-  * Success : Code 200
-
-  * Fail : Code 400
-
-
-* `https://donghun-dev.kro.kr:8083/api/project/1`
-
-  * 프로젝트 {idx}의 상세 정보를 가져옴.
-
-  * Success : Code 200
-
-  * Fail : Code 400
-
-  ```JSON
+``` JSON
   {
     "projectIdx": 1,
     "title": "프로젝트 인원을 모집합니다.",
@@ -207,34 +203,35 @@
     ],
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/project/1"
+            "href": "https://donghun.dev:8083/api/project/1"
         },
         "Leader Profile": {
-            "href": "https://donghun-dev.kro.kr:8084/api/profile/22"
+            "href": "https://donghun.dev:8083/api/profile/22"
         },
         "Comments": {
-            "href": "https://donghun-dev.kro.kr:8084/api/project/1/comments"
+            "href": "https://donghun.dev:8083/api/project/1/comments"
         },
         "Members": {
-            "href": "https://donghun-dev.kro.kr:8084/api/project/1/members"
+            "href": "https://donghun.dev:8083/api/project/1/members"
         },
         "Tags": {
-            "href": "https://donghun-dev.kro.kr:8084/api/project/1/tags"
+            "href": "https://donghun.dev:8083/api/project/1/tags"
         }
     }
   }
   ```
 
+* `https://donghun.dev:8083/api/project/1/comments` 
 
-* `https://donghun-dev.kro.kr:8083/api/project/1/comments`
+  + 프로젝트 {idx}의 댓글들을 가져옴.
 
-  * 프로젝트 {idx}의 댓글들을 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+  
 
-  ```JSON
+``` JSON
   {
     "_embedded": {
         "datas": [
@@ -249,7 +246,7 @@
                 "modifiedDate": null,
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/comment/47"
+                        "href": "https://donghun.dev:8083/api/comment/47"
                     }
                 }
             },
@@ -264,7 +261,7 @@
                 "modifiedDate": null,
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/comment/219"
+                        "href": "https://donghun.dev:8083/api/comment/219"
                     }
                 }
             }
@@ -272,22 +269,23 @@
     },
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/project/1/comments"
+            "href": "https://donghun.dev:8083/api/project/1/comments"
         }
     }
   }
   ```
 
+* `https://donghun.dev:8083/api/project/1/members` 
 
-* `https://donghun-dev.kro.kr:8083/api/project/1/members`
+  + 프로젝트 {idx}의 구성원들의 정보를 가져옴.
 
-  * 프로젝트 {idx}의 구성원들의 정보를 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+  
 
-  ```JSON
+``` JSON
   {
     "_embedded": {
         "datas": [
@@ -298,7 +296,7 @@
                 "position": "마케터",
                 "_links": {
                     "Profile": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/profile/22"
+                        "href": "https://donghun.dev:8083/api/profile/22"
                     }
                 }
             }
@@ -306,22 +304,23 @@
     },
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/project/1/members"
+            "href": "https://donghun.dev:8083/api/project/1/members"
         }
     }
   }
   ```
 
+* `https://donghun.dev:8083/api/project/1/tags` 
 
-* `https://donghun-dev.kro.kr:8083/api/project/1/tags`
+  + 프로젝트 {idx}의 태그들의 정보를 가져옴.
 
-  * 프로젝트 {idx}의 태그들의 정보를 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+  
 
-  ```JSON
+``` JSON
   {
     "_embedded": {
         "datas": [
@@ -330,7 +329,7 @@
                 "text": "테스트 태그 36",
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/tag/36"
+                        "href": "https://donghun.dev:8083/api/tag/36"
                     }
                 }
             },
@@ -339,7 +338,7 @@
                 "text": "테스트 태그 56",
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/tag/56"
+                        "href": "https://donghun.dev:8083/api/tag/56"
                     }
                 }
             },
@@ -348,7 +347,7 @@
                 "text": "테스트 태그 76",
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/tag/76"
+                        "href": "https://donghun.dev:8083/api/tag/76"
                     }
                 }
             },
@@ -357,7 +356,7 @@
                 "text": "테스트 태그 95",
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/tag/95"
+                        "href": "https://donghun.dev:8083/api/tag/95"
                     }
                 }
             }
@@ -365,22 +364,23 @@
     },
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/project/1/tags"
+            "href": "https://donghun.dev:8083/api/project/1/tags"
         }
     }
   }
   ```
 
+* `https://donghun.dev:8083/api/profile/1` 
 
-* `https://donghun-dev.kro.kr:8083/api/profile/1`
+  + 유저의 {idx}의 프로필 정보를 가져옴.
 
-  * 유저의 {idx}의 프로필 정보를 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+  
 
-  ```JSON
+``` JSON
   {
     "userIdx": 1,
     "nickname": "testUser_1",
@@ -391,31 +391,32 @@
     "socialUrl": "https://github.com/testUser",
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/profile/1"
+            "href": "https://donghun.dev:8083/api/profile/1"
         },
         "Profile Skills": {
-            "href": "https://donghun-dev.kro.kr:8084/api/profile/1/skills"
+            "href": "https://donghun.dev:8083/api/profile/1/skills"
         },
         "Processing Projects": {
-            "href": "https://donghun-dev.kro.kr:8084/api/profile/1/projects"
+            "href": "https://donghun.dev:8083/api/profile/1/projects"
         },
         "Done Projects": {
-            "href": "https://donghun-dev.kro.kr:8084/api/profile/1/doneprojects"
+            "href": "https://donghun.dev:8083/api/profile/1/doneprojects"
         }
     }
   }
   ```
 
+* `https://donghun.dev:8083/api/profile/1/skills` 
 
-* `https://donghun-dev.kro.kr:8083/api/profile/1/skills`
+  + 유저의 {idx}의 기술 정보를 가져옴.
 
-  * 유저의 {idx}의 기술 정보를 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+  
 
-  ```JSON
+``` JSON
   {
     "_embedded": {
         "datas": [
@@ -424,7 +425,7 @@
                 "text": "테스트 스킬 48",
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/userskill/48"
+                        "href": "https://donghun.dev:8083/api/userskill/48"
                     }
                 }
             },
@@ -433,7 +434,7 @@
                 "text": "테스트 스킬 85",
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/userskill/85"
+                        "href": "https://donghun.dev:8083/api/userskill/85"
                     }
                 }
             }
@@ -441,22 +442,23 @@
     },
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/profile/1/skills"
+            "href": "https://donghun.dev:8083/api/profile/1/skills"
         }
     }
   }
   ```
 
+* `https://donghun.dev:8083/api/profile/1/projects` 
 
-* `https://donghun-dev.kro.kr:8083/api/profile/1/projects`
+  + 유저의 {idx}의 진행중인 프로젝트의 정보들을 가져옴.
 
-  * 유저의 {idx}의 진행중인 프로젝트의 정보들을 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+  
 
-  ```JSON
+``` JSON
   {
     "_embedded": {
         "datas": [
@@ -484,22 +486,23 @@
     },
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/profile/1/projects"
+            "href": "https://donghun.dev:8083/api/profile/1/projects"
         }
     }
   }
   ```
 
+* `https://donghun.dev:8083/api/profile/1/doneprojects` 
 
-* `https://donghun-dev.kro.kr:8083/api/profile/1/doneprojects`
+  + 유저의 {idx}의 진행했던 프로젝트의 정보들을 가져옴.
 
-  * 유저의 {idx}의 진행했던 프로젝트의 정보들을 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+  
 
-  ```JSON
+``` JSON
   {
     "_embedded": {
         "datas": [
@@ -523,7 +526,7 @@
                 ],
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/doneproject/77"
+                        "href": "https://donghun.dev:8083/api/doneproject/77"
                     }
                 }
             },
@@ -542,7 +545,7 @@
                 "usedSkills": [],
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/doneproject/103"
+                        "href": "https://donghun.dev:8083/api/doneproject/103"
                     }
                 }
             }
@@ -550,22 +553,23 @@
     },
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/profile/1/doneprojects"
+            "href": "https://donghun.dev:8083/api/profile/1/doneprojects"
         }
     }
   }
   ```
 
+* `https://donghun.dev:8083/api/comment/1` 
 
-* `https://donghun-dev.kro.kr:8083/api/comment/1`
+  + 댓글 {idx}의 정보를 가져옴.
 
-  * 댓글 {idx}의 정보를 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+  
 
-  ```JSON
+``` JSON
   {
     "commentIdx": 1,
     "userName": "testUser_24",
@@ -577,22 +581,23 @@
     "modifiedDate": null,
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/comment/1"
+            "href": "https://donghun.dev:8083/api/comment/1"
         }
     }
   }
   ```
 
+* `https://donghun.dev:8083/api/doneproject/1` 
 
-* `https://donghun-dev.kro.kr:8083/api/doneproject/1`
+  + 진행했던 프로젝트 {idx}의 정보를 가져옴.
 
-  * 진행했던 프로젝트 {idx}의 정보를 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+  
 
-  ```JSON
+``` JSON
   {
     "commentIdx": 1,
     "userName": "testUser_24",
@@ -604,22 +609,23 @@
     "modifiedDate": null,
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/comment/1"
+            "href": "https://donghun.dev:8083/api/comment/1"
         }
     }
   }
   ```
 
+* `https://donghun.dev:8083/api/doneproject/1/usedskills` 
 
-* `https://donghun-dev.kro.kr:8083/api/doneproject/1/usedskills`
+  + 진행했던 프로젝트 {idx}의 태그 정보들을 가져옴.
 
-  * 진행했던 프로젝트 {idx}의 태그 정보들을 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+  
 
-  ```JSON
+``` JSON
   {
     "_embedded": {
         "datas": [
@@ -628,7 +634,7 @@
                 "text": "테스트 스킬 133",
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/usedskill/133"
+                        "href": "https://donghun.dev:8083/api/usedskill/133"
                     }
                 }
             },
@@ -637,7 +643,7 @@
                 "text": "테스트 스킬 152",
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/usedskill/152"
+                        "href": "https://donghun.dev:8083/api/usedskill/152"
                     }
                 }
             }
@@ -645,85 +651,89 @@
     },
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/doneproject/1/usedskills"
+            "href": "https://donghun.dev:8083/api/doneproject/1/usedskills"
         }
     }
   }
   ```
 
+* `https://donghun.dev:8083/api/tag/1` 
 
-* `https://donghun-dev.kro.kr:8083/api/tag/1`
+  + {idx}의 태그 정보를 가져옴.
 
-  * {idx}의 태그 정보를 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+  
 
-  ```JSON
+``` JSON
   {
     "idx": 1,
     "text": "테스트 태그 1",
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/tag/1"
+            "href": "https://donghun.dev:8083/api/tag/1"
         }
     }
   }
   ```
 
+* `https://donghun.dev:8083/api/userskill/1` 
 
-* `https://donghun-dev.kro.kr:8083/api/userskill/1`
+  + {idx}의 태그 정보를 가져옴.
 
-  * {idx}의 태그 정보를 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+  
 
-  ```JSON
+``` JSON
   {
     "idx": 1,
     "text": "테스트 스킬 1",
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/userskill/1"
+            "href": "https://donghun.dev:8083/api/userskill/1"
         }
     }
   }
   ```
 
+* `https://donghun.dev:8083/api/usedskill/1` 
 
-* `https://donghun-dev.kro.kr:8083/api/usedskill/1`
+  + {idx}의 태그 정보를 가져옴.
 
-  * {idx}의 태그 정보를 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+  
 
-  ```JSON
+``` JSON
   {
     "idx": 1,
     "text": "테스트 스킬 1",
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/usedskill/1"
+            "href": "https://donghun.dev:8083/api/usedskill/1"
         }
     }
   }
   ```
 
+* `https://donghun.dev:8083/api/tags` 
 
-* `https://donghun-dev.kro.kr:8083/api/tags`
+  + 모든 태그의 정보들을 가져옴.
 
-  * 모든 태그의 정보들을 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+  
 
-  ```JSON
+``` JSON
   {
     "_embedded": {
         "datas": [
@@ -732,7 +742,7 @@
                 "text": "테스트 태그 1",
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/tag/1"
+                        "href": "https://donghun.dev:8083/api/tag/1"
                     }
                 }
             },
@@ -741,7 +751,7 @@
                 "text": "테스트 태그 2",
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/tag/2"
+                        "href": "https://donghun.dev:8083/api/tag/2"
                     }
                 }
             }
@@ -749,22 +759,23 @@
     },
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/tags"
+            "href": "https://donghun.dev:8083/api/tags"
         }
     }
   }
   ```
 
+* `https://donghun.dev:8083/api/userskills` 
 
-* `https://donghun-dev.kro.kr:8083/api/userskills`
+  + {idx}의 태그 정보를 가져옴.
 
-  * {idx}의 태그 정보를 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+  
 
-  ```JSON
+``` JSON
   {
     "_embedded": {
         "datas": [
@@ -773,7 +784,7 @@
                 "text": "테스트 스킬 1",
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/userskill/1"
+                        "href": "https://donghun.dev:8083/api/userskill/1"
                     }
                 }
             },
@@ -782,7 +793,7 @@
                 "text": "테스트 스킬 2",
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/userskill/2"
+                        "href": "https://donghun.dev:8083/api/userskill/2"
                     }
                 }
             }
@@ -790,22 +801,23 @@
     },
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/userskills"
+            "href": "https://donghun.dev:8083/api/userskills"
         }
     }
   }
   ```
 
+* `https://donghun.dev:8083/api/usedskills` 
 
-* `https://donghun-dev.kro.kr:8083/api/usedskills`
+  + {idx}의 태그 정보를 가져옴.
 
-  * {idx}의 태그 정보를 가져옴.
+  + Success : Code 200
 
-  * Success : Code 200
+  + Fail : Code 400
 
-  * Fail : Code 400
+  
 
-  ```JSON
+``` JSON
   {
     "_embedded": {
         "datas": [
@@ -814,7 +826,7 @@
                 "text": "테스트 스킬 1",
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/usedskill/1"
+                        "href": "https://donghun.dev:8083/api/usedskill/1"
                     }
                 }
             },
@@ -823,7 +835,7 @@
                 "text": "테스트 스킬 2",
                 "_links": {
                     "self": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/usedskill/2"
+                        "href": "https://donghun.dev:8083/api/usedskill/2"
                     }
                 }
             }
@@ -831,29 +843,31 @@
     },
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/usedskills"
+            "href": "https://donghun.dev:8083/api/usedskills"
         }
     }
   }
   ```
 
-* `https://donghun-dev.kro.kr:8083/api/image/{fileName}`
+* `https://donghun.dev:8083/api/image/{fileName}` 
 
-  * {fileName}에 해당 이미지를 가져옴
+  + {fileName}에 해당 이미지를 가져옴
 
-  * Success : Code 200
+  + Success : Code 200
 
-  * Fail : Code 400
+  + Fail : Code 400
 
-* `https://donghun-dev.kro.kr:8083/api/profile/1/myprojects`
+* `https://donghun.dev:8083/api/profile/1/myprojects` 
 
-  * 유저의 {idx}의 개설한 프로젝트의 정보들을 가져옴.
+  + 유저의 {idx}의 개설한 프로젝트의 정보들을 가져옴.
 
-  * Success : Code 200
+  + Success : Code 200
 
-  * Fail : Code 400
+  + Fail : Code 400
 
-  ```JSON
+  
+
+``` JSON
   {
     "_embedded": {
         "datas": [
@@ -881,21 +895,23 @@
     },
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/profile/1/projects"
+            "href": "https://donghun.dev:8083/api/profile/1/projects"
         }
     }
   }
   ```
 
-* `https://donghun-dev.kro.kr:8083/api/project/1/joinmembers`
+* `https://donghun.dev:8083/api/project/1/joinmembers` 
 
-  * 프로젝트 {idx}의 지원자들의 정보를 가져옴.
+  + 프로젝트 {idx}의 지원자들의 정보를 가져옴.
 
-  * Success : Code 200
+  + Success : Code 200
 
-  * Fail : Code 400
+  + Fail : Code 400
 
-  ```JSON
+  
+
+``` JSON
   {
     "_embedded": {
         "datas": [
@@ -906,7 +922,7 @@
                 "position": "마케터",
                 "_links": {
                     "Profile": {
-                        "href": "https://donghun-dev.kro.kr:8084/api/profile/22"
+                        "href": "https://donghun.dev:8083/api/profile/22"
                     }
                 }
             }
@@ -914,21 +930,23 @@
     },
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/project/1/members"
+            "href": "https://donghun.dev:8083/api/project/1/members"
         }
     }
   }
   ```
 
-* `https://donghun-dev.kro.kr:8083/api/profile/{idx}/applyprojects`
+* `https://donghun.dev:8083/api/profile/{idx}/applyprojects` 
 
-  * User {idx}의 지원한 프로젝트들의 정보를 가져옴.
+  + User {idx}의 지원한 프로젝트들의 정보를 가져옴.
 
-  * Success : Code 200
+  + Success : Code 200
 
-  * Fail : Code 400
+  + Fail : Code 400
 
-  ```JSON
+  
+
+``` JSON
   {
     "_embedded": {
         "datas": [
@@ -936,7 +954,7 @@
                 "userIdx": 1,
                 "projectIdx": 84,
                 "leaderNick": "testUser_3",
-                "profileImage": "https://donghun-dev.kro.kr:8083/api/image/USER_DEFAULT_PROFILE_IMG.png",
+                "profileImage": "https://donghun.dev:8083/api/image/USER_DEFAULT_PROFILE_IMG.png",
                 "title": "이러 이러한 Side Project 의 함께할 사람들을 찾고 있습니다. 84",
                 "status": "모집중",
                 "createdDate": "2019-09-19T23:09:27",
@@ -947,8 +965,9 @@
     },
     "_links": {
         "self": {
-            "href": "https://donghun-dev.kro.kr:8084/api/profile/1/applyprojects"
+            "href": "https://donghun.dev:8083/api/profile/1/applyprojects"
         }
     }
     }
   ```
+
