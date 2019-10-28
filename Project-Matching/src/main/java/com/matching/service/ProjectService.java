@@ -425,7 +425,8 @@ public class ProjectService {
         userProjectRepo.save(userProject);
 
         for(Tag tag : projectDTO.getTags()) {
-            Tag foundTag = tagRepository.findByText(tag.getText());
+            Tag foundTag = tagRepository.findByText(tag.getText()) == null ?  tagRepository.save(tag) : tagRepository.findByText(tag.getText());
+
 
             ProjectTag projectTag = ProjectTag.builder().id(new ProjectTagKey(project.getIdx(), foundTag.getIdx())).build();
 

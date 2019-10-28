@@ -2,10 +2,13 @@ package com.matching.controller;
 
 import com.matching.domain.*;
 import com.matching.repository.*;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -22,6 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@AutoConfigureTestDatabase
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "donghun-dev.kro.kr")
 public class TagControllerTest {
 
     @Autowired
@@ -78,13 +83,18 @@ public class TagControllerTest {
         usedSkillRepository.save(usedSkill);
     }
 
+    @After
+    public void setDB() {
+        User user = userRepository.findByEmail("Test_User@gmail.com");
+        userRepository.deleteById(user.getIdx());
+    }
+
     @Test
     public void getTagsTest() throws Exception {
         mockMvc.perform(get("/api/tags").with(user("Test_User@gmail.com")
                 .password("test_password")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(content().encoding("UTF-8"))
-                .andExpect(redirectedUrl("/api/tags"))
                 .andExpect(status().isOk());
     }
 
@@ -94,7 +104,6 @@ public class TagControllerTest {
                 .password("test_password")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(content().encoding("UTF-8"))
-                .andExpect(redirectedUrl("/api/tag/" + tag.getIdx()))
                 .andExpect(status().isOk());
     }
 
@@ -104,7 +113,6 @@ public class TagControllerTest {
                 .password("test_password")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(content().encoding("UTF-8"))
-                .andExpect(redirectedUrl("/api/userskills"))
                 .andExpect(status().isOk());
     }
 
@@ -114,7 +122,6 @@ public class TagControllerTest {
                 .password("test_password")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(content().encoding("UTF-8"))
-                .andExpect(redirectedUrl("/api/userskill/" + userSkill.getIdx()))
                 .andExpect(status().isOk());
     }
 
@@ -124,7 +131,6 @@ public class TagControllerTest {
                 .password("test_password")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(content().encoding("UTF-8"))
-                .andExpect(redirectedUrl("/api/usedskills"))
                 .andExpect(status().isOk());
     }
 
@@ -134,7 +140,6 @@ public class TagControllerTest {
                 .password("test_password")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(content().encoding("UTF-8"))
-                .andExpect(redirectedUrl("/api/usedskill/" + usedSkill.getIdx()))
                 .andExpect(status().isOk());
     }
 }

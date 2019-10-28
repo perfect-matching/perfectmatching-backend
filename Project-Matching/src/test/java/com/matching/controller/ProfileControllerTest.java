@@ -9,10 +9,13 @@ import com.matching.repository.UserRepository;
 import com.matching.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,6 +39,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@AutoConfigureTestDatabase
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "donghun-dev.kro.kr")
 public class ProfileControllerTest {
 
     public static final String TEST_EMAIL = "Test_User@gmail.com";
@@ -91,6 +96,12 @@ public class ProfileControllerTest {
                 .compact();
     }
 
+    @After
+    public void setDB() {
+        User user = userRepository.findByEmail(userDetails.getUsername());
+        userRepository.deleteById(user.getIdx());
+    }
+
     @Test
     public void getProfileTest() throws Exception {
         mockMvc.perform(get("/api/profile/" + user.getIdx()).with(user(TEST_EMAIL)
@@ -108,7 +119,6 @@ public class ProfileControllerTest {
                 .password("test_password")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(content().encoding("UTF-8"))
-                .andExpect(redirectedUrl("/api/profile/" + user.getIdx() + "/skills"))
                 .andExpect(status().isOk());
     }
 

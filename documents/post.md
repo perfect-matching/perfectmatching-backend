@@ -1,6 +1,6 @@
 ## POST - JSON Data Form Example
 
-* `https://donghun-dev.kro.kr:8083/api/project`
+* `https://donghun.dev:8083/api/project`
 
   * POST Project JSON Form Data Example
 
@@ -35,7 +35,7 @@
   ```
 
 
-* `https://donghun-dev.kro.kr:8083/api/login`
+* `https://donghun.dev:8083/api/login`
 
   * SignIn JSON Form Data Example
 
@@ -51,7 +51,7 @@
   ```
 
 
-* `https://donghun-dev.kro.kr:8083/api/register`
+* `https://donghun.dev:8083/api/register`
 
   * SignUp JSON Form Data Example
 
@@ -82,7 +82,7 @@
   ```
 
 
-* `https://donghun-dev.kro.kr:8083/api/register/nickcheck`
+* `https://donghun.dev:8083/api/register/nickcheck`
 
   * SignUp Nickname Validation Check JSON Form Data Example
 
@@ -97,7 +97,7 @@
   ```
 
 
-* `https://donghun-dev.kro.kr:8083/api/register/emailcheck`
+* `https://donghun.dev:8083/api/register/emailcheck`
 
   * SignUp E-mail Validation Check JSON Form Data Example
 
@@ -112,7 +112,7 @@
   ```
 
 
-* `https://donghun-dev.kro.kr:8083/api/comment`
+* `https://donghun.dev:8083/api/comment`
 
   * POST Comment JSON Form Data Example
 
@@ -127,7 +127,7 @@
   }
   ```
 
-* `https://donghun-dev.kro.kr:8083/api/project/apply`
+* `https://donghun.dev:8083/api/project/apply`
 
   * POST Project Apply JSON Form Data Example
 
@@ -143,7 +143,7 @@
   }
   ```
 
-* `https://donghun-dev.kro.kr:8083/api/doneproject`
+* `https://donghun.dev:8083/api/doneproject`
 
   * POST DoneProject JSON Form Data Example
 
@@ -170,7 +170,7 @@
   }
   ```
 
-* `https://donghun-dev.kro.kr:8083/api/profile/modify/nickcheck`
+* `https://donghun.dev:8083/api/profile/modify/nickcheck`
 
   * 회원정보 수정 닉네임 중복 체크 api form example
 

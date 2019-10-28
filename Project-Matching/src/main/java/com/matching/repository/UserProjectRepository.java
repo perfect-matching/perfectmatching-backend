@@ -19,7 +19,7 @@ public interface UserProjectRepository extends JpaRepository<UserProject, UserPr
 
     List<UserProject> findByUserAndStatusAndPositionOrderByProjectDesc(User user, UserProjectStatus status, PositionType positionType);
 
-    List<UserProject> findByUserAndProject_StatusAndStatusAndPositionNotOrderByProjectDesc(User user, ProjectStatus status, UserProjectStatus userProjectStatus, PositionType positionType);
+    List<UserProject> findByUserAndProject_StatusNotAndStatusAndPositionNotOrderByProjectDesc(User user, ProjectStatus status, UserProjectStatus userProjectStatus, PositionType positionType);
 
     List<UserProject> findByUserAndStatusAndPositionNotOrderByProjectDesc(User user, UserProjectStatus userProjectStatus, PositionType positionType);
 

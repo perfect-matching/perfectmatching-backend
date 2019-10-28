@@ -1,6 +1,6 @@
 ## PUT - JSON Data Form Example
 
-* `https://donghun-dev.kro.kr:8083/api/project/{idx}`
+* `https://donghun.dev:8083/api/project/{idx}`
 
   * {idx} 프로젝트 수정
 
@@ -34,7 +34,7 @@
   }
   ```
 
-* `https://donghun-dev.kro.kr:8083/api/comment/{idx}`
+* `https://donghun.dev:8083/api/comment/{idx}`
 
   * {idx} 댓글 수정
 
@@ -49,7 +49,7 @@
   }
   ```
 
-* `https://donghun-dev.kro.kr:8083/api/image`
+* `https://donghun.dev:8083/api/image`
 
   * 요청 유저의 프로필 사진 수정
 
@@ -68,11 +68,11 @@
 
   ```JSON
   {
-      "image": "https://donghun-dev.kro.kr:8083/api/image/PROFILE_IMG_1568638730292.jpg",
+      "image": "https://donghun.dev:8083/api/image/PROFILE_IMG_1568638730292.jpg",
   }
   ```
 
-* `https://donghun-dev.kro.kr:8083/project/{idx}/status?status={name}`
+* `https://donghun.dev:8083/project/{idx}/status?status={name}`
 
   * 프로젝트의 status를 변경하기 위한 api
 
@@ -80,7 +80,7 @@
 
   * Fail : Code 400
 
-* `https://donghun-dev.kro.kr:8083/api/project/matching`
+* `https://donghun.dev:8083/api/project/matching`
 
   * 프로젝트의 status를 변경하기 위한 api
 
@@ -96,7 +96,7 @@
   }
   ```
 
-* `https://donghun-dev.kro.kr:8083/api/doneproject/1`
+* `https://donghun.dev:8083/api/doneproject/1`
 
   * {idx} DoneProject 수정.
 
@@ -120,7 +120,7 @@
   }
   ```
 
-* `https://donghun-dev.kro.kr:8083/api/profile/{idx}`
+* `https://donghun.dev:8083/api/profile/{idx}`
 
   * {idx} User 수정.
 

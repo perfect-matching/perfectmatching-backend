@@ -14,12 +14,17 @@ import com.matching.repository.*;
 import com.matching.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,6 +38,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -40,6 +47,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@AutoConfigureTestDatabase
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "donghun-dev.kro.kr")
 public class ProjectControllerTest {
 
     @Autowired
@@ -65,6 +74,9 @@ public class ProjectControllerTest {
     @Autowired
     private UserService userService;
 
+    @Rule
+    public JUnitRestDocumentation jUnitRestDocumentation = new JUnitRestDocumentation();
+
     private Project project;
 
     private UserDetails userDetails;
@@ -74,6 +86,7 @@ public class ProjectControllerTest {
     @Before
     public void setMockMvc() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context)
+                .apply(documentationConfiguration(jUnitRestDocumentation))
                 .alwaysDo(print())
                 .build();
 
@@ -127,6 +140,12 @@ public class ProjectControllerTest {
                 .compact();
     }
 
+    @After
+    public void setDB() {
+        User user = userRepository.findByEmail(userDetails.getUsername());
+        userRepository.deleteById(user.getIdx());
+    }
+
     @Test
     public void getProjectsJsonViewTest() throws Exception {
         mockMvc.perform(get("/api/projects"))
@@ -134,7 +153,8 @@ public class ProjectControllerTest {
                 .andExpect(content().encoding("UTF-8"))
                 .andExpect(header().exists("Location"))
                 .andExpect(header().exists("Link"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andDo(document("getting-a-projects"));
     }
 
     @Test

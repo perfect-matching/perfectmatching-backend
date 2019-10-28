@@ -14,10 +14,13 @@ import com.matching.repository.UserRepository;
 import com.matching.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,6 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
+@AutoConfigureTestDatabase
 @SpringBootTest
 public class CommentControllerTest {
 
@@ -65,6 +69,8 @@ public class CommentControllerTest {
     private Comment comment;
 
     private String token;
+
+    private UserDetails userDetails;
 
     @Before
     public void setMockMvc() {
@@ -93,7 +99,7 @@ public class CommentControllerTest {
 
         commentRepository.save(comment);
 
-        UserDetails userDetails = userService.loadUserByUsername(user.getEmail());
+        userDetails = userService.loadUserByUsername(user.getEmail());
 
         List<String> roles = userDetails.getAuthorities()
                 .stream()
@@ -113,6 +119,12 @@ public class CommentControllerTest {
                 .setExpiration(new Date(System.currentTimeMillis() + 1800000))
                 .claim("role", roles)
                 .compact();
+    }
+
+    @After
+    public void setupDBClear() {
+        User user = userRepository.findByEmail(userDetails.getUsername());
+        userRepository.deleteById(user.getIdx());
     }
 
     @Test
