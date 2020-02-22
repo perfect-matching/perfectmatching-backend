@@ -113,7 +113,7 @@ Project - Side Project Member Matching Platform
 
 * 서버 URL
 
-    * `https://donghun.dev:8083`
+    * `https://deploy.donghun.dev:8083`
 
 * [GET]( https://github.com/perfect-matching/perfectmatching-backend/blob/master/documents/get.md )
 
