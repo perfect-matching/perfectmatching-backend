@@ -113,7 +113,7 @@ Project - Side Project Member Matching Platform
 
 * 서버 URL
 
-    * `https://donghun.dev:8083`
+    * `https://deploy.donghun.dev:8083`
 
 * [GET]( https://github.com/perfect-matching/perfectmatching-backend/blob/master/documents/get.md )
 
@@ -127,6 +127,13 @@ Project - Side Project Member Matching Platform
     | `/api/projects?position={name}&offset={num}` | GET | position과 offset에 따른 Project들을 가져오기 위한 api |
     | `/api/projects?position={name}&location={name}` | GET | position과 location에 따른 Project들을 가져오기 위한 api |
     | `/api/projects?location={name}&position&offset={num}` | GET | location과 postion 그리고 offset에 따른 Project들을 가져오기 위한 api |
+    | `/api/projects?tag={name}` | GET | tag name에 따른 Project들을 가져오기 위한 api |
+    | `/api/projects?tag={name}&offset={num}` | GET | tag name과 offset 따른 Project들을 가져오기 위한 api |
+    | `/api/projects?tag={name}&location={name}` | GET | tag name와 location에 따른 Project들을 가져오기 위한 api |
+    | `/api/projects?tag={name}&location={name}&offset={num}` | GET | tag name과 location과 offset에 따른 Project들을 가져오기 위한 api |
+    | `/api/projects?tag={name}&position={name}` | GET | tag name과 position에 따른  Project들을 가져오기 위한 api |
+    | `/api/projects?tag={name}&postion={name}&offset={num}` | GET | tag name과 postion과 offset에 따른 Project들을 가져오기 위한 api |
+    | `/api/projects?tag={name}&location={name}&postion={name}&offset={num}` | GET | tag name과 postion, location, offset에 따른 Project들을 가져오기 위한 api |
     | `/api/project/{idx}` | GET | idx에 따른 Project의 정보를 가져오기 위한 api |
     | `/api/project/{idx}/comments` | GET | Project에 따른 Comment들을 가져오기 위한 api |
     | `/api/project/{idx}/members` | GET | Project에 참여중인 맴버들의 정보를 가져오기 위한 api |
