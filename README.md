@@ -111,10 +111,6 @@ Project - Side Project Member Matching Platform
 ### REST API URL
 <details><summary>세부정보</summary>
 
-* 서버 URL
-
-    * `https://deploy.donghun.dev:8083`
-
 * [GET]( https://github.com/perfect-matching/perfectmatching-backend/blob/master/documents/get.md )
 
     |URI(자원)| HTTP(행위) | 기능(표현) |
